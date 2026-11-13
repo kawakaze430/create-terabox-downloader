@@ -37,6 +37,10 @@ The product should be owned and operated through our own GitHub, hosting, infras
 
 See **[Local Development](docs/LOCAL_DEVELOPMENT.md)** for API, website and extension setup, and **[Ordered Implementation Checklist](docs/IMPLEMENTATION_CHECKLIST.md)** for the complete tracked roadmap. The website and extension source are development previews. API tests passed locally (20 cases); website builds and browser behavior still require CI/manual verification. The backend currently responds with `PROVIDER_NOT_CONFIGURED` for valid links rather than claiming downloads work.
 
+## Official integration research (new)
+
+TeraBox's [own Open Platform documentation](https://www.terabox.com/integrations/docs?lang=en) describes OAuth, file metadata and download endpoints for approved partners. We have added an **offline-tested OAuth client scaffold**, but have **not received partner credentials or verified public-share download permissions**. See **[Official Open Platform integration handoff](docs/OFFICIAL_OPEN_PLATFORM.md)** for exact implementation, safety constraints and the application process.
+
 ## Immediate, non-negotiable first milestone
 
 **Prove a reliable, compliant TeraBox integration with authorized test files before spending substantial time on cosmetic or premium features.**
