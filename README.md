@@ -1,6 +1,6 @@
 # TeraBox Downloader Platform — Product Vision & Developer Hub
 
-> **Status (2026-11-13):** Project specification and engineering roadmap. The original repository contained only a placeholder README. No operational downloader, website, Chrome extension, backend, published application, or real download has been verified here. These are **planned product requirements**, not a launch claim.
+> **Status (2026-11-13):** Development foundation added on the `feat/phase-0-foundation` branch: FastAPI link-validation endpoints with automated tests, a Next.js development UI, a Chrome/Edge Manifest V3 popup, and GitHub CI configuration. **These are not a working TeraBox downloader**. Live file metadata, previews, and downloads remain unimplemented and unverified.
 
 ## Our mission
 
@@ -32,6 +32,10 @@ The product should be owned and operated through our own GitHub, hosting, infras
 | **Great viewing** | Actual available video qualities, fullscreen, picture-in-picture, optional Continue Watching, bookmarks and history with privacy controls. |
 | **Trust & operations** | Minimal permissions, security, accessibility, i18n, help/FAQ, privacy/copyright reporting, test automation and admin reliability/cost visibility. |
 | **Future business** | Versioned API, optional accounts and premium entitlements, analytics, subscriptions and additional surfaces only after core readiness. |
+
+## Run and develop the starter
+
+See **[Local Development](docs/LOCAL_DEVELOPMENT.md)** for API, website and extension setup, and **[Ordered Implementation Checklist](docs/IMPLEMENTATION_CHECKLIST.md)** for the complete tracked roadmap. The website and extension source are development previews. API tests passed locally (20 cases); website builds and browser behavior still require CI/manual verification. The backend currently responds with `PROVIDER_NOT_CONFIGURED` for valid links rather than claiming downloads work.
 
 ## Immediate, non-negotiable first milestone
 

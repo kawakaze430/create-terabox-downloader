@@ -5,7 +5,7 @@
 
 ## What is actually in the repository?
 
-At project initialization on 2026-11-13, only a placeholder README was present. These product documents establish the specification. **No website, extension, backend, integration, tests, deployment, or successful download has yet been confirmed in this repository.** Update this section when real code and reproducible test evidence are committed.
+At initialization on 2026-11-13, only a README existed. On the `feat/phase-0-foundation` branch, an initial FastAPI share-link validator, disabled provider adapter, responsive Next.js development UI, Chrome/Edge extension popup, and CI have now been committed. **20 API unit tests passed locally**, and the [GitHub Actions run](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43470500522) passed all three jobs (API, website production build, extension syntax). **No authorized TeraBox metadata, preview, download, browser-based integration or production deployment has yet been demonstrated.**
 
 ## Hard-gated development plan
 
