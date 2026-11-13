@@ -9,7 +9,7 @@ A checkmark is used only for implemented items with the evidence noted. The star
 - [x] Create strict offline-only share-link parser and disabled provider contract (services/api/app/).
 - [x] Run initial parser/API unit tests (20 tests passed locally on 2026-11-13).
 - [x] Check extension JS syntax/manifest JSON locally (2026-11-13).
-- [ ] Verify GitHub CI on the pull request (including Next.js build).
+- [x] Verify GitHub CI for API, Next.js production build, extension checks: [successful run](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43470500522) (2026-11-13). Browser/manual tests remain pending.
 - [ ] Generate and commit locked dependency manifests; pin patch versions and audit vulnerabilities.
 - [ ] Audit all five reference repositories for features, current licenses, code health and upstream dependencies.
 - [ ] Verify current TeraBox terms, permissible integration and ownership/license implications.
@@ -29,9 +29,10 @@ A checkmark is used only for implemented items with the evidence noted. The star
 - [ ] Benchmark real resolution speed, success/failure and bandwidth cost.
 
 ## Gate 2 — Complete minimum competitive product
-- [x] Add initial mobile-friendly Next.js input/status interface (unverified build).
+- [x] Add initial mobile-friendly Next.js input/status interface (CI production build passed; browser behavior untested).
 - [x] Add initial Chrome/Edge Manifest V3 popup for recognizing supported share links (browser testing pending).
-- [ ] Verify Next.js production build, frontend API connectivity and accessibility.
+- [x] Verify Next.js production build in GitHub CI (run 43470500522).
+- [ ] Verify frontend API connectivity in browser and accessibility.
 - [ ] Verify extension behavior in real Chrome and Edge without excessive permissions.
 - [ ] Implement verified file metadata cards and real preview thumbnails.
 - [ ] Add proper media player with fullscreen/PiP and source-specific unsupported states.
