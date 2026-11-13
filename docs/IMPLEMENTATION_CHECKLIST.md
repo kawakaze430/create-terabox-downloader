@@ -12,13 +12,14 @@ A checkmark is used only for implemented items with the evidence noted. The star
 - [x] Verify GitHub CI for API, Next.js production build, extension checks: [successful run](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43470500522) (2026-11-13). Browser/manual tests remain pending.
 - [ ] Generate and commit locked dependency manifests; pin patch versions and audit vulnerabilities.
 - [ ] Audit all five reference repositories for features, current licenses, code health and upstream dependencies.
-- [ ] Verify current TeraBox terms, permissible integration and ownership/license implications.
+- [x] Review TeraBox's published terms and record outstanding API authorization questions in [PROVIDER_FEASIBILITY.md](PROVIDER_FEASIBILITY.md) (2026-11-13); a usable permitted integration remains unconfirmed.
 - [ ] Create or receive own authorized, non-sensitive sample TeraBox share URLs for functional tests.
 
 ## Gate 1 — Authorized core engine (BLOCKED pending viable permitted provider)
 - [x] Validate known share URL formats, reject unsupported domains/paths (offline parsing only).
 - [x] Expose versioned API validation route and structured error codes.
 - [x] Add provider adapter seam; deliberately return PROVIDER_NOT_CONFIGURED instead of fictional file metadata.
+- [x] Add typed metadata/capabilities schema, bounded upstream-error mapping and readiness checks; verified with offline fixtures in `services/api/tests/test_provider_contract.py` (CI evidence pending).
 - [ ] Security review of allowed share hosts/path variants, redirect behavior, DNS/SSRF egress, and rate limits before HTTP fetching.
 - [ ] Select and legally/security-validate permitted provider implementation.
 - [ ] Get real metadata: filename, size, type, thumbnails, folders (where offered).
@@ -77,4 +78,6 @@ A checkmark is used only for implemented items with the evidence noted. The star
 - For each newly checked item record code, test method/date and any limitations.
 
 ## Blocker for Codex/developer
+**Provider integration G1:** See [PROVIDER_FEASIBILITY.md](PROVIDER_FEASIBILITY.md) for reviewed terms, domain lookalike warning, contract implementation and Codex review tasks.
+
 **Provider integration G1:** First determine whether the current provider supports an authorized, stable API or integration. Use user-owned public test files and permitted access. If unavailable, return a grounded feasibility report and keep the provider disabled rather than pretending downloads work.
