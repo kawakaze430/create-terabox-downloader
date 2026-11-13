@@ -19,7 +19,7 @@ A checkmark is used only for implemented items with the evidence noted. The star
 - [x] Validate known share URL formats, reject unsupported domains/paths (offline parsing only).
 - [x] Expose versioned API validation route and structured error codes.
 - [x] Add provider adapter seam; deliberately return PROVIDER_NOT_CONFIGURED instead of fictional file metadata.
-- [x] Add typed metadata/capabilities schema, bounded upstream-error mapping and readiness checks; verified with offline fixtures in `services/api/tests/test_provider_contract.py` (CI evidence pending).
+- [x] Add typed metadata/capabilities schema, bounded upstream-error mapping and readiness checks; verified with offline fixtures in `services/api/tests/test_provider_contract.py`; [GitHub CI run 43477525341](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43477525341) passed **37 backend tests, the web build and the extension check** on 2026-11-13. This does not verify real downloads.
 - [ ] Security review of allowed share hosts/path variants, redirect behavior, DNS/SSRF egress, and rate limits before HTTP fetching.
 - [ ] Select and legally/security-validate permitted provider implementation.
 - [ ] Get real metadata: filename, size, type, thumbnails, folders (where offered).
