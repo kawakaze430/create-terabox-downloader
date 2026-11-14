@@ -77,3 +77,25 @@ are now scoped to the app's main landmark, with a fresh CI run required.
 See [operator validation](OPERATOR_VALIDATION.md) for precise prerequisites,
 commands, return codes, protocol ambiguities and public-authentication work.
 A fixture probe is not a production downloader; public routes remain disabled.
+
+## 2026-11-14 — Verified checkpoint and handoff
+
+[Commit 5ed2df6](https://github.com/kawakaze430/create-terabox-downloader/commit/5ed2df64a15701342232030ccfb78b30d6aa00bb)
+passed all three jobs in [CI run 43586842144](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43586842144).
+Results: **153 backend tests, 16 extension parser tests, 10 browser tests**, plus
+production build, TypeScript and Python dependency consistency checks. Both
+desktop and mobile scenarios exercised validation, unavailable-provider messages,
+fragment handoff, input changes during requests and service outages. These are
+Chromium viewport tests, not installed Chrome/Edge extension or real TeraBox tests.
+
+Three implementation checkpoints were pushed directly to `main`; no new branch
+or PR was created. This final documentation checkpoint records the passing result
+and extends ignored environment filenames to reduce accidental secret commits.
+
+Remaining blocker is concrete: no partner credentials, consented access token,
+confirmed API/CDN hosts, operator-owned share/file ID or expected checksum are
+configured. The offline preflight lists these requirements without network calls.
+The next engineering gate is a partner-authorized live probe, resolving documented
+protocol ambiguities, followed by per-user authorization/session isolation before
+exposing metadata/downloads to website users. G1 is still blocked; folders, player,
+ZIP, accounts, billing and production launch must not be marked complete.

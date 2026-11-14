@@ -3,7 +3,7 @@
 **Updated:** 2026-11-14. **This is the live plan, not a claim of completion.**
 Latest evidence: [implementation log](IMPLEMENTATION_LOG.md). Earlier branch/CI references below are historical; current implementation is on `main`.
 
-A checkmark is used only for implemented items with the evidence noted. The starter website and extension exist as source but have NOT been live/browser-tested. The TeraBox downloader engine is NOT connected.
+A checkmark is used only for implemented items with the evidence noted. The website validation flow passes 10 browser checks; the extension parser passes 16 unit tests, while installed-extension testing remains pending. The public TeraBox downloader engine is NOT connected.
 
 ## Gate 0 — Project foundation and feasibility
 - [x] Publish mission, feature requirements, architecture and developer instructions (README, AGENTS.md, docs/).
@@ -36,7 +36,8 @@ A checkmark is used only for implemented items with the evidence noted. The star
 - [x] Add initial mobile-friendly Next.js input/status interface (CI production build passed; browser behavior untested).
 - [x] Add initial Chrome/Edge Manifest V3 popup for recognizing supported share links (browser testing pending).
 - [x] Verify Next.js production build in GitHub CI (run 43470500522).
-- [ ] Verify frontend API connectivity in browser and accessibility.
+- [x] Verify frontend validation/provider-unavailable connectivity against the local API in desktop/mobile Chromium (10 Playwright checks, 2026-11-14).
+- [ ] Complete accessibility audit and real-provider user journeys.
 - [ ] Verify extension behavior in real Chrome and Edge without excessive permissions.
 - [ ] Implement verified file metadata cards and real preview thumbnails.
 - [ ] Add proper media player with fullscreen/PiP and source-specific unsupported states.

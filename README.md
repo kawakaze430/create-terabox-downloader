@@ -1,6 +1,6 @@
 # TeraBox Downloader Platform — Product Vision & Developer Hub
 
-> **Status (2026-11-14):** Development is on `main`. The FastAPI link validator, strict provider contract, readiness endpoint and credential-gated official OAuth client are integrated and pass 153 offline tests. The Next.js site and MV3 extension are development starters. **Live TeraBox authorization, metadata and downloads are still blocked and unverified.** The operator-only metadata/download probe is ready for authorized fixture testing; see [operator validation](docs/OPERATOR_VALIDATION.md) and the [implementation log](docs/IMPLEMENTATION_LOG.md).
+> **Status (2026-11-14):** Development is on `main`. The FastAPI link validator, strict provider contract, readiness endpoint and credential-gated official OAuth client are integrated and pass 153 offline tests. The Next.js validation flow passes desktop/mobile browser checks; the MV3 extension remains a development build. **Live TeraBox authorization, metadata and downloads are still blocked and unverified.** The operator-only metadata/download probe is ready for authorized fixture testing; see [operator validation](docs/OPERATOR_VALIDATION.md) and the [implementation log](docs/IMPLEMENTATION_LOG.md).
 
 ## Our mission
 
@@ -35,7 +35,7 @@ The product should be owned and operated through our own GitHub, hosting, infras
 
 ## Run and develop the starter
 
-See **[Local Development](docs/LOCAL_DEVELOPMENT.md)** for API, website and extension setup, and **[Ordered Implementation Checklist](docs/IMPLEMENTATION_CHECKLIST.md)** for the complete tracked roadmap. The website and extension source are development previews. The integrated API passes 153 offline tests; browser behavior still requires verification. The backend currently responds with `PROVIDER_NOT_CONFIGURED` for valid links rather than claiming downloads work.
+See **[Local Development](docs/LOCAL_DEVELOPMENT.md)** for API, website and extension setup, and **[Ordered Implementation Checklist](docs/IMPLEMENTATION_CHECKLIST.md)** for the complete tracked roadmap. The website and extension source are development previews. The API passes 153 offline tests, the extension parser passes 16 tests, and 10 desktop/mobile browser checks pass in GitHub Actions. Live TeraBox access and actual extension installation remain unverified. The backend currently responds with `PROVIDER_NOT_CONFIGURED` for valid links rather than claiming downloads work.
 
 ## Official integration research (new)
 

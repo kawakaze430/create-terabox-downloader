@@ -1,11 +1,15 @@
 # Delivery Roadmap, Quality Gates and Credible Status
 
 **Status:** Planned; this document does not certify any implementation.  
-**Updated:** 2026-11-13
+**Updated:** 2026-11-14
 
 ## What is actually in the repository?
 
-At initialization on 2026-11-13, only a README existed. On the `feat/phase-0-foundation` branch, an initial FastAPI share-link validator, disabled provider adapter, responsive Next.js development UI, Chrome/Edge extension popup, and CI have now been committed. **20 API unit tests passed locally**, and the [GitHub Actions run](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43470500522) passed all three jobs (API, website production build, extension syntax). **No authorized TeraBox metadata, preview, download, browser-based integration or production deployment has yet been demonstrated.**
+The implementation is on `main`. On 2026-11-14, [commit 5ed2df6](https://github.com/kawakaze430/create-terabox-downloader/commit/5ed2df64a15701342232030ccfb78b30d6aa00bb) passed all jobs in [CI run 43586842144](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43586842144): **153 backend tests, 16 extension link tests, Next.js build/type checks, and 10 desktop/mobile browser tests**. Python and Node dependency audits reported no known vulnerabilities in the resolved sets.
+
+The API has strict contracts, bounded requests, rate/concurrency limits, redacted errors and readiness checks. The website validation flow is tested against the local API. The official OAuth client and operator-only metadata/download checksum probe have **offline fixture coverage only**. The public provider remains disabled. No authorized live TeraBox metadata, preview or completed download has been demonstrated; no production deployment or installed-extension test has been completed.
+
+See the [implementation log](IMPLEMENTATION_LOG.md) for individual checkpoints and the [operator validation guide](OPERATOR_VALIDATION.md) for the external requirements to continue G1.
 
 ## Hard-gated development plan
 

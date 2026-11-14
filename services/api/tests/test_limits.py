@@ -1,6 +1,5 @@
 """Request admission and privacy boundaries; all tests run without network."""
 import asyncio
-import json
 
 import pytest
 from fastapi.testclient import TestClient

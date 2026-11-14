@@ -1,7 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
 from app.main import app
-from app.links import InvalidShareLink, parse_share_link
+from app.links import parse_share_link
 
 client = TestClient(app)
 
