@@ -1,5 +1,45 @@
 # Implementation log
 
+
+## 2026-11-15 — Operator token validation before any partner network call
+
+Reviewed main at `a93fa7a`, issue #2, current CI, provider boundary, official
+OAuth, pinned egress, URL admission, mock tests and public provider gating.
+Found that malformed operator-supplied access tokens could pass the *offline*
+configuration check and reach the OAuth token-info request before the later
+`OfficialShares` validation. Shared the existing token policy through
+`validated_operator_token()` and apply it during offline configuration,
+before network-client construction in `probe()`, and in `OfficialShares`.
+Five regression cases cover embedded spaces, newline, tab, DEL and tokens
+exceeding 8192 characters. The invalid-token `--live` path now exits at the
+configuration gate without network calls; no credentials were added.
+
+Added an explicit `python -m app.preflight` **offline** step to GitHub Actions
+(no `--live`). It exited with unconfigured status, reporting
+`configuration_ready: false`, `live_verified: false` and
+`public_provider_enabled: false`. The step checks these safety invariants
+without exposing variable contents.
+
+Verification: [Platform CI run 43650510463](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43650510463)
+passed all jobs: **158 backend tests** (fixtures/MockTransport only),
+**16 extension unit tests**, Next.js production build, TypeScript check,
+**10 Playwright desktop/mobile tests** against the local API, Python
+dependency check and offline preflight. An earlier intermediate run caught
+a newly introduced Python syntax error; it was fixed before the passing run.
+Playwright exercises URL validation, disabled-provider responses and browser
+behavior, not a real TeraBox account or completed download.
+
+**G1 remains blocked:** TeraBox partner approval and exact permitted public-share
+scopes, operator-consented access token, partner-approved regional/CDN hosts,
+operator-owned small fixture with file ID and trusted SHA-256, followed by
+authorized live verification. Do not use `--live` until these are confirmed.
+Public `UnconfiguredProvider` remains enabled as the safe default; no
+operator credential is exposed to public routes. Next engineering task:
+after operator authorization, validate one approved fixture's real metadata
+and full checksum-matching download, record sanitized evidence, then design
+per-user authorization before enabling visitor downloads.
+
+
 ## 2026-11-14 — Integrate and review existing P0 work
 
 The owner requested development directly on `main`, no new branches or PRs,
