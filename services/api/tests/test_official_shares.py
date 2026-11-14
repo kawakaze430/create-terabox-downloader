@@ -133,6 +133,32 @@ def configured_env():
     }
 
 
+
+@pytest.mark.parametrize("bad_token", [
+    "bad token", "bad\\nvalue", "bad\\tvalue", "bad\\x7fvalue", "x" * 8193,
+])
+def test_preflight_rejects_malformed_operator_access_token_before_network(bad_token, monkeypatch, capsys):
+    from app import preflight
+
+    env = configured_env()
+    env["TERABOX_ACCESS_TOKEN"] = bad_token
+    report = configuration(env)
+    assert report["configuration_ready"] is False
+    assert "TERABOX_ACCESS_TOKEN" in report["invalid"]
+    assert bad_token not in json.dumps(report)
+
+    # Even direct probe() callers must not contact the provider with a malformed token.
+    monkeypatch.setattr(preflight, "PinnedTransport", lambda hosts: pytest.fail("No network allowed"))
+    with pytest.raises(OpenPlatformFailure):
+        asyncio.run(preflight.probe(env))
+
+    for key, value in env.items():
+        monkeypatch.setenv(key, value)
+    assert main(["--live"]) == 2
+    output = capsys.readouterr().out
+    assert json.loads(output)["live_verified"] is False
+    assert bad_token not in output
+
 def test_operator_probe_end_to_end_with_mocked_network_and_cookie_isolation(monkeypatch):
     from app import preflight
     def handler(request):
