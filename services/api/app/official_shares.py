@@ -91,7 +91,7 @@ class OfficialShares:
         self.http = http
         self.origin = approved_api_origin(origin, validate_hosts(approved_api_hosts))
         self.token = validated_operator_token(token.get_secret_value())
-        self.download_hosts = validate_hosts(download_hosts
+        self.download_hosts = validate_hosts(download_hosts)
 
     async def resolve(self, link):
         payload = await bounded_json(self.http, self.origin + "/openapi/api/shorturlinfo", params={
