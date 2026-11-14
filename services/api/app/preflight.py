@@ -7,11 +7,10 @@ import os
 import re
 
 import httpx
-from pydantic import SecretStr
 
 from .egress import PinnedTransport, validate_hosts
 from .links import parse_share_link
-from .official_shares import OfficialShares, shorturl, uint, verify_download
+from .official_shares import OfficialShares, shorturl, uint, validated_operator_token, verify_download
 from .open_platform import OpenPlatformOAuth, PartnerCredentials
 
 REQUIRED = (
@@ -29,6 +28,7 @@ def configuration(env):
     invalid = []
     checks = {
         "TERABOX_CLIENT_ID": lambda: PartnerCredentials(env.get("TERABOX_CLIENT_ID", ""), env.get("TERABOX_CLIENT_SECRET", ""), env.get("TERABOX_PRIVATE_SECRET", "")),
+        "TERABOX_ACCESS_TOKEN": lambda: validated_operator_token(env["TERABOX_ACCESS_TOKEN"]),
         "TERABOX_APPROVED_API_HOSTS": lambda: validate_hosts(env["TERABOX_APPROVED_API_HOSTS"].split(",")),
         "TERABOX_APPROVED_DOWNLOAD_HOSTS": lambda: validate_hosts(env["TERABOX_APPROVED_DOWNLOAD_HOSTS"].split(",")),
         "TERABOX_TEST_SHARE_URL": lambda: shorturl(parse_share_link(env["TERABOX_TEST_SHARE_URL"])),
@@ -55,7 +55,7 @@ async def probe(env):
     creds = PartnerCredentials(env["TERABOX_CLIENT_ID"], env["TERABOX_CLIENT_SECRET"], env["TERABOX_PRIVATE_SECRET"])
     api_hosts = validate_hosts(env["TERABOX_APPROVED_API_HOSTS"].split(","))
     download_hosts = validate_hosts(env["TERABOX_APPROVED_DOWNLOAD_HOSTS"].split(","))
-    token = SecretStr(env["TERABOX_ACCESS_TOKEN"])
+    token = validated_operator_token(env["TERABOX_ACCESS_TOKEN"])
     # Separate clients keep cookies/authorization isolated from the download CDN.
     async with httpx.AsyncClient(transport=PinnedTransport(api_hosts | {"www.terabox.com"}),
                                  trust_env=False, follow_redirects=False, timeout=8) as api:
