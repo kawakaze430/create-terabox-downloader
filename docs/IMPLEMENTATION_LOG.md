@@ -52,3 +52,28 @@ Local browser execution limitation: Chromium could not launch because the manage
 workspace denied its process-singleton socket (`Operation not permitted`). No
 browser scenario passed locally; GitHub Actions is the next verification source.
 The first harness attempt also caught and fixed the Uvicorn app import string.
+
+## 2026-11-14 — Operator-only metadata/download validation path
+
+Added `official_shares.py`, `egress.py` and `python -m app.preflight` with a
+no-network default and explicit `--live` opt-in. The candidate uses documented
+share metadata/download endpoints, selects only a resolved file, validates
+response shape and approved hosts, then hashes a bounded fixture transfer.
+DNS answers must all be public; connections target a checked IP while retaining
+the original TLS hostname. Separate clients isolate API cookies from the CDN.
+No new dependencies or third-party repository source were incorporated.
+
+Evidence: **153 Python tests pass** (all offline). The current environment's
+no-network preflight reports missing partner credentials/token, approved hosts,
+fixture URL/ID/hash and approval confirmation. No live test was attempted.
+`uvx pip-audit -r services/api/requirements.lock --no-deps --disable-pip`
+reported **no known vulnerabilities**; npm audit had also reported zero.
+
+GitHub run [43586294273](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43586294273)
+passed API, extension, web build and type checks. Browser execution found test
+selectors matching Next.js's route announcer in addition to our alert; selectors
+are now scoped to the app's main landmark, with a fresh CI run required.
+
+See [operator validation](OPERATOR_VALIDATION.md) for precise prerequisites,
+commands, return codes, protocol ambiguities and public-authentication work.
+A fixture probe is not a production downloader; public routes remain disabled.

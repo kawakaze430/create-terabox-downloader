@@ -8,7 +8,7 @@ test("validates a link with the real API and reports unavailable provider honest
   await page.getByLabel("TeraBox share URL").press("Enter");
   await expect(page.getByText("Recognized TeraBox share URL", { exact: false })).toBeVisible();
   await page.getByRole("button", { name: "Check downloader status" }).click();
-  await expect(page.getByRole("alert")).toContainText("not been configured or approved");
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("not been configured or approved");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
@@ -16,7 +16,7 @@ test("unsupported links show a clear backend error", async ({ page }) => {
   await page.goto("/");
   await page.getByLabel("TeraBox share URL").fill("https://untrusted.example/s/abcd");
   await page.getByRole("button", { name: "Validate link" }).click();
-  await expect(page.getByRole("alert")).toContainText("not on the supported");
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("not on the supported");
   await expect(page.getByRole("button", { name: "Check downloader status" })).toHaveCount(0);
 });
 
@@ -43,7 +43,7 @@ test("editing a link cancels validation and prevents stale results", async ({ pa
   await expect(page.getByRole("button", { name: "Validate link" })).toBeEnabled();
   await page.waitForTimeout(400);
   await expect(page.getByRole("button", { name: "Check downloader status" })).toHaveCount(0);
-  await expect(page.getByRole("alert")).toHaveCount(0);
+  await expect(page.getByRole("main").getByRole("alert")).toHaveCount(0);
 });
 
 test("a service outage leaves the form usable", async ({ page }) => {
@@ -51,6 +51,6 @@ test("a service outage leaves the form usable", async ({ page }) => {
   await page.goto("/");
   await page.getByLabel("TeraBox share URL").fill(share);
   await page.getByRole("button", { name: "Validate link" }).click();
-  await expect(page.getByRole("alert")).toBeVisible();
+  await expect(page.getByRole("main").getByRole("alert")).toBeVisible();
   await expect(page.getByRole("button", { name: "Validate link" })).toBeEnabled();
 });

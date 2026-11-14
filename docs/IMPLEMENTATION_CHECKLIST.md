@@ -12,7 +12,7 @@ A checkmark is used only for implemented items with the evidence noted. The star
 - [x] Run initial parser/API unit tests (20 tests passed locally on 2026-11-13).
 - [x] Check extension JS syntax/manifest JSON locally (2026-11-13).
 - [x] Verify GitHub CI for API, Next.js production build, extension checks: [successful run](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43470500522) (2026-11-13). Browser/manual tests remain pending.
-- [x] Pin direct dependencies and commit Python/Node dependency locks (2026-11-14); npm audit reports 0 vulnerabilities. Python advisory scan remains pending.
+- [x] Pin direct dependencies and commit Python/Node dependency locks (2026-11-14); npm audit reports 0 vulnerabilities. Python pip-audit also reports no known vulnerabilities for the locked set.
 - [ ] Audit all five reference repositories for features, current licenses, code health and upstream dependencies.
 - [x] Review TeraBox's published terms and record outstanding API authorization questions in [PROVIDER_FEASIBILITY.md](PROVIDER_FEASIBILITY.md) (2026-11-13); a usable permitted integration remains unconfirmed.
 - [ ] Create or receive own authorized, non-sensitive sample TeraBox share URLs for functional tests.
@@ -28,7 +28,8 @@ A checkmark is used only for implemented items with the evidence noted. The star
 - [ ] Get real playable preview URL and supported quality options (where offered).
 - [ ] Get permitted downloadable file; verify a completed real transfer using own authorized files.
 - [ ] Support expiry, protected links (only permitted access), missing/removed links, upstream outages.
-- [ ] Add provider contract and live integration tests for valid, expired, unavailable, folder and large-file cases.
+- [x] Add offline provider/security contracts and an opt-in operator checksum probe (153 tests, 2026-11-14).
+- [ ] Run authorized live integration tests for valid, expired, unavailable, folder and large-file cases; no live test has passed.
 - [ ] Benchmark real resolution speed, success/failure and bandwidth cost.
 
 ## Gate 2 — Complete minimum competitive product

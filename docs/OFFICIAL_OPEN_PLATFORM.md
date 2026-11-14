@@ -63,3 +63,10 @@ CI also builds the website and checks the extension.
 - Do not surface raw OAuth tokens or signed file URLs to untrusted clients.
 - OAuth code exchange can only succeed with approved credentials and user authorization.
 - TeraBox terms and partner API terms may further limit redistribution, bulk downloading, external link retrieval or monetization. Confirm with TeraBox rather than assuming.
+
+## Operator-only candidate now implemented (2026-11-14)
+
+The [operator validation guide](OPERATOR_VALIDATION.md) documents the new metadata,
+download and checksum probe. The OAuth helper is reused with pinned HTTPS egress.
+These are offline-tested candidates, not enabled public provider routes. The
+partner credentials, scope and live test requirements above still apply.
