@@ -1,6 +1,8 @@
 # Ordered Implementation Checklist
 
-**Updated:** 2026-11-13. **This is the live plan, not a claim of completion.**
+**Updated:** 2026-11-14. **This is the live plan, not a claim of completion.**
+Latest evidence: [implementation log](IMPLEMENTATION_LOG.md). Earlier branch/CI references below are historical; current implementation is on `main`.
+
 A checkmark is used only for implemented items with the evidence noted. The starter website and extension exist as source but have NOT been live/browser-tested. The TeraBox downloader engine is NOT connected.
 
 ## Gate 0 — Project foundation and feasibility

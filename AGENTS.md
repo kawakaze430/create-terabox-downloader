@@ -1,7 +1,7 @@
 # Instructions for All Developers and Codex Agents
 
 **Project:** Independently operated, commercially competitive TeraBox downloader website + browser extension.  
-**Updated:** 2026-11-13.
+**Updated:** 2026-11-14.
 
 ## READ FIRST — canonical product intent
 
@@ -35,7 +35,7 @@ These documents describe **planned targets**, not proof of implementation. The a
 For each task:
 1. Inspect and summarize relevant existing code/behavior and expected feature acceptance.
 2. Choose the smallest high-value solution; reuse existing code and suitable libraries.
-3. Implement a bounded change, with tests; prefer PRs and clear commits.
+3. Implement a bounded change with tests and clear commits. Current owner instruction: work directly on `main`, create no new branch or PR, and push coherent verified checkpoints roughly every 10 minutes during active work. Never force-push or overwrite concurrent changes.
 4. Run relevant lint/type/unit checks, then targeted integration/browser checks. A mocked pass is not a successful real TeraBox download.
 5. Update feature status and any architecture decision or known limitation.
 6. Report what changed, exact commands/tests executed, results, untested items, security/license implications, and next prioritized work.

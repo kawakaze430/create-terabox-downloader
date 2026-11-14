@@ -1,6 +1,6 @@
 # TeraBox Downloader Platform — Product Vision & Developer Hub
 
-> **Status (2026-11-13):** Development foundation added on the `feat/phase-0-foundation` branch: FastAPI link-validation endpoints with automated tests, a Next.js development UI, a Chrome/Edge Manifest V3 popup, and GitHub CI configuration. **These are not a working TeraBox downloader**. Live file metadata, previews, and downloads remain unimplemented and unverified.
+> **Status (2026-11-14):** Development is on `main`. The FastAPI link validator, strict provider contract, readiness endpoint and credential-gated official OAuth client are integrated and pass 82 offline tests. The Next.js site and MV3 extension are development starters. **Live TeraBox authorization, metadata and downloads are still blocked and unverified.** See [implementation log](docs/IMPLEMENTATION_LOG.md) for exact evidence and the next task.
 
 ## Our mission
 
@@ -35,7 +35,11 @@ The product should be owned and operated through our own GitHub, hosting, infras
 
 ## Run and develop the starter
 
-See **[Local Development](docs/LOCAL_DEVELOPMENT.md)** for API, website and extension setup, and **[Ordered Implementation Checklist](docs/IMPLEMENTATION_CHECKLIST.md)** for the complete tracked roadmap. The website and extension source are development previews. API tests passed locally (20 cases); website builds and browser behavior still require CI/manual verification. The backend currently responds with `PROVIDER_NOT_CONFIGURED` for valid links rather than claiming downloads work.
+See **[Local Development](docs/LOCAL_DEVELOPMENT.md)** for API, website and extension setup, and **[Ordered Implementation Checklist](docs/IMPLEMENTATION_CHECKLIST.md)** for the complete tracked roadmap. The website and extension source are development previews. The integrated API passes 82 offline tests; browser behavior still requires verification. The backend currently responds with `PROVIDER_NOT_CONFIGURED` for valid links rather than claiming downloads work.
+
+## Official integration research (new)
+
+TeraBox's [own Open Platform documentation](https://www.terabox.com/integrations/docs?lang=en) describes OAuth, file metadata and download endpoints for approved partners. We have added an **offline-tested OAuth client scaffold**, but have **not received partner credentials or verified public-share download permissions**. See **[Official Open Platform integration handoff](docs/OFFICIAL_OPEN_PLATFORM.md)** for exact implementation, safety constraints and the application process.
 
 ## Immediate, non-negotiable first milestone
 
