@@ -19,6 +19,21 @@ jobs:
       - run: python -m pip install -r services/api/requirements.lock
       - run: PYTHONPATH=services/api python -m pytest -q services/api/tests
       - run: python -m pip check
+      - name: Verify offline operator preflight (no live network)
+        run: |
+          set +e
+          PYTHONPATH=services/api python -m app.preflight > /tmp/terabox_preflight.json
+          status=$?
+          set -e
+          test "$status" -eq 0 -o "$status" -eq 2
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path("/tmp/terabox_preflight.json").read_text())
+          assert report["live_verified"] is False
+          assert report["public_provider_enabled"] is False
+          print("Offline preflight checked; configuration_ready:", report["configuration_ready"])
+          PY
   web:
     runs-on: ubuntu-latest
     env:
