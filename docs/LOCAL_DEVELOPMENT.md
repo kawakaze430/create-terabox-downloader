@@ -24,7 +24,7 @@ In a second shell:
 
     cd apps/web
     cp .env.example .env.local       # Windows: copy .env.example .env.local
-    npm install
+    npm ci
     npm run dev
 
 Open http://localhost:3000. The interface validates supported share URL shapes with the API. "Check downloader status" reports that a live provider is not configured.
@@ -37,13 +37,13 @@ The extension opens localhost:3000 and pre-fills the share link. It does **not**
 ## Tests
 From repository root:
 
-    python -m pip install -r services/api/requirements.txt
+    python -m pip install -r services/api/requirements.lock
     PYTHONPATH=services/api python -m pytest -q services/api/tests   # bash/macOS
     node --check apps/extension/popup.js
 
-Next.js build verification requires npm installation:
+Next.js build verification requires npm ciation:
 
-    cd apps/web && npm install && npm run build
+    cd apps/web && npm ci && npm run build
 
 No actual remote TeraBox API request is made in any parser test. Passing mocked tests does not establish download functionality.
 
@@ -63,3 +63,30 @@ Supported hosts are explicitly allowlisted in services/api/app/links.py and must
 - Replace the local extension destination with configurable published website, test extension behavior, and publish privacy terms.
 - Add deployment, operational monitoring and legal review.
 - Follow docs/IMPLEMENTATION_CHECKLIST.md in order.
+
+## Repeatable browser checks
+
+Install API dependencies above and run `npm ci` in `apps/web`, then:
+
+```bash
+npm run build
+npx playwright install chromium
+npm run test:e2e
+```
+
+Playwright starts both the production web build and local API. Ensure `python`
+uses the API virtual environment. For a preinstalled Chromium, set
+`PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium`. Both desktop and mobile
+viewports exercise the real validation API; the live provider stays disabled.
+Extension checks: `node --test apps/extension/tests/*.test.mjs` from the repo root.
+
+### API limits and privacy
+
+See `services/api/.env.example` for body, timeout, concurrency and rate limits.
+The limiter uses the ASGI peer address, never raw `X-Forwarded-For`; only configure
+Uvicorn trusted proxy IPs for your actual proxy. Limits are per process, so apply
+aggregate quotas at your ingress for multiple replicas. No private share URL or
+upstream exception text is emitted by application error handlers. Disable access
+logging (`--no-access-log`) and review hosting/proxy logs before using real shares.
+The extension fragment handoff is cleared after reading; manually supplied legacy
+query links can still reach hosting access logs before the page clears them.

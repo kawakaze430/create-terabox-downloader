@@ -4,7 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class Capabilities(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", strict=True)
     metadata: bool = True
     preview: bool = False
     download: bool = False
@@ -15,7 +15,7 @@ class Capabilities(BaseModel):
 
 
 class SharedFile(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", strict=True)
     file_id: str = Field(min_length=1, max_length=256)
     name: str = Field(min_length=1, max_length=512)
     kind: Literal["file", "folder"] = "file"
@@ -50,7 +50,7 @@ class SharedFile(BaseModel):
 
 
 class ShareResolution(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", strict=True)
     provider: Literal["terabox"] = "terabox"
     files: list[SharedFile] = Field(default_factory=list, max_length=200)
     capabilities: Capabilities = Field(default_factory=Capabilities)

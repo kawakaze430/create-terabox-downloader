@@ -1,4 +1,6 @@
-fastapi>=0.115,<1
-uvicorn>=0.30,<1
-httpx>=0.27,<1
-pytest>=8,<10
+# Direct dependencies; install requirements.lock for reproducible checks.
+fastapi==0.162.7
+uvicorn==0.54.0
+httpx==0.28.1
+pydantic==2.14.3
+pytest==9.2.0

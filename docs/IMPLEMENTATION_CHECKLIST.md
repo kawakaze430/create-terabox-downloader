@@ -12,7 +12,7 @@ A checkmark is used only for implemented items with the evidence noted. The star
 - [x] Run initial parser/API unit tests (20 tests passed locally on 2026-11-13).
 - [x] Check extension JS syntax/manifest JSON locally (2026-11-13).
 - [x] Verify GitHub CI for API, Next.js production build, extension checks: [successful run](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43470500522) (2026-11-13). Browser/manual tests remain pending.
-- [ ] Generate and commit locked dependency manifests; pin patch versions and audit vulnerabilities.
+- [x] Pin direct dependencies and commit Python/Node dependency locks (2026-11-14); npm audit reports 0 vulnerabilities. Python advisory scan remains pending.
 - [ ] Audit all five reference repositories for features, current licenses, code health and upstream dependencies.
 - [x] Review TeraBox's published terms and record outstanding API authorization questions in [PROVIDER_FEASIBILITY.md](PROVIDER_FEASIBILITY.md) (2026-11-13); a usable permitted integration remains unconfirmed.
 - [ ] Create or receive own authorized, non-sensitive sample TeraBox share URLs for functional tests.
@@ -47,7 +47,7 @@ A checkmark is used only for implemented items with the evidence noted. The star
 
 ## Gate 3 — Production, privacy and operational quality
 - [ ] Add exhaustive URL/redirect SSRF tests, HTTP egress limits, size/time/concurrency quotas.
-- [ ] Add API rate limiting, secure error handling, privacy-safe logs and secret management.
+- [x] Add bounded per-process API rate/concurrency limits, sanitized errors and privacy headers (2026-11-14; 100 backend tests). Deployment secret management and shared edge limits remain operator work.
 - [ ] Add unit/contract/E2E Playwright tests, cross-browser extension tests and CI gates.
 - [ ] Add health/readiness, monitoring/alerts, incident runbook and cost dashboard.
 - [ ] Deploy owned staging environment, test with authorized files and track releases.

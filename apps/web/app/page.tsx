@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 type ValidResult = { valid: true; hostname: string; normalized_url: string };
 type ApiFailure = { error?: { code: string; message: string } };
@@ -12,43 +12,68 @@ export default function Home() {
   const [verified, setVerified] = useState<ValidResult | null>(null);
   const [message, setMessage] = useState("");
   const [checking, setChecking] = useState(false);
+  const validationRequest = useRef<AbortController | null>(null);
+  const providerRequest = useRef<AbortController | null>(null);
 
   useEffect(() => {
-    const incoming = new URLSearchParams(window.location.search).get("url");
-    if (incoming) setUrl(incoming.slice(0, 2048));
+    const incoming = new URLSearchParams(window.location.hash.slice(1)).get("url")
+      ?? new URLSearchParams(window.location.search).get("url");
+    if (incoming) {
+      setUrl(incoming.slice(0, 2048));
+      // Consume extension handoff once; do not retain private links in history.
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+    return () => { validationRequest.current?.abort(); providerRequest.current?.abort(); };
   }, []);
 
   async function checkLink(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    validationRequest.current?.abort();
+    providerRequest.current?.abort();
+    const controller = new AbortController();
+    validationRequest.current = controller;
+    const timer = window.setTimeout(() => controller.abort(), 15000);
+    setChecking(false);
     setBusy(true);
     setVerified(null);
     setMessage("");
     try {
       const response = await fetch(apiBase + "/api/v1/shares/validate", {
         method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ url: url.trim() }), cache: "no-store",
+        body: JSON.stringify({ url: url.trim() }), cache: "no-store", signal: controller.signal,
       });
       const data = (await response.json()) as ValidResult & ApiFailure;
       if (!response.ok) throw new Error(data.error?.message ?? "Link validation failed.");
-      setVerified(data);
+      if (validationRequest.current === controller) setVerified(data);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Unexpected error. Try again.");
-    } finally { setBusy(false); }
+      if (validationRequest.current === controller) setMessage(controller.signal.aborted ? "The request timed out. Please try again." : error instanceof Error ? error.message : "Unexpected error. Try again.");
+    } finally {
+      window.clearTimeout(timer);
+      if (validationRequest.current === controller) { setBusy(false); validationRequest.current = null; }
+    }
   }
 
   async function checkProvider() {
     if (!verified) return;
+    providerRequest.current?.abort();
+    const controller = new AbortController();
+    providerRequest.current = controller;
+    const timer = window.setTimeout(() => controller.abort(), 15000);
     setChecking(true);
     setMessage("");
     try {
       const response = await fetch(apiBase + "/api/v1/shares/resolve", {
         method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ url: verified.normalized_url }), cache: "no-store",
+        body: JSON.stringify({ url: verified.normalized_url }), cache: "no-store", signal: controller.signal,
       });
       const data = (await response.json()) as ApiFailure;
-      setMessage(response.ok ? "Provider returned a response; verify the implementation before offering downloads." : data.error?.message ?? "Provider not available.");
-    } catch { setMessage("Cannot reach the backend. Start the API server first."); }
-    finally { setChecking(false); }
+      if (providerRequest.current === controller) setMessage(response.ok ? "Provider returned a response; verify the implementation before offering downloads." : data.error?.message ?? "Provider not available.");
+    } catch {
+      if (providerRequest.current === controller) setMessage(controller.signal.aborted ? "The request timed out. Please try again." : "Cannot reach the service. Please try again shortly.");
+    } finally {
+      window.clearTimeout(timer);
+      if (providerRequest.current === controller) { setChecking(false); providerRequest.current = null; }
+    }
   }
 
   return <main className="shell">
@@ -59,7 +84,12 @@ export default function Home() {
       <p className="intro">A trustworthy foundation for authorized TeraBox links. At this stage, you can validate a share URL. Video previews and real downloads are not connected yet.</p>
       <form onSubmit={checkLink} className="search" aria-label="Validate a share link">
         <label htmlFor="share-url">TeraBox share URL</label>
-        <div className="input-row"><input id="share-url" type="url" autoComplete="url" required maxLength={2048} value={url} onChange={event => setUrl(event.target.value)} placeholder="https://terabox.com/s/…" /><button type="submit" disabled={busy}>{busy ? "Checking…" : "Validate link"}</button></div>
+        <div className="input-row"><input id="share-url" type="url" autoComplete="off" spellCheck={false} required maxLength={2048} value={url} onChange={event => {
+          validationRequest.current?.abort(); providerRequest.current?.abort();
+          validationRequest.current = null; providerRequest.current = null;
+          setBusy(false); setChecking(false); setVerified(null); setMessage("");
+          setUrl(event.target.value);
+        }} placeholder="https://terabox.com/s/…" /><button type="submit" disabled={busy}>{busy ? "Checking…" : "Validate link"}</button></div>
       </form>
       {verified && <div className="result" role="status"><div className="result-title">✓ Recognized TeraBox share URL</div><p>Supported domain: <strong>{verified.hostname}</strong></p><p>Only URL format has been validated. File access and availability have not been checked.</p><button className="secondary-button" onClick={checkProvider} disabled={checking}>{checking ? "Checking…" : "Check downloader status"}</button></div>}
       {message && <p className="notice" role="alert">{message}</p>}
