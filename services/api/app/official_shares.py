@@ -21,6 +21,14 @@ from .open_platform import OpenPlatformFailure, approved_api_origin
 from .provider import ProviderError, ProviderErrorCode
 
 
+def validated_operator_token(value: str) -> SecretStr:
+    """Fail closed on malformed operator tokens before sending OAuth requests."""
+    if (not isinstance(value, str) or not value or len(value) > 8192 or
+            any(ord(c) < 33 or ord(c) == 127 for c in value)):
+        raise OpenPlatformFailure("A valid operator access token is required.")
+    return SecretStr(value)
+
+
 def uint(value):
     if type(value) is int:
         number = value
@@ -82,11 +90,8 @@ class OfficialShares:
     def __init__(self, http, origin, token: SecretStr, approved_api_hosts, download_hosts):
         self.http = http
         self.origin = approved_api_origin(origin, validate_hosts(approved_api_hosts))
-        self.token = token
-        self.download_hosts = validate_hosts(download_hosts)
-        value = token.get_secret_value()
-        if not value or len(value) > 8192 or any(ord(c) < 33 or ord(c) == 127 for c in value):
-            raise OpenPlatformFailure("A valid operator access token is required.")
+        self.token = validated_operator_token(token.get_secret_value())
+        self.download_hosts = validate_hosts(download_hosts
 
     async def resolve(self, link):
         payload = await bounded_json(self.http, self.origin + "/openapi/api/shorturlinfo", params={
