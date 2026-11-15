@@ -24,7 +24,7 @@ from .provider import ProviderError, ProviderErrorCode
 def validated_operator_token(value: str) -> SecretStr:
     """Fail closed on malformed operator tokens before sending OAuth requests."""
     if (not isinstance(value, str) or not value or len(value) > 8192 or
-            any(ord(c) < 33 or ord(c) == 127 for c in value)):
+            any(ord(c) < 33 or ord(c) > 126 for c in value)):
         raise OpenPlatformFailure("A valid operator access token is required.")
     return SecretStr(value)
 

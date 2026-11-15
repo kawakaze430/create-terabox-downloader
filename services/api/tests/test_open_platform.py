@@ -207,6 +207,7 @@ def test_module_is_opt_in():
     {"access_token": "", "refresh_token": "valid", "expires_in": 172800},
     {"access_token": "valid", "refresh_token": "bad\nvalue", "expires_in": 172800},
     {"access_token": "valid", "refresh_token": "valid", "expires_in": True},
+    {"access_token": "nonascii-\u00e9", "refresh_token": "valid", "expires_in": 172800},
 ])
 def test_invalid_tokens_fail_closed(data):
     async def run():
@@ -253,3 +254,36 @@ def test_compressed_response_is_rejected_without_reading():
             with pytest.raises(OpenPlatformFailure):
                 await OpenPlatformOAuth(CREDS, http).exchange_code("test-code")
     asyncio.run(run())
+
+
+@pytest.mark.parametrize("bad_token", [
+    "", "bad token", "has\nnewline", "has\ttab", "bad\x7fchar",
+    "nonascii-\u00e9", "spoof-\u202e", "x" * 8193,
+])
+def test_refresh_and_token_info_reject_malformed_tokens_without_network(bad_token):
+    calls = []
+    def handler(request):
+        calls.append(request.url.path)
+        raise AssertionError("Invalid credentials must not reach the provider")
+
+    async def run():
+        async with fake_client(handler) as http:
+            oauth = OpenPlatformOAuth(CREDS, http, approved_hosts=frozenset({"www.terabox.com"}))
+            with pytest.raises(OpenPlatformFailure):
+                await oauth.refresh(SecretStr(bad_token), timestamp=1705570481)
+            with pytest.raises(OpenPlatformFailure):
+                await oauth.token_info(SecretStr(bad_token))
+
+    asyncio.run(run())
+    assert calls == []
+
+
+@pytest.mark.parametrize("bad_code", ["bad code", "bad\ncode", "nonascii-\u00e9", "spoof-\u202e"])
+def test_exchange_code_rejects_malformed_values_before_network(bad_code):
+    calls = []
+    async def run():
+        async with fake_client(lambda request: calls.append(request) or httpx.Response(200)) as http:
+            with pytest.raises(ValueError):
+                await OpenPlatformOAuth(CREDS, http).exchange_code(bad_code, timestamp=1705570481)
+    asyncio.run(run())
+    assert calls == []

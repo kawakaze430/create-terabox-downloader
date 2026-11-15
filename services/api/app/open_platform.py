@@ -29,6 +29,16 @@ class OpenPlatformFailure(RuntimeError):
     """Sanitized failure: never contains upstream bodies or secrets."""
 
 
+def checked_credential_token(value: SecretStr) -> str:
+    """Fail closed on malformed OAuth credentials before constructing HTTP requests."""
+    if not isinstance(value, SecretStr):
+        raise OpenPlatformFailure("Invalid TeraBox authorization token.")
+    token = value.get_secret_value()
+    if not token or len(token) > 8192 or any(ord(c) < 33 or ord(c) > 126 for c in token):
+        raise OpenPlatformFailure("Invalid TeraBox authorization token.")
+    return token
+
+
 @dataclass(frozen=True)
 class PartnerCredentials:
     client_id: str
@@ -76,7 +86,7 @@ class OAuthTokens(BaseModel):
     @classmethod
     def valid_token(cls, token: SecretStr) -> SecretStr:
         value = token.get_secret_value()
-        if not value or len(value) > 8192 or any(ord(c) < 33 or ord(c) == 127 for c in value):
+        if not value or len(value) > 8192 or any(ord(c) < 33 or ord(c) > 126 for c in value):
             raise ValueError("Invalid authorization token.")
         return token
 
@@ -174,7 +184,7 @@ class OpenPlatformOAuth:
         }
 
     async def exchange_code(self, code: str, *, timestamp: int | None = None) -> OAuthTokens:
-        if not code or len(code) > 1024 or any(ord(c) < 33 for c in code):
+        if not code or len(code) > 1024 or any(ord(c) < 33 or ord(c) > 126 for c in code):
             raise ValueError("Invalid authorization code.")
         now = int(time.time()) if timestamp is None else timestamp
         data = await self._post_form("/oauth/gettoken", {
@@ -186,9 +196,10 @@ class OpenPlatformOAuth:
             raise OpenPlatformFailure("Incomplete TeraBox authorization response.") from None
 
     async def refresh(self, refresh_token: SecretStr, *, timestamp: int | None = None) -> OAuthTokens:
+        token = checked_credential_token(refresh_token)
         now = int(time.time()) if timestamp is None else timestamp
         data = await self._post_form("/oauth/refreshtoken", {
-            **self._signed(now), "refresh_token": refresh_token.get_secret_value(),
+            **self._signed(now), "refresh_token": token,
         })
         try:
             return OAuthTokens.model_validate(data)
@@ -198,8 +209,9 @@ class OpenPlatformOAuth:
     async def token_info(self, access_token: SecretStr) -> tuple[TokenInfo, str]:
         if not self._approved_hosts:
             raise IntegrationNotReady("Operator-approved TeraBox API hosts are required.")
+        token = checked_credential_token(access_token)
         data = await self._post_form("/oauth/tokeninfo", {
-            "access_token": access_token.get_secret_value(),
+            "access_token": token,
         })
         try:
             info = TokenInfo.model_validate(data)

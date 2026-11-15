@@ -135,7 +135,8 @@ def configured_env():
 
 
 @pytest.mark.parametrize("bad_token", [
-    "bad token", "bad" + chr(10) + "value", "bad" + chr(9) + "value", "bad" + chr(127) + "value", "x" * 8193,
+    "bad token", "bad" + chr(10) + "value", "bad" + chr(9) + "value", "bad" + chr(127) + "value",
+    "bad" + chr(128) + "value", "spoof-\u202e", "x" * 8193,
 ])
 def test_preflight_rejects_malformed_operator_access_token_before_network(bad_token, monkeypatch, capsys):
     from app import preflight
