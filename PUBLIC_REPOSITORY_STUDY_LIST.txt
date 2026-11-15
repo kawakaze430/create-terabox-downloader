@@ -1,0 +1,278 @@
+PUBLIC REPOSITORY STUDY LIST — CREATE TERABOX DOWNLOADER
+Repository: https://github.com/kawakaze430/create-terabox-downloader
+Verified catalog snapshot: 2026-11-15 (GitHub repository URLs and metadata checked).
+Prepared for: all developers and Codex agents.
+
+MISSION
+Build one independent, commercially competitive, maintainable TeraBox website,
+Chrome/Edge extension and shared FastAPI backend in OUR OWN MONOREPO.
+Do not blindly combine multiple full applications. Keep existing working code.
+The highest priority remains an AUTHORIZED, reproducible metadata result and a
+COMPLETED checksum-verified real file transfer. No such live transfer is verified.
+Official partner documentation: https://www.terabox.com/integrations/docs?lang=en
+Official partner application: https://www.terabox.com/integrations
+Operator test guide: docs/OPERATOR_VALIDATION.md
+Current blocking issue: https://github.com/kawakaze430/create-terabox-downloader/issues/2
+
+READ BEFORE USING REPOSITORIES
+- This is a research/inspiration inventory, NOT a list of production-ready
+  download engines. Existence and GitHub metadata were checked; code security,
+  licensing provenance, compliance and real downloads have NOT all been audited.
+- "No license detected" means do NOT copy code without rights/permission.
+  "MIT" or another metadata label still requires review of actual LICENSE,
+  file-level notices and transitive dependencies.
+- Do not use borrowed session cookies, untrusted demo proxies, undocumented
+  endpoints or DRM/authentication/premium bypasses in our product.
+- We must confirm partner authorization and per-user access scope before going
+  live. Publicly shared content is not automatically free to redistribute.
+- Priority P0 = feasibility/security; P1 = initial product; P2 = after core
+  proof; P3 = later; HISTORY = learn from failures, not a foundation.
+- Original recommendation SH20RAJ/terabox-player-chrome-extension now resolves
+  to sh20raj-dump/terabox-player-chrome-extension; use the canonical owner.
+- Some GitHub metadata uses NOASSERTION even when a project mentions a license.
+  Treat license as unresolved until reviewed by a developer.
+
+TOTAL GITHUB REPOSITORIES: 49
+BREAKDOWN BY GROUP: 8 + 6 + 14 + 5 + 16
+
+===========================================================================
+A. ORIGINAL RECOMMENDATIONS (all earlier references; verify source before copying)
+===========================================================================
+
+01. [P1] https://github.com/gitmarcus07/Teraplayer
+    Study: Primary full-stack reference: React frontend, FastAPI backend, extension, folder/ZIP/player architecture.
+    Notes: MIT; behavior not live-verified
+
+02. [P1] https://github.com/Itz-Ashlynn/Terabox-Web
+    Study: React/TypeScript website UX, file display and error-state patterns.
+    Notes: No license detected in repo metadata: reference-only until legally checked
+
+03. [P0-RESEARCH] https://github.com/saahiyo/terabox-gateway
+    Study: Flask metadata, backend boundary and streaming architecture comparison.
+    Notes: MIT; unofficial endpoints/cookies/proxies require review
+
+04. [P1] https://github.com/sh20raj-dump/terabox-player-chrome-extension
+    Study: Chrome Manifest V3 popup / supported-page detection reference. Older SH20RAJ link now points to this owner.
+    Notes: MIT; old project; review permission and third-party playback URL
+
+05. [P1] https://github.com/saahiyo/tera-peek
+    Study: Next.js metadata, thumbnails, previews and UX comparison.
+    Notes: MIT; externally hosted workers/endpoints require review
+
+06. [P2] https://github.com/SarangGit/TeraDLDW
+    Study: Flask/HTML download and streaming sample for an alternative lightweight architecture.
+    Notes: No license detected; historical/low-maintenance research
+
+07. [P2] https://github.com/Paidguy/terabox-api
+    Study: Cloudflare Worker share metadata/download design candidate.
+    Notes: MIT; test security/authorization/longevity before reuse
+
+08. [P3-HISTORY] https://github.com/0xarchit/Terabox-Downloader
+    Study: Historical failure modes and upstream-breaking-change reference.
+    Notes: MIT; README says currently unavailable: do not use as production base
+
+===========================================================================
+B. ADDITIONAL WEB, BROWSER AND DOWNLOAD USER-EXPERIENCE REFERENCES
+===========================================================================
+
+09. [P2] https://github.com/r0ld3x/terabox-app
+    Study: Next.js paste-link workflow and deployment patterns.
+    Notes: No license detected; stale since 2024
+
+10. [P1] https://github.com/nazzal5448/TeraView-Extension
+    Study: Multi-browser extension UX; preview/download toolbar experience.
+    Notes: No license detected; review permissions, APIs and browser support
+
+11. [P2] https://github.com/techshade/terabox-player
+    Study: Player and simple download-page UX.
+    Notes: No license detected; code/endpoint reliability unknown
+
+12. [P2] https://github.com/codex67cm/TeraboxDownloader
+    Study: Downloader application UX / alternate project structure.
+    Notes: No license detected; source audit required
+
+13. [P3] https://github.com/kdbotss/Terabox-Downloader-Player
+    Study: Older HTML player/download UI patterns.
+    Notes: No license detected; historical only
+
+14. [P3] https://github.com/kdbotss/Terabox-Downloader-Player-V2
+    Study: Second version of HTML player/downloader; compare interface revisions.
+    Notes: No license detected; historical only
+
+===========================================================================
+C. ADDITIONAL TERABOX SDK, API, FILE/SHARE AND TRANSFER RESEARCH
+===========================================================================
+
+15. [P0-RESEARCH] https://github.com/seiya-dev/terabox-node
+    Study: Recently maintained Node.js client for TeraBox account/file interactions.
+    Notes: MIT; review unofficial interfaces and account authorization
+
+16. [P0-RESEARCH] https://github.com/seiya-npm/terabox-api
+    Study: Node package/client for TeraBox interactions; compare API shape with seiya-dev.
+    Notes: MIT; check provenance, duplication and access restrictions
+
+17. [P1-RESEARCH] https://github.com/Damantha126/TeraboxDL
+    Study: Python library: file details, thumbnail, progress callbacks and download design.
+    Notes: MIT; verify whether code relies on unsupported endpoints
+
+18. [P1-RESEARCH] https://github.com/saahiyo-cloud/TeraBridge-api
+    Study: Python CLI/Flask resolver and HLS manifests; study typed response patterns.
+    Notes: License marked NOASSERTION; unknown worker/third-party dependencies
+
+19. [P2] https://github.com/abhinai2244/TeraBox-Dl
+    Study: Bun/TypeScript resolver API; evaluate API design and request validation.
+    Notes: No license detected; don't copy source
+
+20. [P3-HISTORY] https://github.com/maiquocthinh/Terabox-DL
+    Study: Archived Cloudflare Worker/Hono example; past deployment and interface learnings.
+    Notes: ARCHIVED since 2024; no license detected
+
+21. [P3-HISTORY] https://github.com/ivansaul/terabox_downloader
+    Study: Older Python file/folder downloads and error handling.
+    Notes: MIT; 2023 code, may depend on unofficial endpoints
+
+22. [P2-HISTORY] https://github.com/sarevok89/terabox-downloader
+    Study: Recursive folder download and HTTP Range/resume behavior design.
+    Notes: No license detected; READMEs describe session-cookie-based unofficial API
+
+23. [P2] https://github.com/Pahadi10/terabox-upload-tool
+    Study: Node.js account file operations (create/list/update/delete), only if future account features are permitted.
+    Notes: MIT; do not combine with public-share access assumptions
+
+24. [P3] https://github.com/dnigamer/TeraboxUploaderCLI
+    Study: CLI uploads, large-file workflows and operator-side tooling references.
+    Notes: MIT; upload scope outside first downloader milestone
+
+25. [P1-RESEARCH] https://github.com/OpenSIN-Code/TeraBox-SIN
+    Study: Distinguishes official Open Platform OAuth from unofficial API interfaces; inspect client designs.
+    Notes: MIT; this is NOT an official TeraBox SDK
+
+26. [P2-RESEARCH] https://github.com/terabox-storage/skills
+    Study: Community CLI/skill documentation on shares, errors and operational tooling.
+    Notes: MIT; NOT an official TeraBox repository
+
+27. [P3-HISTORY] https://github.com/tttt369/tera-download
+    Study: Userscript browser architecture comparison; inspect rather than reuse.
+    Notes: MIT; possible bypass/undocumented logic; not production base
+
+28. [P3-HISTORY] https://github.com/devrobinop/tera-api
+    Study: Worker-backed direct link/streaming API examples.
+    Notes: MIT; reliance on uncontrolled third-party worker
+
+===========================================================================
+D. TELEGRAM BOT REFERENCES (FUTURE DISTRIBUTION ONLY — NOT CURRENT G1)
+===========================================================================
+
+29. [P3] https://github.com/r0ld3x/terabox-downloader-bot
+    Study: Python Telegram bot flow and queue/download workflow.
+    Notes: No license detected; old since 2024
+
+30. [P3-HISTORY] https://github.com/Hrishi2861/Terabox-Downloader-Bot
+    Study: High-speed Telegram bot flow and abuse/transfer limits.
+    Notes: ARCHIVED; no license detected
+
+31. [P3] https://github.com/MN-BOTS/MN-TeraBox-Downloader-Bot
+    Study: Telegram bot queue and multiple-file handling, plus quota/verification UX.
+    Notes: MIT; depends on external API/worker and cookies; review carefully
+
+32. [P3] https://github.com/abdul97233/TeraBox-Downloader-Bot
+    Study: Telegram download bot user-flow / deployment research.
+    Notes: License NOASSERTION; not an approved service integration
+
+33. [P3-HISTORY] https://github.com/rishi058/TeraBox-Video-Downloader
+    Study: Telegram cache, delivery and error reporting workflows.
+    Notes: No license detected; relies on session cookies
+
+===========================================================================
+E. MAINTAINED GENERAL-PURPOSE LIBRARIES (BUILDING BLOCKS, NOT TERABOX PROVIDERS)
+===========================================================================
+
+34. [P1] https://github.com/videojs/video.js
+    Study: Video player controls, fullscreen, media integrations.
+    Notes: Check current Video.js version/LICENSE; not an upstream resolver
+
+35. [P1-IF-NEEDED] https://github.com/video-dev/hls.js
+    Study: HLS playback only when real permitted HLS stream exists.
+    Notes: Check current license and browser compatibility
+
+36. [P1] https://github.com/microsoft/playwright
+    Study: Cross-browser website integration and regression tests.
+    Notes: Apache-2.0
+
+37. [P2] https://github.com/getsentry/sentry-javascript
+    Study: Privacy-redacted frontend errors and telemetry.
+    Notes: Check current license and DPA/data retention
+
+38. [P2-RESEARCH] https://github.com/aria2/aria2
+    Study: HTTP Range, resumable transfer and segmented download design ideas.
+    Notes: GPL-2.0; legal review required before embedding in proprietary software
+
+39. [P3] https://github.com/ffmpegwasm/ffmpeg.wasm
+    Study: Optional client-side video processing for permitted media.
+    Notes: MIT; large performance/bundle cost
+
+40. [P0] https://github.com/fastapi/fastapi
+    Study: Existing backend framework; versioned API and OpenAPI docs.
+    Notes: MIT; already part of our architecture
+
+41. [P1] https://github.com/vercel/next.js
+    Study: Existing website framework for responsive routing and SEO.
+    Notes: MIT; already part of our architecture
+
+42. [P2] https://github.com/wxt-dev/wxt
+    Study: Browser extension tooling for Chrome/Edge/Firefox; consider only if current MV3 setup needs it.
+    Notes: MIT; do not rewrite stable extension unnecessarily
+
+43. [P2-ALTERNATIVE] https://github.com/PlasmoHQ/plasmo
+    Study: Alternative browser-extension framework to WXT; choose at most one.
+    Notes: MIT; avoid duplicate toolchains
+
+44. [P0] https://github.com/pydantic/pydantic
+    Study: Strict typed provider schemas and validation.
+    Notes: MIT; already used
+
+45. [P0] https://github.com/encode/httpx
+    Study: Bounded async API calls and transport tests.
+    Notes: BSD-3-Clause; already used
+
+46. [P1] https://github.com/astral-sh/ruff
+    Study: Python linting and formatting checks.
+    Notes: MIT
+
+47. [P0] https://github.com/pytest-dev/pytest
+    Study: Python offline provider/unit tests.
+    Notes: MIT; already used
+
+48. [P2] https://github.com/open-telemetry/opentelemetry-python
+    Study: Backend tracing/metrics and privacy-safe observability.
+    Notes: Apache-2.0; add only if needed
+
+49. [P2] https://github.com/shadcn-ui/ui
+    Study: Accessible composable website UI reference.
+    Notes: MIT; avoid gratuitous UI rewrites
+
+===========================================================================
+IMMEDIATE WORK ORDER FOR CODEX
+===========================================================================
+1. Review docs/IMPLEMENTATION_LOG.md, docs/IMPLEMENTATION_CHECKLIST.md,
+   docs/OFFICIAL_OPEN_PLATFORM.md and docs/OPERATOR_VALIDATION.md.
+2. Verify approved TeraBox Open Platform scopes, legal use and test credentials
+   through the operator's secure environment; no secrets in GitHub.
+3. Audit A1, A3, B2, C1, C2 and C3 first for supported architecture, response
+   contracts, preview UX and security risks. Record license, commit SHA, last
+   change, dependency/worker/cookie reliance and a reuse/rewrite/ignore verdict.
+4. Keep provider unconfigured unless authorized and live verified. Do not
+   fabricate success with mocked responses.
+5. Leverage existing FastAPI/Next.js/Pydantic/HTTPX/pytest/Playwright tests.
+6. Integrate individual ideas or licensed modules only when they improve
+   reliability or verified features. Preserve THIRD_PARTY_NOTICES if reused.
+7. Update implementation checklist with dated evidence and keep owner informed.
+
+CORE ACCEPTANCE TEST:
+At least one explicitly authorized TeraBox file has real provider metadata,
+a complete file transfer, matching size and matching trusted SHA-256 checksum;
+record sanitized results and upstream permission scope. No user-facing
+download feature should be marked production-ready until then.
+
+This file is a curated inventory, not an exhaustive list of GitHub projects
+or a market ranking. Revalidate links, license and activity before use.
