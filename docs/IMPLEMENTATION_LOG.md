@@ -1,5 +1,41 @@
 # Implementation log
 
+## 2026-11-16 — G1 OAuth outbound credential gate and reference audit
+
+Inspected main at `6a088e3795eb8c52cff46180ae1776d3487582ca`,
+open issue #2, open PRs (none), three GitHub Actions jobs,
+the operator-only client, egress, API limits, web and extension source, and both
+primary public references. The latest baseline CI was green; live provider
+integration was and remains unconfigured.
+
+Pushed [commit 8203a017](https://github.com/kawakaze430/create-terabox-downloader/commit/8203a017032516e9ae30a9790fc141752604880a)
+directly to `main`: require printable ASCII and bounded tokens on OAuth
+refresh/token-info **before** building outbound HTTP requests; also reject
+non-ASCII authorization codes, provider-returned tokens and operator-probe
+tokens. Four code/test files changed. Regression tests prove malformed tokens
+do not cause HTTP calls and that invalid offline operator configuration cannot
+run `--live`. No provider credentials or external service was used.
+
+[GitHub Actions run 43750414786](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43750414786)
+passed at `8203a017`: **173 offline Python tests**, **16 extension
+tests**, successful Next.js production build/typecheck, **10 Playwright
+Chromium desktop/mobile tests**, and the no-network preflight. These are
+CI tests with fixture/mocked provider behavior, not authorized live file
+metadata, a completed download or installed-extension verification.
+
+Source-checked exactly two reference repositories, TeraPlayer at
+`2e60ba4b4963a4112aab57eb2d4770175c5f9965` and TeraBox Gateway at
+`063f61fc61bb173fb936fc487f4a18e40436caab`; their inspected LICENSE
+files are MIT. Both contain worker/third-party extraction or cookie paths
+that are unsuitable as unapproved production providers. See
+[research audit and strict priorities](RESEARCH_AND_LICENSES.md).
+No third-party code was imported.
+
+**Next:** secure written TeraBox partner approval for external-share metadata
+and file-transfer scopes, approved hosts and a non-sensitive owner-controlled
+fixture with trusted SHA-256. Run the explicit live probe only after that.
+Until then G1 remains blocked, and public routes stay disabled.
+
 
 ## 2026-11-15 — Operator token validation before any partner network call
 

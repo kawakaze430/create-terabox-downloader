@@ -66,3 +66,47 @@ Favor mature libraries, minimal bundles, pinned versions, dependency scanning, c
 3. Provider feasibility finding: compliant data access methods, unsupported operations, temporary URL expiry, bandwidth and upstream rate limits.
 4. Dependency evaluation: why each extra library is needed, its exact license and compatibility, maintenance signals, size and security.
 5. Explicit architecture decision with risks and first implementation milestones.
+
+
+## 2026-11-16 — audited two primary code references (not provider acceptance)
+
+**Selection: exactly two primary study repositories.** The 49-entry inventory in
+`PUBLIC_REPOSITORY_STUDY_LIST.txt` was reviewed by purpose, priority and recorded
+license warnings; source-level review concentrated on the two initial candidates.
+Supporting libraries in that inventory are not additional primary download engines.
+
+| Primary reference and audited revision | What the inspected source actually provides | Risks, license and actionable decision |
+| --- | --- | --- |
+| [TeraPlayer](https://github.com/gitmarcus07/Teraplayer) at `2e60ba4b4963a4112aab57eb2d4770175c5f9965` (2026-10-18) | FastAPI `backend/server.py`, React/CRACO `frontend/src/components/FolderBrowser.jsx` and `VideoPlayer.jsx`, browser extension, `backend/services/terabox.py` caching/orchestration, tests. Folder filtering, selection and status UI are useful patterns. | MIT LICENSE file inspected. `backend/services/extractors.py` explicitly uses public third-party API fallbacks and a configurable worker. `terabox.py` can use `COOKIE_JSON`/`TERABOX_NDUS`; MongoDB/admin/caching complexity is not needed for G1. Its legacy `terabox_engine.py` needs individual verification, not blind importing. **Adapt UI state and bounded file-selection concepts after G1; do not import extraction paths, branding, cache of secret links or provider sessions.** |
+| [TeraBox Gateway](https://github.com/saahiyo/terabox-gateway) at `063f61fc61bb173fb936fc487f4a18e40436caab` (2026-06-29) | Flask `src/terabox_gateway/api.py`, aiohttp `terabox_client.py`, `utils.py` retries and parsing, `cache.py` bounded TTL/LRU, `rate_limiter.py` windowed control, `config.py` settings. Its API wrapper and error-normalization patterns can inform offline contract cases. | MIT LICENSE file inspected. `config.py` hardcodes an external Cloudflare Worker, loads cookies; `terabox_client.py` uses the Worker and optional session cookies; `rate_limiter.py` directly trusts caller-supplied forwarded IP headers; `cache.py` logs raw share URLs. No test directory in the audited tree. **Study failure handling only, retaining our existing FastAPI, HTTPX, exact host transport and safer peer-derived limits. Do not import Flask, worker, cookies, IP-header trust or raw-link logging.** |
+
+Both repositories have MIT licenses at the audited revisions, which would permit
+reuse *subject to notices and provenance review*, but **no third-party code was
+copied in this checkpoint**. No current live downloading was reproduced in either
+reference, and a repository README's claims are not our acceptance evidence.
+TeraPlayer is the stronger product/UX reference; Gateway is the focused Python
+provider-boundary/failure-mode reference. Their overlap with existing FastAPI,
+validation, API contracts, request admission and extension code argues against
+framework imports or a rewrite.
+
+### Ranked next actions and acceptance gates
+
+| Priority | Task / source boundary | Dependency; required evidence; feasible now? |
+| --- | --- | --- |
+| 1 | Written partner scope and commercial authorization: `docs/OFFICIAL_OPEN_PLATFORM.md` | TeraBox's approval for external shares, downloads, regions and quotas; **external blocker** |
+| 2 | Operator-owned small public fixture, file ID and trusted SHA-256: `docs/OPERATOR_VALIDATION.md` | Authorized fixture and secrets configured privately; **external blocker** |
+| 3 | Verify real share metadata and endpoint parameter semantics: `app/official_shares.py` | Approved token, regional API host, fixture; filename, ID and size match; **blocked for live proof** |
+| 4 | Demonstrate a complete pinned-host checksum-verified transfer: `app/preflight.py`, `app/egress.py` | Approved CDN host and safe fixture, exact byte count and SHA-256; **blocked for live proof** |
+| 5 | Prevent malformed OAuth credentials from reaching HTTP: `app/open_platform.py`, `app/official_shares.py` | Offline tests; **implemented 2026-11-16, CI 173 backend tests passed** |
+| 6 | Extend SSRF/DNS/redirect and bounded-transfer negative tests: `app/egress.py`, `tests/test_egress.py` | MockTransport and synthetic DNS fixtures; **feasible now**, not live verification |
+| 7 | Design individual user authorization and isolation: `app/provider.py`, `app/open_platform.py` | Scope agreement and per-user consent/token lifecycle; **design feasible, live integration blocked** |
+| 8 | Map verified live provider fields to sanitized contract: `app/models.py`, `tests/test_provider_contract.py` | Real authorized response samples; **blocked for accurate field mapping** |
+| 9 | Implement truthful metadata and file handoff UI: `apps/web/app/page.tsx` | G1 verified download/provider integration and secured API; **deferred** |
+| 10 | Test/publish permission-minimal Chrome/Edge extension and production operations: `apps/extension/`, `docs/ROADMAP_AND_QA.md` | Verified web flow, owned deployment, manual browsers and store accounts; **deferred** |
+
+**Official documentation correction:** TeraBox publishes an Open Platform
+integration guide at https://www.terabox.com/integrations/docs?lang=en (including
+documented OAuth, file/share API operations and regional hosts). Its existence
+does not grant partner credentials, external-share scopes, a production download
+license or permission to reuse account sessions. The public provider remains
+`UnconfiguredProvider` until authorized live validation and per-user isolation.

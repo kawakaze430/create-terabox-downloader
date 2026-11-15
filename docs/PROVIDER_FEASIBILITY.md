@@ -1,13 +1,13 @@
 # P0 Provider Feasibility and Safety Review
 
-**Updated:** 2026-11-13. **Status:** Real TeraBox integration remains **blocked and unverified**.
+**Updated:** 2026-11-16. **Status:** Real TeraBox integration remains **blocked and unverified**.
 **Tracking:** [Issue #2](https://github.com/kawakaze430/create-terabox-downloader/issues/2).
 
 ## What has and has not been established
 
 The [TeraBox Terms of Service](https://www.terabox.com/terms/duty) restrict bypassing authentication/security, access to areas where the user is not authorized, and scraping outside publicly supported interfaces. The terms also require appropriate rights to download content. These are material commercial-launch constraints, not a blanket authorization to use unofficial APIs.
 
-No publicly documented **official cloud-file metadata/download developer API** was verified during this research pass. That is an **unresolved evidence gap**, not proof that no permitted integration could exist.
+The initial 2026-11-13 research pass did not locate an official cloud-file API. **This finding was superseded:** TeraBox's [Open Platform guide](https://www.terabox.com/integrations/docs?lang=en) documents partner OAuth, regional API host discovery, and file/share metadata/download endpoints. However, no partner credentials, approved public-share scopes, authorized live metadata or completed file transfer have been verified. See [official integration](OFFICIAL_OPEN_PLATFORM.md) and [operator validation](OPERATOR_VALIDATION.md).
 
 **Domain warning:** \`teraabox.com\` (with two 'a' letters) offers a *separate link management/shortening API*. It is not evidence of a TeraBox cloud-file developer API; do not merge or trust similarly named products without checking their operator.
 

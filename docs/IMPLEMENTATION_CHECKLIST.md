@@ -3,6 +3,8 @@
 **Updated:** 2026-11-14. **This is the live plan, not a claim of completion.**
 Latest evidence: [implementation log](IMPLEMENTATION_LOG.md). Earlier branch/CI references below are historical; current implementation is on `main`.
 
+**2026-11-16 checkpoint:** [CI 43750414786](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43750414786) passed 173 offline Python tests, 16 extension tests, Next.js build/typecheck and 10 browser checks at commit 8203a017. Malformed OAuth inputs are now rejected before outbound requests. No live metadata/download was verified.
+
 A checkmark is used only for implemented items with the evidence noted. The website validation flow passes 10 browser checks; the extension parser passes 16 unit tests, while installed-extension testing remains pending. The public TeraBox downloader engine is NOT connected.
 
 ## Gate 0 — Project foundation and feasibility
@@ -29,6 +31,7 @@ A checkmark is used only for implemented items with the evidence noted. The webs
 - [ ] Get permitted downloadable file; verify a completed real transfer using own authorized files.
 - [ ] Support expiry, protected links (only permitted access), missing/removed links, upstream outages.
 - [x] Add offline provider/security contracts and an opt-in operator checksum probe (153 tests, 2026-11-14).
+- [x] Harden OAuth refresh/token-info pre-network validation and operator preflight for non-ASCII/invalid tokens; 173 offline tests passed (2026-11-16).
 - [ ] Run authorized live integration tests for valid, expired, unavailable, folder and large-file cases; no live test has passed.
 - [ ] Benchmark real resolution speed, success/failure and bandwidth cost.
 
