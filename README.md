@@ -19,6 +19,7 @@ The product should be owned and operated through our own GitHub, hosting, infras
 | **[Technical Architecture](docs/ARCHITECTURE.md)** | Target monorepo, React/Next.js website, FastAPI service, Chrome/Edge extension, shared API, provider adapter, security, deployment and testing. |
 | **[Roadmap & QA](docs/ROADMAP_AND_QA.md)** | Hard phase gates, current verified status, implementation priorities, test matrix, launch criteria and avoiding wasted Codex credits. |
 | **[Competitors, Open Source & Licensing](docs/RESEARCH_AND_LICENSES.md)** | Links to reference repositories, market sites, reusable libraries, license diligence and research tasks. |
+| **[Public GitHub Repository Study List](PUBLIC_REPOSITORY_STUDY_LIST.txt)** | Curated inventory of 49 verified GitHub repository URLs, grouped by project use, study priority, and licensing/reliability cautions (updated 2026-11-15). |
 
 **The documents above are canonical.** A new developer should not need to read prior ChatGPT chats to understand the goal.
 
