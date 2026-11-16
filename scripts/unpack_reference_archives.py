@@ -9,15 +9,16 @@ from zipfile import ZipFile
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "reference_sources"
+ARCHIVE_DIR = ROOT / "AnalyseFuture" / "archives"
+OUTPUT = ROOT / "AnalyseFuture" / "extracted"
 ARCHIVES = {
     "Teraplayer-main.zip": (
         "Teraplayer-main",
-        "036ccf1889b19c729dcbca65a6846ac38952e3140618d23cb497e236f9cb06f7",
+        "4b06f6e36ff45d12b51615d1a556e39a00d386b7c63087697c03d97e0561033d",
     ),
     "terabox-gateway-main.zip": (
         "terabox-gateway-main",
-        "30d5a4e7e7a36e833ae31a01f2cf850e21a637025875bcd86ce0ba6f7703c5e6",
+        "646e621836e40c6e21cbb510d1c69ce278cea3ef77e7dc72a320a8701b38c394",
     ),
 }
 
@@ -63,7 +64,7 @@ def main() -> None:
         raise ValueError("Reference output directory must not be a symlink")
     OUTPUT.mkdir(exist_ok=True)
     for filename, (top_level, expected_hash) in ARCHIVES.items():
-        source = ROOT / filename
+        source = ARCHIVE_DIR / filename
         if sha256(source.read_bytes()).hexdigest() != expected_hash:
             raise ValueError(f"Archive checksum differs: {filename}")
         with ZipFile(source) as archive:

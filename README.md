@@ -1,5 +1,7 @@
 # TeraBox Downloader Platform — Product Vision & Developer Hub
 
+The detailed future product idea is in [PROJECT_IDEA_AND_FUTURE_VISION.txt](PROJECT_IDEA_AND_FUTURE_VISION.txt). Uploaded reference projects are preserved separately in [AnalyseFuture](AnalyseFuture/README.md); the [structure audit](docs/REPOSITORY_STRUCTURE_AUDIT_2026-11-17.md) records what was kept and moved.
+
 > **Long-chat continuity:** Read [Permanent Project Master Handoff](docs/START_HERE_PROJECT_HANDOFF.md),
 > [recoverable chat archive](docs/PROJECT_CONVERSATION_ARCHIVE.md),
 > [verbatim 1,160-line master development prompt](docs/MASTER_DEVELOPMENT_PROMPT_2026-11-15.md),

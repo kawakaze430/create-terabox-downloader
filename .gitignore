@@ -14,3 +14,4 @@ test-results/
 playwright-report/
 *.tsbuildinfo
 reference_sources/
+/AnalyseFuture/extracted/
