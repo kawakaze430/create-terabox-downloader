@@ -1,0 +1,268 @@
+PROJECT IDEA AND FUTURE VISION
+Independent media access, preview and download workspace
+Prepared: 17 November 2026 (India time)
+
+1. THE IDEA IN ONE PARAGRAPH
+
+Build a trusted, independently branded place where people can inspect, play,
+organize and download media they own or are permitted to access. TeraBox shares
+are the first target, with a website, browser extension and one shared API.
+Over time, the same product can support user-imported files and other lawful
+storage providers. Our differentiation should be accurate results, broad media
+format support, safe transfers, a polished mobile experience, privacy and
+transparent failures. "Every TeraBox video" is an ambition to maximize
+coverage of accessible content, not a claim that every link can be downloaded.
+
+2. START WITH WHAT WE ALREADY BUILT
+
+This is an existing product, not a new project. The current repository has:
+
+- A Python FastAPI API with versioned link validation, strict host admission,
+  bounded requests, rate/concurrency limits, privacy-safe errors and health.
+- A provider contract and an official integration candidate. The public
+  provider is deliberately unconfigured. Its operator-only OAuth, metadata,
+  outbound transport and checksum probe have offline fixture tests.
+- A responsive Next.js/TypeScript website that validates share-link format and
+  truthfully shows that the live provider is unavailable.
+- A Chrome/Edge Manifest V3 development extension that recognizes supported
+  share URLs and hands them to the website. It is not a published extension.
+- CI and earlier evidence of 173 offline API tests, 16 extension parser tests,
+  10 desktop/mobile browser checks, a web build and a type check.
+- Two complete source ZIPs, TeraPlayer and terabox-gateway, unpackable as
+  isolated references. They are not integrated download engines.
+
+No live TeraBox metadata, completed TeraBox transfer, real player, folder
+browsing, batch ZIP, deployed product or installed extension has been proven.
+The current API responds with PROVIDER_NOT_CONFIGURED for a valid share.
+The repository's current source and fresh tests always outrank these dated
+status notes.
+
+3. THE USER PROMISE
+
+For a supported and accessible file, a person should be able to:
+
+1) Paste a link or import a file through a supported, user-controlled path.
+2) See real name, size, type, access state and available actions.
+3) Preview the actual available media, with honest quality labels.
+4) Download the original or an explicitly selected conversion when permitted.
+5) See real byte progress, a clear final result and useful error recovery.
+
+The product should never display a made-up filename, 4K option, download URL,
+completed transfer or "working" status merely because a URL looks valid.
+
+4. WHAT "OUR OWN STRONG ALGORITHM" CAN MEAN
+
+We can own an excellent media and transfer engine without depending on one
+partner API for the whole business. It can:
+
+- Classify and normalize exact supported links without fetching arbitrary URLs.
+- Select a permitted source adapter: an approved provider interface, a
+  user-authorized export, a user-supplied file, or storage we operate.
+- Confirm permission and discover actual file capabilities before showing
+  actions. Treat unknown capabilities as unavailable.
+- Normalize metadata into one versioned contract for website and extension.
+- Stream accessible bytes under size, time, concurrency and bandwidth budgets.
+- Verify length and cryptographic checksums where trustworthy source hashes or
+  owner-held originals exist. Mark verification limits honestly otherwise.
+- Resume only when the source supports safe HTTP ranges and stable identity.
+- Use bounded retries with backoff for transient failures, never endlessly.
+- Detect container/codec from accessible bytes; choose browser playback,
+  permitted conversion or a clear unsupported-codec message.
+- Cancel work cleanly; avoid retaining raw private links or sensitive tokens.
+
+This engine is independent in design, hosting, code and user experience. It
+still needs the source to supply bytes. A share URL by itself does not contain
+the video, an encryption key, a stable download URL or access rights. Neither
+ordinary code nor AI can guarantee bytes TeraBox refuses to provide. We can
+research publicly documented, lawful access paths without assuming partner
+approval is the only technical option, but must verify terms and live behavior
+before enabling each path. We must not bypass login, CAPTCHA, DRM, premium
+limits, rate limits or revoked permissions.
+
+5. VIDEO COVERAGE: A TRUTHFUL CAPABILITY MATRIX
+
+Source or situation                 Goal and present constraint
+--------------------------------------------------------------------------
+Public, accessible share            Target metadata, preview and download
+                                    after a permitted live path is proven.
+Owner's local/exported video        Can build processing and playback under
+                                    our control, subject to rights and cost.
+MP4, WebM, MOV, MKV, AVI, TS        Aim to identify actual container/codec.
+                                    Browser playback depends on codec;
+                                    conversion requires accessible bytes.
+HLS or DASH stream                  Play or save only if a lawful source
+                                    exposes it and usage is permitted.
+Folder with many videos             Browse/paginate and select files only
+                                    when a real listing is available.
+Very large video                    Use bounded streaming and optional
+                                    resume if source supports it; budget
+                                    storage, bandwidth and time.
+Password-protected share            Require the legitimate password and a
+                                    supported authorization flow. No bypass.
+Private account file                Require the account owner's authorized
+                                    access and isolated user credentials.
+Premium-only resolution/file        Offer only if that user actually has
+                                    the provider-granted entitlement.
+DRM or encrypted video              Require the legitimate license/key and
+                                    allowed playback/export. No circumvention.
+Expired, deleted or revoked share   Cannot recover from a link alone; report
+                                    the actual unavailable state.
+Region-restricted or blocked source Cannot promise access; respect policy
+                                    and provider controls.
+
+"Every type" should refer to broad, tested format and situation handling for
+content the user can access. It must not be used to promise every TeraBox
+account state, title, resolution or protection level.
+
+6. PRODUCT EXPERIENCE WORTH BUILDING
+
+Core website: paste/import flow, accessible file cards, file/folder tree,
+search and sort, honest status, preview when available, download choice and
+privacy controls. Mobile must be a first-class experience rather than a
+shrunk desktop page. Explain non-affiliation with TeraBox plainly.
+
+Player: actual quality/codec detection, keyboard controls, subtitles when
+available or user supplied, speed, fullscreen, picture-in-picture, poster,
+buffering and expiry messages. Continue Watching can remain local and opt-in.
+Do not advertise upscaling or 4K as if it restores absent source detail.
+
+Downloads: one-file transfer first, then queue, cancellation, source-supported
+resume and selected-file batch. ZIP export needs file-count, total-byte,
+memory, disk and time limits. A "download started" click is not proof that
+the file completed; success must be based on the actual transfer.
+
+Extension: keep minimal browser permissions, identify only supported share
+pages, show current capability and send the user into the same website/API
+flow. Never collect browser cookies or unrelated tab history.
+
+Trust: no raw private share URLs in ordinary logs, minimal retention, secure
+token handling, accessible errors, clear copyright/reporting process and
+visible service health. Reliability must be measured on a defined set of
+authorized fixtures rather than on marketing claims.
+
+7. HOW THE EXISTING PROJECT AND ZIP REFERENCES FIT TOGETHER
+
+Keep one product, one API contract and the current Python FastAPI backend,
+TypeScript Next.js website and small JavaScript extension. Different languages
+are normal at these boundaries. Generate client types from OpenAPI if manual
+contract drift becomes costly. A one-language rewrite would discard tested
+work without making TeraBox supply files.
+
+TeraPlayer's folder selection, player states and extension UX are useful
+reference ideas. terabox-gateway's bounded cache/retry and error mapping are
+reference ideas. Both have MIT license files, but any adapted code needs a
+file-level audit and required notices. Their worker, cookie and broad URL
+paths should not be imported as the foundation of our public downloader.
+Keep the extracted complete projects separate from our running app.
+
+8. FEASIBILITY: WHAT WE CAN AND CANNOT PROMISE
+
+Feasible now: improve offline validation/security, build a strong local-file
+media experience, create provider-neutral contracts, test transfer mechanics
+against our own server and fixtures, improve UI/accessibility, prepare
+deployment and observe costs. These do not prove TeraBox download access.
+
+Conditional: TeraBox public-share metadata, download, private access,
+password flows, folder tree, source qualities, CDN handoff and real playback.
+Each depends on a lawful, working access path and live evidence. The official
+Open Platform is one candidate, but its documentation does not establish our
+commercial external-share permissions. Other public interfaces require the
+same scrutiny; an unofficial endpoint can disappear at any time.
+
+Not possible from software alone: recover deleted files with no independent
+copy; create withheld encryption keys; defeat DRM or authentication; grant a
+premium entitlement; force a remote server to send bytes; infer real metadata
+or video resolution from a bare URL. AI does not change these limits.
+
+If a reliable TeraBox path cannot be established, the product can still grow
+as a user-controlled media workspace for imported files, owned storage and
+other permitted providers. It should label TeraBox links as validation-only
+in that case, never pretend a download will work.
+
+9. AI-ERA FEATURES THAT ACTUALLY HELP USERS
+
+AI should operate on files users can access and have rights to process.
+Offer opt-in local or private processing where feasible:
+
+- Natural-language search over a user's own filenames and approved metadata.
+- Optional transcription, translation and subtitle search for accessible
+  audio/video, with language and accuracy indicators.
+- Scene/chapter suggestions, duplicate detection and semantic organization.
+- Smart download planning: predict size, codec support, expected cost and
+  whether a stream or conversion is practical before work starts.
+- Error diagnosis that maps known failure codes to clear next actions.
+- Accessibility aids such as generated captions, subject to consent and
+  transparent quality limits.
+
+Never send private video, share links or tokens to an AI service by default.
+AI output is a suggestion, not evidence of a real file, license or transfer.
+Do not use agents to hunt for leaked credentials or invent bypasses when a
+provider denies access.
+
+10. PHASED ROADMAP AND DECISION GATES
+
+Now to 3 months: preserve the existing tested foundation; strengthen negative
+security tests; define lawful provider access candidates; obtain owner-owned
+test fixtures; prove one real metadata response and one complete checksum-
+matched download if access is available. In parallel, prototype media handling
+on our own files so progress does not depend entirely on TeraBox.
+
+3 to 12 months: after a live access path is proven, add user-scoped access,
+truthful file cards and downloads, then preview/player and folders as the
+source supports them. Test Chrome and Edge extension installation, mobile
+accessibility, costs, privacy, copyright handling and staged deployment.
+If access is not proven, invest instead in the user-import/owned-storage
+product and keep TeraBox download claims disabled.
+
+Around year 1 (late 2027): aim for a dependable release on at least one
+fully verified source path. Measure successful completed transfers, p95 time
+to metadata, browser/device compatibility, failures and cost per transfer.
+Expand supported codecs and bounded batch operations only when real demand
+and measured capacity justify them.
+
+Around year 2 (late 2028): consider a provider-neutral personal media hub,
+more lawful storage adapters, user-controlled history/sync, a documented
+developer API and a mobile/PWA experience. Add optional paid features only
+after reliability, legal scope, privacy and unit economics are demonstrated.
+
+Year 3 and beyond: explore local-first AI indexing, collaborative libraries,
+creator workflows, smarter transcoding and more platform integrations. Review
+provider policies and technical changes continuously. Future AI capability
+may improve discovery and processing, but it will not remove the need for
+source access, rights, keys and honest evidence.
+
+Every phase is a candidate, not a deadline or claim of availability. A phase
+advances only after measurable acceptance tests and a cost/security review.
+
+11. WHO SHOULD TRY WHICH FUTURE WORK
+
+Product owner: choose supported use cases, rights policy, brand, budget and
+whether to pursue partnership or pivot to the broader media workspace.
+Provider/integration engineer: test permitted interfaces with owned fixtures,
+document actual behavior and maintain source adapters.
+Backend/security engineer: typed contract, transfer engine, SSRF defenses,
+authorization isolation, rate limits and verification.
+Web/extension engineer: accessible player, folders, mobile UX and minimal
+permission browser handoff, all driven by verified capabilities.
+QA/reliability engineer: representative authorized fixtures, completed-byte
+tests, browser coverage, incident and regression monitoring.
+Legal/operations lead: provider terms, copyright process, privacy, partner
+discussion, storage/bandwidth costs and release readiness.
+AI/media engineer (later): opt-in indexing, captions and conversion quality,
+with privacy and accuracy evaluation.
+
+Small teams can combine roles, but each decision and test needs an owner.
+
+12. FIRST PRIORITIES FROM THIS DOCUMENT
+
+1) Keep the repository's current FastAPI/Next.js/extension architecture.
+2) Define a small owned video fixture set with known formats, lengths and
+   SHA-256 hashes; use it to prove our format and transfer engine locally.
+3) Investigate permitted TeraBox access using an owner-controlled share and
+   record the exact scope, response and completed transfer evidence.
+4) Build the public file/preview/download flow only from verified capabilities.
+5) Reassess the TeraBox path at a fixed checkpoint; continue the broader
+   authorized-media product if the dependency remains blocked.
+
+Success is a completed, trustworthy user outcome. The plan should be bold
+about what we own and precise about what only the source can provide.
