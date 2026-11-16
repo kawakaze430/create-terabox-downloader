@@ -1,5 +1,11 @@
 # TeraBox Downloader Platform — Product Vision & Developer Hub
 
+> **Long-chat continuity:** Read [Permanent Project Master Handoff](docs/START_HERE_PROJECT_HANDOFF.md),
+> [recoverable chat archive](docs/PROJECT_CONVERSATION_ARCHIVE.md),
+> [verbatim 1,160-line master development prompt](docs/MASTER_DEVELOPMENT_PROMPT_2026-11-15.md),
+> [dated source/reference index](docs/PROJECT_SOURCE_INDEX_2026-11-16.md),
+> and the [Word copy](docs/PROJECT_MASTER_HANDOFF.docx). Future ChatGPT/Codex sessions should start here rather than rely on an old chat.
+
 > **Status (2026-11-14):** Development is on `main`. The FastAPI link validator, strict provider contract, readiness endpoint and credential-gated official OAuth client are integrated and pass 173 offline tests. The Next.js validation flow passes desktop/mobile browser checks; the MV3 extension remains a development build. **Live TeraBox authorization, metadata and downloads are still blocked and unverified.** The operator-only metadata/download probe is ready for authorized fixture testing; see [operator validation](docs/OPERATOR_VALIDATION.md) and the [implementation log](docs/IMPLEMENTATION_LOG.md).
 
 ## Our mission

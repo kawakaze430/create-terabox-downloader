@@ -1,5 +1,7 @@
 # Instructions for All Developers and Codex Agents
 
+**NEW SESSION CONTINUITY:** First read [docs/START_HERE_PROJECT_HANDOFF.md](docs/START_HERE_PROJECT_HANDOFF.md) and [docs/PROJECT_CONVERSATION_ARCHIVE.md](docs/PROJECT_CONVERSATION_ARCHIVE.md), plus [original master prompt](docs/MASTER_DEVELOPMENT_PROMPT_2026-11-15.md). The handoff is a snapshot; always verify latest HEAD, CI, issue #2 and source before changes.
+
 **Project:** Independently operated, commercially competitive TeraBox downloader website + browser extension.  
 **Updated:** 2026-11-14.
 
