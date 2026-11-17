@@ -1,6 +1,6 @@
 # Instructions for All Developers and Codex Agents
 
-**Owner update — 2026-11-17:** Use [PROJECT_STATUS_AND_TASKS.md](PROJECT_STATUS_AND_TASKS.md) for the current status, complete file guide, ordered tasks and PR review procedure. Follow-up implementation tools must submit bounded pull requests for review; this replaces the older direct-to-main implementation workflow. Do not self-merge. The current checkout's remote is authoritative; historical documents refer to an earlier repository owner.
+**Latest owner update — 2026-11-17:** Build our source-independent download engine first. Official partner approval is not a prerequisite for generic transfer work against controlled permitted sources. Keep source access separate and preserve all existing security controls. The latest uploaded engine prompt authorizes verified incremental direct commits to `main`, superseding the earlier PR-only instruction. Push each completed tested task immediately, never force-push; use a remote checkpoint branch/PR if direct push is blocked. Keep [docs/CODEX_CONTINUITY.md](docs/CODEX_CONTINUITY.md) current so another workspace can resume. The current remote is authoritative; historical documents refer to an earlier repository owner.
 
 **NEW SESSION CONTINUITY:** First read [docs/START_HERE_PROJECT_HANDOFF.md](docs/START_HERE_PROJECT_HANDOFF.md) and [docs/PROJECT_CONVERSATION_ARCHIVE.md](docs/PROJECT_CONVERSATION_ARCHIVE.md), plus [original master prompt](docs/MASTER_DEVELOPMENT_PROMPT_2026-11-15.md). The handoff is a snapshot; always verify latest HEAD, CI, issue #2 and source before changes.
 
@@ -26,7 +26,7 @@ These documents describe **planned targets**, not proof of implementation. The a
 
 - **Do not restart an existing implementation or overwrite working code without evidence.** Inspect current files, branches, tests, issues and outstanding PRs first.
 - First assess lawful and technical feasibility of TeraBox access. Favor permitted, documented integration. Do not bypass authentication, CAPTCHA, provider access controls, premium limits, DRM, or others' rights.
-- **P0:** link validation, authorized metadata and download, error handling, SSRF protection and repeatable live tests. If P0 is blocked, report blocker and do not spend credits on unrelated premium features.
+- **P0:** source-independent bounded streaming, retry/recovery, integrity, cancellation and controlled local transfer tests, plus safe source admission. Continue independent engine engineering while TeraBox access is unverified. Do not claim local fixtures prove TeraBox compatibility; do not expand into unrelated premium features.
 - **P1:** usable full web app, player, folders/batch only as supported, Chrome/Edge MV3 extension, CI, deployability and monitoring.
 - **P2/P3:** differentiation, accounts, subscription plans and extra platforms only after proven reliability; preserve extension points without premature implementation.
 - Use one coherent monorepo and **one backend API contract**, not five copied frameworks. Integrate selective code only after source audit and license verification; preserve required notices.
@@ -41,7 +41,7 @@ These documents describe **planned targets**, not proof of implementation. The a
 For each task:
 1. Inspect and summarize relevant existing code/behavior and expected feature acceptance.
 2. Choose the smallest high-value solution; reuse existing code and suitable libraries.
-3. Implement a bounded task with tests and clear commits on a task branch, then submit a pull request for review, following the owner's 2026-11-17 instruction. Include the task ID and acceptance evidence from `PROJECT_STATUS_AND_TASKS.md`. Do not self-merge, force-push shared history, or overwrite concurrent changes. Use the existing isolated checkout; do not create a worktree unless explicitly requested.
+3. Implement a bounded task with tests and clear commits. Following the latest engine prompt, use normal direct `main` commits for completed verified work; push and confirm each remote checkpoint. If protection/concurrency prevents that, preserve the work on a pushed named branch and submit a PR when supported. Keep incomplete work off main. Never force-push shared history or overwrite concurrent changes. Use the existing isolated checkout; do not create a worktree unless explicitly requested.
 4. Run relevant lint/type/unit checks, then targeted integration/browser checks. A mocked pass is not a successful real TeraBox download.
 5. Update feature status and any architecture decision or known limitation.
 6. Report what changed, exact commands/tests executed, results, untested items, security/license implications, and next prioritized work.

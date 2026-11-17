@@ -1,5 +1,7 @@
 # Project status, file guide, and implementation tasks
 
+> **Latest owner priority update (17 November 2026):** the subsequent engine prompt supersedes the PR-only and provider-first execution order below. Build and test the source-independent transfer engine against controlled accessible sources now; TeraBox authorization remains a separate adapter gap. Verified task checkpoints may be pushed directly to `main` without force. Use [CODEX_CONTINUITY.md](docs/CODEX_CONTINUITY.md) for current tasks/checkpoints, [repository organization audit](docs/REPOSITORY_ORGANIZATION_AUDIT.md) for the new classification, and [engine design](docs/DOWNLOAD_ENGINE.md) for algorithms and evidence. Historical provider-specific tasks remain useful; do not treat their prerequisites as a blocker for generic engine work.
+
 **Start here when handing this project to another developer or AI tool.**
 
 - **Updated:** 17 November 2026 (Asia/Kolkata).
