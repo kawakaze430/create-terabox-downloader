@@ -39,11 +39,17 @@ PYTHONPATH=services/api services/api/.venv/bin/python -m app.download_cli \
 
 The CLI prints sanitized JSON statistics only. Exit 0 means validated stream publication, 1 a transfer failure, 2 invalid configuration and 130 interruption. A SHA-256 is always computed; `integrity_verified` is true only when a trusted expected digest matched. `bytes_written` is the final file length; `transferred_bytes` counts body bytes yielded to the engine across attempts, including discarded retries. It is not a wire/TLS bandwidth counter.
 
-Progress callbacks get `bytes_written`, `total_bytes` (possibly unknown), and `attempt`; a full restart resets progress. Paths and callbacks are trusted internal inputs. No browser progress endpoint, public job service or source refresh callback exists yet.
+Progress callbacks get `bytes_written`, `total_bytes` (possibly unknown), and `attempt`. A full restart resets progress. Paths and callbacks are trusted internal inputs.
 
 Limits: resume is within one invocation only, not durable cross-process resume. Only strong ETag plus known total supports recovery; ignored Range restarts from zero. A 416, wrong interval/size or changed 206 validator fails closed. Permanent authorization failures are not retried; refreshing expired source URLs belongs to an authorized adapter. Retry count is capped at eight, defaults to three; output max bytes is per attempt/file, while total network consumption is also bounded by attempts and total time. Disk writes are fixed-size synchronous operations; cooperative timeouts cannot interrupt blocked filesystem I/O. Atomic no-clobber publication uses a same-directory hard link, requiring filesystem support, and does not promise crash-durable directory metadata. Files remain mode 0600. Do not expose arbitrary destination paths to visitors.
 
-TeraBox's public provider remains disabled; this engine does not turn share URLs into accessible bytes. Website/extension integration waits for an authorized source adapter and a properly scoped transfer workflow, rather than exposing a generic URL proxy.
+TeraBox's public provider remains disabled. Production integration requires an authorized source adapter, visitor-scoped access, and a production job lifecycle.
+
+## Local transfer fixture
+
+The [local development procedure](LOCAL_DEVELOPMENT.md#local-browser-to-engine-transfer-fixture) enables a developer-only route and UI for one fixed synthetic source. The API admits that source by opaque ID and confines its transport to the in-process fixture. Engine writes drive progress and the service exposes the completed file after the expected size and SHA-256 match. A per-job capability in an HTTP header authorizes status, cancellation, and file delivery. The browser independently verifies the bytes before downloading them.
+
+The process limits the number of running and retained jobs, expires completed and cancelled jobs, and keeps files in private temporary storage. The test fixture has no provider credentials, accepts no visitor source URLs or output paths, and is disabled by default.
 
 ## Controlled recovery benchmark — 17 November 2026
 

@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
+from .fixture_transfers import FixtureTransferError, FixtureTransfers, ROUTE_PREFIX, TOKEN_HEADER
 from .limits import ApiLimits, RequestGuard
 from .links import InvalidShareLink, parse_share_link
 from .models import ShareResolution
@@ -38,19 +39,32 @@ def parse_or_error(url: str):
         return error_response(exc.code, exc.message, 400)
 
 
-def create_app(limits: ApiLimits | None = None) -> FastAPI:
+def create_app(limits: ApiLimits | None = None, *, enable_transfer_fixture: bool | None = None) -> FastAPI:
     limits = limits or ApiLimits.from_environment()
-    app = FastAPI(title="TeraBox Platform API", version="0.3.0")
     origins = [s.strip() for s in os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000").split(",") if s.strip()]
     if "*" in origins:
         raise ValueError("ALLOWED_ORIGINS must contain exact client origins")
+    if enable_transfer_fixture is None:
+        enable_transfer_fixture = os.getenv("ENABLE_TRANSFER_FIXTURE") == "1"
+    transfers = FixtureTransfers(origins) if enable_transfer_fixture else None
+    app = FastAPI(title="TeraBox Platform API", version="0.3.0", lifespan=transfers.lifespan if transfers else None)
     app.add_middleware(RequestGuard, limits=limits)
     # CORS outside the guard also decorates rejected requests for allowed clients.
-    app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["POST", "GET"], allow_headers=["content-type"])
+    cors_headers = ["content-type", TOKEN_HEADER] if transfers else ["content-type"]
+    app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["POST", "GET"], allow_headers=cors_headers)
+
+    if transfers is not None:
+        app.include_router(transfers.router())
+
+        @app.exception_handler(FixtureTransferError)
+        async def fixture_error(_request: Request, exc: FixtureTransferError):
+            return error_response(exc.code, exc.message, exc.status)
 
     @app.exception_handler(RequestValidationError)
     async def invalid_body(request: Request, exc: RequestValidationError):
         # FastAPI's default errors include raw input, which may contain secrets.
+        if transfers is not None and request.scope["path"].startswith(ROUTE_PREFIX + "/"):
+            return error_response("INVALID_REQUEST", "A JSON object with a fixture source ID is required.", 422)
         return error_response("INVALID_REQUEST", "A JSON object with a valid share URL is required.", 422)
 
     @app.get("/healthz")

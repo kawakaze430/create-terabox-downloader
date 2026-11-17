@@ -61,6 +61,13 @@ jobs:
         working-directory: apps/web
       - run: npm run test:e2e
         working-directory: apps/web
+      - name: Verify the opt-in local transfer fixture
+        env:
+          NEXT_PUBLIC_ENABLE_TRANSFER_FIXTURE: '1'
+        run: |
+          npm run build
+          npm run test:e2e -- fixture-transfer.spec.ts
+        working-directory: apps/web
   extension:
     runs-on: ubuntu-latest
     steps:
