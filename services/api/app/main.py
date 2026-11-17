@@ -1,5 +1,6 @@
 """Versioned, bounded API; the live provider is disabled until validated."""
 import asyncio
+from contextlib import AsyncExitStack, asynccontextmanager
 import os
 
 from fastapi import Depends, FastAPI, Request
@@ -11,6 +12,7 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from .fixture_transfers import FixtureTransferError, FixtureTransfers, ROUTE_PREFIX, TOKEN_HEADER
 from .limits import ApiLimits, RequestGuard
 from .links import InvalidShareLink, parse_share_link
+from .managed_transfers import MANAGED_PREFIX, ManagedTransferError, ManagedTransfers
 from .models import ShareResolution
 from .provider import PUBLIC_ERRORS, ProviderError, ProviderUnavailable, ShareProvider, UnconfiguredProvider
 
@@ -47,11 +49,27 @@ def create_app(limits: ApiLimits | None = None, *, enable_transfer_fixture: bool
     if enable_transfer_fixture is None:
         enable_transfer_fixture = os.getenv("ENABLE_TRANSFER_FIXTURE") == "1"
     transfers = FixtureTransfers(origins) if enable_transfer_fixture else None
-    app = FastAPI(title="TeraBox Platform API", version="0.3.0", lifespan=transfers.lifespan if transfers else None)
+    managed = ManagedTransfers.from_environment(origins)
+
+    @asynccontextmanager
+    async def transfer_lifespan(application):
+        async with AsyncExitStack() as stack:
+            for service in (transfers, managed):
+                if service is not None:
+                    await stack.enter_async_context(service.lifespan(application))
+            yield
+
+    app = FastAPI(title="TeraBox Platform API", version="0.3.0",
+                  lifespan=transfer_lifespan if transfers is not None or managed is not None else None)
     app.add_middleware(RequestGuard, limits=limits)
     # CORS outside the guard also decorates rejected requests for allowed clients.
-    cors_headers = ["content-type", TOKEN_HEADER] if transfers else ["content-type"]
-    app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["POST", "GET"], allow_headers=cors_headers)
+    cors_headers = ["content-type"]
+    if transfers is not None:
+        cors_headers.append(TOKEN_HEADER)
+    if managed is not None:
+        cors_headers.append("authorization")
+    app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["POST", "GET"],
+                       allow_headers=cors_headers, expose_headers=["Content-Disposition"] if managed else [])
 
     if transfers is not None:
         app.include_router(transfers.router())
@@ -60,11 +78,23 @@ def create_app(limits: ApiLimits | None = None, *, enable_transfer_fixture: bool
         async def fixture_error(_request: Request, exc: FixtureTransferError):
             return error_response(exc.code, exc.message, exc.status)
 
+    if managed is not None:
+        app.include_router(managed.router())
+
+        @app.exception_handler(ManagedTransferError)
+        async def managed_error(_request: Request, exc: ManagedTransferError):
+            result = error_response(exc.code, exc.message, exc.status)
+            if exc.status == 401 and exc.code == "TRANSFER_SESSION_REQUIRED":
+                result.headers["WWW-Authenticate"] = "Bearer"
+            return result
+
     @app.exception_handler(RequestValidationError)
     async def invalid_body(request: Request, exc: RequestValidationError):
         # FastAPI's default errors include raw input, which may contain secrets.
         if transfers is not None and request.scope["path"].startswith(ROUTE_PREFIX + "/"):
             return error_response("INVALID_REQUEST", "A JSON object with a fixture source ID is required.", 422)
+        if managed is not None and request.scope["path"].startswith(MANAGED_PREFIX + "/"):
+            return error_response("INVALID_REQUEST", "Transfer request is invalid.", 422)
         return error_response("INVALID_REQUEST", "A JSON object with a valid share URL is required.", 422)
 
     @app.get("/healthz")

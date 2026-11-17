@@ -1,11 +1,15 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const fixtureMode = process.env.NEXT_PUBLIC_ENABLE_TRANSFER_FIXTURE === "1";
-const reuseExistingServer = !fixtureMode && !process.env.CI;
+const managedMode = process.env.NEXT_PUBLIC_ENABLE_MANAGED_TRANSFERS === "1";
+const reuseExistingServer = !fixtureMode && !managedMode && !process.env.CI;
+const testIgnore = ["**/managed-transfer-integration.spec.ts"];
+if (!fixtureMode) testIgnore.push("**/fixture-transfer.spec.ts");
+if (!managedMode) testIgnore.push("**/managed-transfers.spec.ts");
 
 export default defineConfig({
   testDir: "./tests",
-  testIgnore: fixtureMode ? [] : ["**/fixture-transfer.spec.ts"],
+  testIgnore,
   fullyParallel: false,
   workers: 1,
   forbidOnly: !!process.env.CI,

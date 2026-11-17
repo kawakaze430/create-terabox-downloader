@@ -2,6 +2,15 @@
 
 Updated 18 November 2026 (Asia/Kolkata). Work is on `recovery/incident-review-2026-11-18` while the owner verifies GitHub account and repository access. Keep `main` at the reviewed baseline and use normal, non-force pushes for recovery checkpoints.
 
+## Managed-download release candidate
+
+- The extension checkpoint `25b1b01a3a0180d75f250bbe5c4b07fddd3fcdbf` adds homepage access from unsupported tabs and preserves the fragment handoff from supported shares. The engine checkpoint `4fbbec0fa6728e008096590110742cd731558277` adds cumulative retry-byte accounting and an optional hard body budget.
+- This record's latest commit adds the managed API and browser catalog, a single-worker container deployment, and separate controlled and live-source acceptance commands. Find the checkpoint with `git log -1 --format=%H -- docs/CODEX_CONTINUITY.md` and verify the recovery ref with `git ls-remote`.
+- Final local results were 289 API tests, 52 extension tests, 20 default browser tests, four local fixture tests, eight managed UI tests with simulated API responses, and two managed browser-to-engine tests with the real local services and a controlled upstream transport. Build/typecheck, dependency consistency, and Word archive validation passed. The independently verified body counts in the 4 MiB benchmark were 4,194,304 on resume and 4,718,715 on restart after a 524,411-byte interruption.
+- Both container targets built. Local Compose verified the homepage, API health and share validation through the ingress. The managed HTTPS smoke proved sign-in, access controls, catalog listing and private storage with a locally trusted TLS certificate. Public hosting and real provider credentials were outside the smoke.
+- The commit-pinned project README was retrieved through the managed HTTPS proxy and matched the Git bytes. The production pinning path failed because public direct DNS is unavailable in the task runtime, including from the API container. Run the [live-source acceptance mode](MANAGED_DOWNLOADS.md#acceptance-checks) where direct egress is available. Keep normal destination, TLS, and DNS validation in place.
+- The TeraBox operator preflight remains unconfigured. The owner still needs permitted provider access and a small authorized fixture for a live check. Chromium's managed installation policy blocks the installed-extension check here. Use the [deployment guide](MANAGED_DOWNLOADS.md), [operator runbook](OPERATOR_VALIDATION.md), and [extension packaging procedure](EXTENSION_DEVELOPMENT.md) for those release steps.
+
 ## Recovery checkpoints
 
 - GitHub `main` was `c0163c24ffdcf4391c0e2874cb508f52172958f1`. The named recovery branch contains `1cd4c80410a40ddc427a6f8005564c4235672dd3`, the incident review and all 21 former `AnalyseFuture/` dispositions, and `bb37749a8a73a365c27465032c041f867f07ed4f`, the first recovery continuity update.
@@ -29,14 +38,9 @@ node --test apps/extension/tests/*.test.mjs
 
 Run [ordinary web checks](LOCAL_DEVELOPMENT.md#repeatable-browser-checks) and the [opt-in browser suite](LOCAL_DEVELOPMENT.md#local-browser-to-engine-transfer-fixture) on fresh local services. The default site and API leave the fixture disabled. The fixture has separate CI coverage with the existing workflow permissions.
 
-## Next five tasks
+## Release acceptance still pending
 
-| Priority | Files | Goal, prerequisites and acceptance |
-| --- | --- | --- |
-| 1 | `services/api/app/provider.py`, `egress.py`, fixture tests | Design an operator-owned source adapter after confirming one controlled source and its authorization. Test exact-host policy, authorization expiry, wrong actor and arbitrary-input rejection. Advance when a real owned HTTPS source delivers its independently verified bytes. |
-| 2 | `services/api/app/fixture_transfers.py`, `limits.py`, focused API tests | Design production session ownership and job storage after deciding whether the service will run multiple workers. Exercise concurrent start/cancel/delivery, quota fairness, race-free cleanup and restart recovery before enabling broader use. |
-| 3 | `services/api/app/download_engine.py`, `services/api/tests/test_download_engine.py`, `scripts/benchmark_download_engine.py` | Measure aggregate bytes and retry cost under controlled latency and interruptions. Test a total retry-byte budget and consistent progress before adding parallel scheduling. |
-| 4 | `apps/web/app/api-contract.ts`, `page.tsx`, `apps/web/tests/` | Connect an authorized adapter to the existing typed website once session ownership is available. Verify keyboard and mobile start/cancel, expiry, integrity failure and completed file delivery. |
-| 5 | `apps/extension/`, `docs/EXTENSION_DEVELOPMENT.md`, `docs/OPERATOR_VALIDATION.md` | Run the packaged extension in owner-approved Chrome and Edge with an owned site origin. Verify its active-tab permission and fragment handoff. Record permitted live-source evidence separately when an authorized account and source are available. |
-
-The immediate handoff is priority 1 on the recovery branch. The owner can investigate GitHub access and revoke potentially exposed sessions independently of generic engine work.
+1. Run managed live-source acceptance from a host with approved direct egress. Compare the browser-delivered file with the pinned source hash.
+2. Deploy to an owned domain with the production access key and registry provisioned privately. Verify public TLS, ingress quotas, and restricted logs. Review GitHub access and the earlier session exposure before updating main.
+3. Run the packaged extension in owner-approved Chrome and Edge against that domain. Confirm both homepage launch and supported-share fragment handoff.
+4. Complete the authorized TeraBox operator preflight before exposing provider results to visitors. Real video, folder, batch, and preview behavior depends on the capabilities verified there.

@@ -5,6 +5,7 @@ the operator CLI and generic streaming/retry/Range/integrity behavior against
 permitted direct sources, independently of TeraBox OAuth. [EXTENSION_DEVELOPMENT.md](EXTENSION_DEVELOPMENT.md)
 documents configurable website origins and deterministic release packaging. Current
 validation results and resume commands are in [CODEX_CONTINUITY.md](CODEX_CONTINUITY.md).
+Operators can also configure [managed HTTPS downloads](MANAGED_DOWNLOADS.md) from a private source registry.
 The public TeraBox provider described below remains disabled.
 
 **Development-only starter.** Real TeraBox metadata, previews and downloads are not implemented. The API intentionally returns HTTP 501 PROVIDER_NOT_CONFIGURED for recognized links.
@@ -38,8 +39,7 @@ Open http://localhost:3000. The interface validates supported share URL shapes w
 
 ## Extension (unpublished developer proof)
 Chrome/Edge → Extensions → Developer mode → Load unpacked → select apps/extension.
-Open a supported TeraBox public share, click the extension icon, and then "Open in website".
-The extension opens localhost:3000 and pre-fills the share link. It does **not** download content, request cookies or interact with other tabs. Localhost is hard-coded in this development-only build; replace it with an independently owned production domain before release.
+On a supported TeraBox share, choose **Open share in CloudLink** to prefill the local website. On any other page, choose **Open CloudLink** to open the configured homepage. Use the [extension package command](EXTENSION_DEVELOPMENT.md#build-an-owned-site-package) to set an owned HTTPS origin for release.
 
 ## Tests
 From repository root:

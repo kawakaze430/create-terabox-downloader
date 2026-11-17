@@ -11,6 +11,7 @@ One FastAPI service supports a Next.js website and a Manifest V3 extension. The 
 ├── services/api/
 │   ├── app/                       FastAPI, provider boundaries, and transfer engine
 │   └── tests/                     Service, egress, engine, and CLI tests
+├── deploy/                        Single-worker images and HTTPS ingress
 ├── scripts/                       Benchmark, packaging, and archive tools
 ├── docs/
 │   ├── history/repository-reviews/ Dated inventories, moves, and recovery reports
@@ -23,6 +24,8 @@ One FastAPI service supports a Next.js website and a Manifest V3 extension. The 
 ```
 
 The API owns share-link admission and versions its HTTP contract. The extension uses a separate local parser before handing a link to the website. The engine owns streaming, retries, Range recovery, verification and atomic publication. Upstream authorization and source policy belong in the provider/operator code. Keep package locks and tests with the application they support.
+
+The opt-in managed transfer router uses an operator-approved registry and expiring sessions. The browser verifies delivered files against the registry. See [managed downloads and deployment](docs/MANAGED_DOWNLOADS.md).
 
 Start with the [documentation index](docs/README.md), [current work](docs/CODEX_CONTINUITY.md) and [baseline inventory](docs/history/repository-reviews/baseline-inventory-2026-11-18.md). The [move ledger](docs/history/repository-reviews/move-ledger-2026-11-18.md) maps the earlier paths. The [incident review](docs/security/incident-review.md) records evidence and owner actions.
 
