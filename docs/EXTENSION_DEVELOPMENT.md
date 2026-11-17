@@ -1,15 +1,15 @@
 # Extension development and packaging
 
-The Chrome/Edge Manifest V3 extension reads a supported share URL from the active tab and opens the website. It uses only `activeTab`; it does not read cookies, scrape unrelated tabs, resolve files, or download bytes itself. File availability and source authorization are checked by the shared application, not by the extension parser.
+The Chrome/Edge Manifest V3 popup uses `activeTab` to check the current page. It opens the configured website with a supported share link prefilled, or opens its homepage so an authorized operator can access managed downloads. Only the normalized supported share is passed to the website, in a URL fragment that the page clears.
 
 ## Local installation
 
 1. Start the website and API using [LOCAL_DEVELOPMENT.md](LOCAL_DEVELOPMENT.md).
 2. In Chrome, open `chrome://extensions`; in Edge, open `edge://extensions`. Enable Developer mode, choose **Load unpacked**, and select `apps/extension`.
-3. Open a supported share page, activate the extension, and choose **Open in website**. For a non-sensitive test URL, the existing parser fixture is `https://terabox.com/s/1Abc_123`; its syntax is supported, but its file existence is not asserted.
-4. Verify the website input is populated, the handoff is removed from the address bar, and validation/status messaging is accurate. Repeat on an unsupported page and confirm the action stays disabled.
+3. Open a supported share page, activate the extension, and choose **Open share in CloudLink**. The parser fixture `https://terabox.com/s/1Abc_123` exercises the share format.
+4. Verify the website input is populated and the fragment clears. Repeat on an unsupported page and select **Open CloudLink**. The website should open at its homepage without the current tab's URL.
 
-`apps/extension/config.mjs` defaults to `http://localhost:3000`. Do not put tokens, account credentials, or private share URLs in configuration. The popup validates configuration before querying the active tab and revalidates the destination before navigation. Invalid configuration keeps the action disabled; browser tab-opening errors produce a retry message.
+`apps/extension/config.mjs` defaults to `http://localhost:3000`. The popup validates configuration before querying the active tab and computes the destination from that validated origin. Invalid configuration disables the action. A failed tab open produces a retry message.
 
 ## Build an owned-site package
 
