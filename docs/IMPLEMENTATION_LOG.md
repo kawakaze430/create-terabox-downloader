@@ -265,3 +265,20 @@ Median elapsed clean/restart/resume: 0.044010/0.044481/0.045834 seconds; body by
 4,194,304/4,718,592/4,194,304. Resume avoided 512 KiB retransmission; no speed
 advantage claimed. Traced allocations and limits are reported in DOWNLOAD_ENGINE.md.
 No third-party service, parallel scheduling or production throughput was tested.
+
+## 2026-11-17 — Typed website metadata and truthful states
+
+Added `apps/web/app/api-contract.ts` to validate successful validation/resolution
+JSON at runtime and provide TypeScript models aligned with current API schemas.
+The page renders only returned file name/kind/byte size/MIME/quality labels, has
+an honest empty state, rejects malformed responses and clears metadata on edits,
+new validation or resolution. No download/preview action or progress was invented.
+Existing abort/deadline logic remains; stale provider references on new validation
+were also cleared. String validation bounds allocation before counting Unicode.
+
+Build and typecheck passed. Fresh-server Playwright passed 20 checks (10 scenarios
+in desktop/mobile). New metadata cases are explicitly simulated: hostile names
+rendered as text, invalid payloads rejected, empty list, delayed stale resolution
+discarded and malformed validation rejected. Real local API still returns truthful
+provider-unconfigured status. Initial stale-server and route-announcer selector
+failures were diagnosed and corrected; the final current-build run passed.
