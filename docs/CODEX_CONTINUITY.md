@@ -5,10 +5,11 @@ Updated 17 November 2026 (Asia/Kolkata). Latest owner priorities supersede the e
 ## Checkpoint state
 
 - Repository: `sarfiaroui-oss/create-terabox-downloader`; branch: `main`.
-- Last confirmed remote before this record: `a03a4c3222899d0cb2c30aaa702c6339589d2246` (E01 audit/plan checkpoint).
+- Last confirmed remote before this record: `f36a72b0b8538975af420a6a8e7293328b749b5c` (E04 extension checkpoint); E01 `a03a4c3` also confirmed.
 - The commit containing this record is itself a checkpoint; resolve its SHA with `git log -1 --format=%H -- docs/CODEX_CONTINUITY.md` and confirm against `git ls-remote origin refs/heads/main`. A file cannot contain its own final Git commit hash.
 - Completed: E01 baseline source/file audit; current owner workflow reconciled. E04 configurable extension destination, deterministic six-file packaging, popup failures/tests and current website source link. No framework moves/deletions required.
-- In progress: safe generic streaming/retry/integrity engine and controlled HTTP fixture tests; strict validator-protected in-call recovery. Engine review/CLI/benchmark are next.
+- Completed E02/E03: source-independent streaming-to-file, bounded retries/backoff/Retry-After, size/SHA-256 checks, cancellation/temp cleanup, atomic no-clobber publication and strong-ETag in-call Range recovery; operator CLI. 74 engine + 3 CLI tests passed; total API suite 250 passed and pip check passed. No live TeraBox verification or new dependency.
+- Next: controlled recovery-byte benchmark, full web/browser validation, current inventory/status updates and final durable checkpoint. Parallel/adaptive algorithms and cross-process resume remain unimplemented.
 - Working files: `services/api/app/download_engine.py`, `services/api/tests/test_download_engine.py`; client work stays under extension/packaging docs and website source link.
 - Baseline: 82 tracked files, 18 tracked directories, no initial local changes, remote main at the SHA above. Fresh baseline: 173 API tests passed (one existing Starlette/httpx deprecation warning); pip check passed. Engine/client changes were not part of that baseline.
 - External limitations: current-fork GitHub PR/CI API previously returned Forbidden; native Git read/push works. TeraBox access unverified; generic engine work does not depend on partner credentials. Known historical ZIP sessions require owner revocation; no values are exposed here.

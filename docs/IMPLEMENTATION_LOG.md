@@ -235,3 +235,22 @@ The website View source href now names the current repository. Validation:
 50 extension tests, popup syntax and package command passed. Installed Chrome/
 Edge/store verification remains unrun. See EXTENSION_DEVELOPMENT.md and
 CODEX_CONTINUITY.md. Generic engine work is being tested separately.
+
+## 2026-11-17 — Source-independent streaming and Range recovery
+
+E02/E03 add `app/download_engine.py` and the operator `app/download_cli.py`.
+Production uses existing approved HTTPS host/DNS-pinned TLS transport, without
+OAuth dependency or a public arbitrary-URL endpoint. Transfers stream bounded
+chunks to private temporary files, retry transient GET failures within attempts/
+deadlines, respect Retry-After, verify expected size/SHA-256 and publish atomically
+without clobbering existing files. Cancellation/failure cleans temporary files.
+Interrupted streams can resume within the call only when a known total and strong
+ETag permit validated Range/If-Range recovery; ignored Range resets safely.
+
+Validation: 74 real-local-socket/contract engine tests and 3 CLI tests passed;
+the complete API suite passed 250 tests, pip check passed. Independent review
+identified a non-string digest validation bug; its regression test now passes.
+No lockfile/dependency change, public provider enablement or claimed TeraBox
+transfer. See DOWNLOAD_ENGINE.md for exact commands and limitations, including
+trusted output paths, cooperative disk deadlines and no cross-process resume.
+Parallel/adaptive algorithms remain unimplemented pending measured justification.
