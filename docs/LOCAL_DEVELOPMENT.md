@@ -1,5 +1,12 @@
 # Run the Development Foundation
 
+**Independent engine update:** [DOWNLOAD_ENGINE.md](DOWNLOAD_ENGINE.md) documents
+the operator CLI and generic streaming/retry/Range/integrity behavior against
+permitted direct sources, independently of TeraBox OAuth. [EXTENSION_DEVELOPMENT.md](EXTENSION_DEVELOPMENT.md)
+documents configurable website origins and deterministic release packaging. Current
+validation results and resume commands are in [CODEX_CONTINUITY.md](CODEX_CONTINUITY.md).
+The public TeraBox provider described below remains disabled.
+
 **Development-only starter.** Real TeraBox metadata, previews and downloads are not implemented. The API intentionally returns HTTP 501 PROVIDER_NOT_CONFIGURED for recognized links.
 
 ## Requirements

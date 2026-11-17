@@ -6,9 +6,9 @@
 
 - **Updated:** 17 November 2026 (Asia/Kolkata).
 - **Current repository:** [sarfiaroui-oss/create-terabox-downloader](https://github.com/sarfiaroui-oss/create-terabox-downloader).
-- **Source inspected:** `de7e4b34f4a935bcfe96f47594d0c2b31abc60df`, before this documentation update. Recheck the latest source and PRs when resuming.
-- **Owner's current workflow:** other implementation tools submit pull requests; the reviewing assistant checks scope, code, tests, and evidence. This supersedes older instructions to push implementation directly to `main`.
-- **Critical status:** the development foundation works locally. **Real TeraBox authorization, metadata, previews, and completed downloads have not been verified.** The public provider is deliberately disabled.
+- **Source checkpoints:** original handoff `076205b`; independent-engine audit `a03a4c3`; extension `f36a72b`; streaming/recovery engine `0a8117a`. Recheck the latest source when resuming.
+- **Owner's current workflow:** the later engine prompt authorizes frequent verified direct `main` checkpoints, with a durable branch/PR fallback if main is protected. Never force-push or put unfinished work on main. Maintain `docs/CODEX_CONTINUITY.md` at each checkpoint.
+- **Critical status:** a generic operator download engine now works against controlled accessible sources independently of OAuth. **Real TeraBox authorization, metadata, previews, and completed downloads have not been verified.** Its public provider remains deliberately disabled.
 
 Older documents refer to `kawakaze430/create-terabox-downloader`, earlier commits, and earlier CI runs. Preserve those historical references, but use this checkout's actual remote for new work. An issue numbered `#2` or a passing workflow in the historical repository does not establish the same state in the current repository.
 
@@ -45,6 +45,8 @@ Chrome/Edge extension ─────┘                           │
 
 Today the extension opens the website; it does not itself resolve or download files. The separate operator probe is an integration candidate, not the public provider.
 
+The independent transfer engine is `services/api/app/download_engine.py`, operated through `download_cli.py` or a trusted Python caller. It consumes an already authorized direct source, separately from share resolution. No public arbitrary-URL transfer route was added. Strong-validator in-call resume is implemented; parallel ranges, adaptive scheduling and cross-process resume are not. See `docs/DOWNLOAD_ENGINE.md`.
+
 Keep the existing Python FastAPI, Next.js/TypeScript, and small JavaScript extension. Do not rewrite them, merge whole reference projects, or create empty framework folders to match an architecture proposal. There is currently no application database, account service, job queue, payment system, AI media engine, or production deployment configuration.
 
 ### Delivery gates
@@ -52,7 +54,8 @@ Keep the existing Python FastAPI, Next.js/TypeScript, and small JavaScript exten
 | Gate | Required outcome | Current state |
 | --- | --- | --- |
 | G0 — Foundation and feasibility | Understand source, establish reproducible checks, audit references and permitted access | Foundation and historical audits exist; current access permission still unresolved |
-| G1 — Authorized engine proof | Real metadata and a completed owned-file download with correct size and SHA-256 | **Blocked by external authorization/configuration and missing live evidence** |
+| Generic engine milestone | Accessible-source streaming/recovery and complete size/hash verification | **Implemented and local-socket tested**, independently of TeraBox |
+| G1 — TeraBox source proof | Real metadata and a completed owned-file TeraBox download with correct size and SHA-256 | **Unverified source access; separate from completed generic engine work** |
 | G2 — Core product | Website and extension consume verified API; supported previews, folders, and downloads | Validation/handoff foundation only |
 | G3 — Production readiness | Owned staging, security, privacy, operations, release and store checks | CI/local checks exist; production work incomplete |
 | G4 — Differentiation | Useful playback, local preferences, localization, supported resume and extra browsers | Deferred |
@@ -72,6 +75,8 @@ Status definitions:
 
 | Feature | Actual behavior today | Evidence / boundary |
 | --- | --- | --- |
+| Independent download engine | Bounded streaming-to-disk, connect/read/total deadlines, transient GET retries with jitter/Retry-After, expected size/hash, cancellation cleanup and atomic no-clobber completion | 74 engine + 3 CLI tests against controlled local sockets/invalid-input cases; production defaults to exact-host DNS-pinned HTTPS. No new dependency or public URL-fetch endpoint |
+| Range recovery | Resume an interrupted call only with strong ETag and known size; validate 206 interval/total/version, restart on ignored Range | Tested including corruption/changed ETag/truncated response; no durable resume or parallel/adaptive algorithm |
 | Share-link validation | Exact HTTPS host/path checks; rejects malformed inputs, credentials, unsupported ports/hosts; normalizes supported URL shapes | Verified offline in `links.py`, API and extension parser tests. Valid syntax does not prove the file exists or may be downloaded |
 | Versioned API | Health, readiness, validation, and resolve routes with typed safe responses | Local/offline tests; routes listed below |
 | Provider abstraction | Typed files/capabilities, errors, injectable provider interface | Mock-tested contract. Capability fields do not implement downloads or preview |
@@ -79,11 +84,11 @@ Status definitions:
 | Approved outbound transport | Exact HTTPS hosts, public DNS checks, checked-IP pinning with TLS SNI, no redirect or implicit proxy fallback | Synthetic DNS/HTTP tests; real hosting/API/CDN compatibility remains unverified |
 | Official OAuth helper | Authorization URL/signature, token exchange/refresh/info and approved regional host checks | Mock-tested candidate; no visitor login/callback/session/token store |
 | Operator metadata/download probe | Candidate metadata/link calls; explicit live opt-in; bounded full transfer with size and checksum verification | Mock-tested only; not wired into public resolve; no live successful transfer recorded |
-| Website | Responsive “CloudLink” development page; validate link; check provider status; errors/deadlines; cancel stale requests; consume extension handoff and clear it from location | Local browser checks. No real file renderer, media player, download action, or completion UI |
-| Extension | MV3 popup reads the active tab, validates its URL, and opens the website using a fragment | 16 parser tests; hardcoded local website; installed Chrome/Edge flow and store releases unverified |
+| Website | Responsive validation/status flow plus strict runtime response guards, returned file metadata/qualities/empty states, safe errors/deadlines, stale-request cancellation and private handoff clearing | 20 desktop/mobile browser checks, including explicitly simulated metadata. Real TeraBox data remains unavailable; no media/download action or progress UI |
+| Extension | MV3 active-tab fragment handoff, validated configurable website origin, popup failure states and deterministic minimal release packaging | 50 parser/popup/packaging tests; checked-in local default, selectable owned HTTPS release origin; installed Chrome/Edge/store flow unverified |
 | CI and reproducible installs | Locked Python/npm dependencies; API, web, and extension checks | Workflow source exists. Current fork's PR/CI state was not accessible during this handoff |
 | Documentation/reference recovery | Product plans, historical records, Word archive verifier, two isolated sanitized reference ZIPs, safe extraction | Supporting material, not additional implemented product features |
-| Metadata, actual download, preview/qualities | No publicly usable implementation | Blocked on approved integration and subsequent implementation |
+| Live TeraBox metadata/download/preview | No verified public source adapter; webpage can render a valid sanitized metadata response | Real source access and scoped integration still required; generic operator engine already exists |
 | Folders, batch/ZIP, protected-share access | No active routes or user workflow | Planned; implement only supported permitted operations |
 | Production hosting, monitoring, support/legal pages, published extension | Not delivered by this repository | Tasks below |
 | History/bookmarks, theme switch, i18n, accounts, billing, public developer auth/API, PWA/mobile/AI | No active implementation | Later gated work only |
@@ -98,6 +103,7 @@ Status definitions:
 | `POST /api/v1/shares/resolve` | Recognized valid link returns HTTP 501 `PROVIDER_NOT_CONFIGURED` by default |
 | `python -m app.preflight` | Offline configuration report; exit 2 while required live settings are absent |
 | `python -m app.preflight --live` | Explicit authorized operator probe only; **not successfully exercised against TeraBox** |
+| `python -m app.download_cli` | Generic permitted HTTPS transfer using private `ENGINE_SOURCE_URL`, explicit host allowlist, output path and limits; no OAuth dependency |
 
 ## 3. Every folder and tracked file
 
@@ -116,9 +122,9 @@ The tables cover every versioned file at the inspected snapshot, plus this new h
 | `apps/extension/` | MV3 popup and URL handoff; no background worker or content script |
 | `apps/extension/tests/` | Node parser/handoff tests; not an installed-extension test harness |
 | `services/` → `api/` | Python API configuration, dependency locks, code and tests |
-| `services/api/app/` | API routes, URL admission, models, limits, disabled provider and operator-only clients |
-| `services/api/tests/` | API, provider-contract, OAuth, egress, limits and operator-probe tests |
-| `scripts/` | Safe reference extraction tooling, not a download service |
+| `services/api/app/` | Independent transfer engine/CLI, routes, URL admission, models, limits, disabled TeraBox provider and optional operator clients |
+| `services/api/tests/` | Engine/CLI local-socket and existing API/provider/OAuth/egress/limit/probe tests |
+| `scripts/` | Controlled benchmarks, deterministic extension packaging and safe reference extraction, not an application service |
 | `docs/` | Requirements, technical plans, operator/setup guides and dated continuity records |
 | `AnalyseFuture/` | Review reports, inventories, recovered ideas and reference material; not a second application |
 | `AnalyseFuture/archives/` | Two sanitized third-party ZIPs and their inventory/extraction guide |
@@ -145,6 +151,8 @@ The tables cover every versioned file at the inspected snapshot, plus this new h
 | `services/api/requirements.txt` | Pinned direct API/test dependencies; update deliberately with the full lock |
 | `services/api/requirements.lock` | Resolved Python 3.12 dependency set used for reproducible installation and CI; version-pinned, not artifact-hash-pinned |
 | `services/api/app/__init__.py` | Python application package marker; no business feature |
+| `services/api/app/download_engine.py` | Source-independent streaming/retry/integrity/atomic output and strict in-call Range recovery; trusted source/destination inputs, pinned HTTPS by default |
+| `services/api/app/download_cli.py` | Operator CLI reads private source URL from environment, uses allowlisted hosts/limits and outputs sanitized actual transfer statistics |
 | `services/api/app/main.py` | FastAPI app factory, current four routes, request schemas, CORS, provider timeout and sanitized errors |
 | `services/api/app/links.py` | Offline exact-host/path URL parser and normalizer; no metadata fetch |
 | `services/api/app/provider.py` | `ShareProvider` protocol, public error mapping and intentional `UnconfiguredProvider`; extension point for a future authorized adapter |
@@ -155,6 +163,8 @@ The tables cover every versioned file at the inspected snapshot, plus this new h
 | `services/api/app/official_shares.py` | Operator-only candidate metadata, selected-file link and complete size/SHA-256 transfer check. Limited public `/s/1...` share/root file flow; no recursive folders or player |
 | `services/api/app/preflight.py` | Offline config checker and explicit `--live` probe; safe JSON and exit codes; does not enable public provider |
 | `services/api/tests/test_api.py` | Route/URL normalization, rejection, health and related API behavior |
+| `services/api/tests/test_download_engine.py` | 74 controlled socket/admission/policy/retry/integrity/range/cancellation/publication tests; no TeraBox access |
+| `services/api/tests/test_download_cli.py` | Safe missing config, actual controlled CLI transfer, redacted integrity failure/cleanup |
 | `services/api/tests/test_provider_contract.py` | Fake-provider injection, strict metadata/capability/error contracts and safe response boundaries |
 | `services/api/tests/test_limits.py` | Rate/client memory/body/timeout/concurrency/privacy tests, including forwarded-header abuse cases |
 | `services/api/tests/test_open_platform.py` | Mock OAuth/signature/token/region/error/response-limit tests; no live authentication |
@@ -173,26 +183,35 @@ The tables cover every versioned file at the inspected snapshot, plus this new h
 | `apps/web/next.config.ts` | Website config with no-referrer, nosniff and frame-deny headers; not hosting/deployment infrastructure |
 | `apps/web/app/layout.tsx` | English root document, development-preview metadata, global CSS import |
 | `apps/web/app/globals.css` | Existing dark responsive page styles; no light-theme switching |
-| `apps/web/app/page.tsx` | Client input/validation/provider-status UI, request cancellation/deadlines, fragment handoff clearing, status/error presentation. No real metadata/player/download renderer |
+| `apps/web/app/page.tsx` | Client validation/status/returned-metadata/empty/error UI, request cancellation/deadlines and fragment clearing. No enabled player/download/progress action |
+| `apps/web/app/api-contract.ts` | Runtime validation and TypeScript types for internal validation/metadata JSON, bounded names/qualities and safe fixed invalid-response errors; rejects extra upstream URL fields |
 | `apps/web/playwright.config.ts` | Desktop/mobile Chromium projects; starts local production website and API, one worker, traces disabled, optional system Chromium path |
-| `apps/web/tests/core.spec.ts` | Five scenarios in two viewports: validation/unavailable provider, unsupported URL, handoff privacy, stale responses, outage. Some failures are simulated using browser interception |
+| `apps/web/tests/core.spec.ts` | Ten scenarios in two viewports: existing local flow plus simulated hostile-name metadata, malformed responses, empty files and stale-resolution cleanup. Intercepted metadata is not live TeraBox proof |
 
 ### Extension files
 
 | File | Implemented responsibility / limit |
 | --- | --- |
 | `apps/extension/manifest.json` | Unpublished MV3 development extension; only `activeTab` permission; popup entry |
+| `apps/extension/config.mjs` | Local development website origin; packager replaces only the ZIP copy with validated release origin |
 | `apps/extension/popup.html` | Popup content/button/status and development disclosure; loads CSS and script |
 | `apps/extension/popup.css` | Small dark popup styling |
 | `apps/extension/popup.js` | Reads active tab, handles browser errors, enables supported-link action and opens website |
-| `apps/extension/links.mjs` | Exact-host HTTPS parser and normalized fragment handoff to hardcoded `http://localhost:3000/`; no cookies/history scraping |
-| `apps/extension/tests/links.test.mjs` | 16 normalization/rejection/handoff tests; does not install an extension in Chrome/Edge |
+| `apps/extension/links.mjs` | Exact-host share parser, strict website-origin validation and configured normalized fragment handoff; no cookies/history scraping |
+| `apps/extension/tests/links.test.mjs` | Share parsing and configured-origin rejection/canonicalization/handoff tests |
+| `apps/extension/tests/popup.test.mjs` | Controlled browser stubs exercise supported/unsupported tabs, invalid config and safe navigation errors; not installed-extension evidence |
+| `apps/extension/tests/package.test.mjs` | Deterministic ZIP content/origin/source-preservation and invalid-config checks; runs local Python builder |
 
 ### Documentation and tooling files
 
 | File | Purpose / authority |
 | --- | --- |
 | `docs/README.md` | Index of current and historical documentation by responsibility |
+| `docs/CODEX_CONTINUITY.md` | Current durable tasks, previous confirmed remote checkpoints, results, blockers and exact resume commands; newest owner execution priorities |
+| `docs/DOWNLOAD_ENGINE.md` | Actual independent-engine algorithms, operator CLI, testing, limitations and benchmark guidance |
+| `docs/ENGINE_BENCHMARK_2026-11-17.json` | Complete synthetic 4 MiB recovery benchmark samples, byte/attempt/hash/time/allocation measurements and interpretation limits |
+| `docs/REPOSITORY_ORGANIZATION_AUDIT.md` | Complete dated 82-file/18-directory baseline classification and preserve/repair decisions; no needless source moves |
+| `docs/EXTENSION_DEVELOPMENT.md` | Unpacked Chrome/Edge steps, safe destination configuration and deterministic packaging/checks |
 | `docs/PRODUCT_REQUIREMENTS.md` | Target user journeys and feature IDs/priorities; requirements are not completed features |
 | `docs/ARCHITECTURE.md` | Target boundaries, provider/API/security/deployment design; illustrative routes/folders are not automatically implemented |
 | `docs/ROADMAP_AND_QA.md` | G0–G5 gates, test matrix, known local/historical evidence |
@@ -210,6 +229,8 @@ The tables cover every versioned file at the inspected snapshot, plus this new h
 | `docs/PROJECT_MASTER_HANDOFF.docx` | Archived Word copy of project context; not automatically synchronized with every new change |
 | `docs/verify_handoff_archive.py` | Stdlib CI verifier for Word archive structure and required historical content |
 | `scripts/unpack_reference_archives.py` | SHA-256/CRC/path/symlink/size/count-checked reference ZIP extraction; verifies existing extracted files without blindly overwriting them |
+| `scripts/package_extension.py` | Minimal reproducible six-file extension ZIP with reviewed permissions and validated build-time website origin; source config not mutated |
+| `scripts/benchmark_download_engine.py` | Standalone controlled local HTTP clean/restart/resume comparison with real hash/size assertions, no external service and no parallel speed claim |
 
 ### Preserved review and archive files
 
@@ -255,13 +276,15 @@ Proposed `infra/`, `packages/contracts/`, upload/storage workers and account ser
 
 ## 4. Ordered implementation tasks
 
+**Current engine queue (newer owner instruction):** E01 audit/checkpoint complete; E02 bounded streaming/retry/integrity/cleanup complete; E03 strict in-call Range recovery complete; E04 extension config/package/source-link complete; E05 controlled benchmark, typed metadata UI and affected application validation complete. Final documentation/remote evidence is recorded in the continuation record. T01–T25 below remain longer-term source/product definitions, not prerequisites for independent engine development.
+
 Use these IDs in branches, commits and PRs. An unchecked item is not finished. Sizes are rough engineering scope (`S`, `M`, `L`), not delivery promises; external approval has no predictable code estimate.
 
 ### Immediate queue and dependencies
 
 | ID | Priority / size | State | Dependency / responsible role |
 | --- | --- | --- | --- |
-| T01 | P0 / S | Open | Implementer + reviewer: current baseline/access/CI inspection |
+| T01 | P0 / S | Complete for this checkpoint; recheck on resume | Implementer + reviewer: baseline/source/remote inspection; CI API unavailable |
 | T02 | P0 / S | Owner action unresolved | Owner: confirm revocation of any exposed historical sessions |
 | T03 | P0 / external | Blocked | Owner + provider: permitted scope and partner access |
 | T04 | P0 / S + external | Blocked | Owner: approved credentials, exact hosts and small owned fixture after T03 |
@@ -271,14 +294,14 @@ Use these IDs in branches, commits and PRs. An unchecked item is not finished. S
 | T08 | P0 / L | Blocked for real field mapping | API: authorized provider adapter after T06–T07 |
 | T09 | P0 / L | Blocked | API: secure single-file delivery after T06–T08 |
 | T10 | P0 / M | Partly feasible offline | QA/API: real integration matrix after T06; new routes after T08–T09 |
-| T11 | P1 / M | Contract cleanup feasible | API/client: consistent host fixtures and types |
-| T12 | P1 / M | Deferred until G1 | Web: real metadata and error UI after T08 |
+| T11 | P1 / M | Runtime client types complete; shared fixtures pending | API/client: consistent host fixtures and types |
+| T12 | P1 / M | Renderer locally verified; live source proof blocked | Web: returned metadata/error UI present; real source depends on T08 |
 | T13 | P1 / M | Deferred until G1 | Web: real download UX after T09, T12 |
 | T14 | P1 / M–L | Provider-dependent | API/web: verified preview/player/qualities after T06–T08 |
 | T15 | P1 / L | Provider-dependent | API/web: folder navigation and pagination |
 | T16 | P1 / L | Conditional | API/web: protected-share access only with approved supported flow |
 | T17 | P1 / L | Conditional | API/jobs/web: bounded batch/ZIP after reliable single-file/folders |
-| T18 | P1 / M | Local checks feasible; release blocked | Extension: Chrome/Edge installation, production handoff, packaging |
+| T18 | P1 / M | Config/package verified; installed release unverified | Extension: actual Chrome/Edge evidence and owned-site release remain |
 | T19 | P1 / M | Existing-flow audit feasible | Web/QA: accessibility and client compatibility |
 | T20 | P1 / M–L | Design feasible; deploy needs owner | Ops: owned staging, reproducible deployment, limits and secrets |
 | T21 | P1 / M | Not implemented | Ops: privacy-safe monitoring and cost controls after T20 |
@@ -287,15 +310,15 @@ Use these IDs in branches, commits and PRs. An unchecked item is not finished. S
 | T24 | P2 / varies | Deferred | Measured differentiation after G1–G3 |
 | T25 | P3 / varies | Deferred | Commercial/extra platforms/AI only after proven core and owner decision |
 
-**First implementer task:** T01, then one small T05 regression improvement if partner access is still unavailable. T03–T04 proceed through the owner/provider in parallel. Do not spend an entire PR restating the blocker or skip ahead to billing/player decoration.
+**Next implementer task:** resume the current E-series engine/client queue from `docs/CODEX_CONTINUITY.md`, then select a measured recovery/correctness gap. T03–T04 apply only to the optional official TeraBox adapter, not generic transfer work. Do not spend an entire task restating a credential blocker or skip ahead to billing/player decoration.
 
 ### T01 — Establish the current baseline and select one bounded PR
 
 - [ ] Inspect clean/dirty working state, actual origin, latest default-branch SHA, relevant issues, open PRs and current CI. Do not assume historical GitHub links describe this fork.
 - [ ] Run affected existing checks; reproduce any failure before proposing changes. Record versions, command, target SHA, counts and failure classification.
-- [ ] Claim a task with specific paths to avoid two tools editing the same module simultaneously. Make a small task branch from the current base; a worktree is unnecessary unless explicitly requested.
+- [ ] Claim a task with specific paths to avoid overlapping edits. Use main for verified completed checkpoints under the newest owner instruction; keep unfinished work on a durable named branch. A worktree is unnecessary unless explicitly requested.
 - **Files:** this handoff, `AGENTS.md`, CI and relevant tests; inspect application source before modifying it.
-- **Acceptance:** PR description identifies task ID, base/head SHA, current behavior, intended change, tests and known blockers. Unavailable PR/CI metadata is reported as unavailable, never “all green.”
+- **Acceptance:** checkpoint log or fallback PR identifies task ID, SHA, current behavior, change, tests and blockers. Unavailable PR/CI metadata is reported as unavailable, never “all green.”
 
 ### T02 — Resolve the known historical reference-session exposure
 
@@ -374,7 +397,7 @@ Use these IDs in branches, commits and PRs. An unchecked item is not finished. S
 
 ### T12 — Render verified metadata and complete web states
 
-- [ ] Replace provider-status-only success with typed file name, size/type, availability, expiry and thumbnail only when the API supplies them.
+- [x] Replace provider-status-only success with runtime-validated returned file name, size/type and actual quality labels; empty/malformed/stale states tested locally. The current public model does not supply thumbnail or expiry URLs; do not invent them.
 - [ ] Preserve validation, loading, empty, protected/denied/expired, unsupported and retry states, cancellation and privacy-safe handoff.
 - **Files:** `apps/web/app/page.tsx`, small components/styles as justified, browser tests.
 - **Acceptance:** accessible desktop/mobile journey against the authorized API, safe hostile-name rendering, no fabricated files or capability buttons. Mock UI tests are separate from live acceptance.
@@ -412,8 +435,8 @@ Use these IDs in branches, commits and PRs. An unchecked item is not finished. S
 ### T18 — Complete the Chrome/Edge extension journey
 
 - [ ] Install the existing unpacked development extension in actual Chrome and Edge; document supported/unsupported tabs, browser failures and fragment handoff. Parser tests alone do not satisfy this.
-- [ ] Replace the hardcoded local destination with controlled owned HTTPS release configuration; preserve minimal permissions and use the same backend/web contract.
-- [ ] Package reproducibly; verify API outage/expiry/error states and permission/privacy disclosures before store submission.
+- [x] Support controlled validated owned HTTPS release configuration and exact local defaults while preserving minimal permissions/shared handoff.
+- [x] Package reproducibly without changing source config, with automated popup/origin/archive checks. Actual installed-browser outage/expiry/privacy/store review remains pending.
 - **Files:** extension manifest/popup/link module/tests and release docs.
 - **Acceptance:** dated installed-browser evidence and real authorized end-to-end journey when G1 is available; no unrelated tab/history/cookie access. Store publishing requires owner accounts and separate release authorization.
 
@@ -445,7 +468,7 @@ Use these IDs in branches, commits and PRs. An unchecked item is not finished. S
 
 ### T23 — Establish production identity, policies and release approval
 
-- [ ] Confirm original brand and current source/support links; active website source link still refers to the historical repository and needs reconciliation before release.
+- [ ] Confirm original brand and production source/support links. The website View source href is now repaired to the current repository; historical documentation links remain historical.
 - [ ] Publish clear non-affiliation, privacy/retention, terms, support and copyright-reporting information; review analytics/cookie choices and extension store requirements.
 - [ ] Reconcile outdated summaries using dated evidence, while preserving verbatim prompts and historical records. Add third-party notices when licensed code is actually reused.
 - **Acceptance:** owned staging has correct public configuration, identity and support/policy surfaces; permission/license/release review complete. Do not claim production readiness or submit stores solely because CI passed.
@@ -472,6 +495,8 @@ Use these IDs in branches, commits and PRs. An unchecked item is not finished. S
 A task is complete only when its acceptance criteria are met, relevant code/tests pass, the exact reviewed commit is recorded, and the status/checklist/log reflect its real limits. A merged PR may complete one task without completing an entire gate. The reviewer must keep **offline**, **mocked**, **authorized live**, **manual installed-browser**, and **production** evidence distinct.
 
 ## 5. Development commands and evidence
+
+**Latest current-source results:** 250 API tests (74 engine + 3 CLI + 173 existing), 50 extension tests and 20 browser checks passed; build/typecheck and pip check passed. New API/engine commands are in `docs/DOWNLOAD_ENGINE.md`; extension packaging commands are in `docs/EXTENSION_DEVELOPMENT.md`. The earlier onboarding table below remains historical evidence, not the latest counts. Current validation is local; no fresh vulnerability audit or current-fork CI pass is claimed.
 
 Use the existing isolated checkout at `/workspace/create-terabox-downloader`. No worktree is required. CI uses Python 3.12 and Node 22; the prepared cloud machine was validated with Python 3.12.14 and Node 24.22.1. Prefer repository locks and inspect tool versions when moving hosts.
 
@@ -539,7 +564,7 @@ The earlier cloud onboarding in this conversation tested the same `de7e4b3` appl
 | Service requests | API health and valid-link normalization; dev and production homepage content verified | Local services only |
 | Offline preflight | Exit 2, required partner/fixture settings missing, provider disabled | Expected blocked live setup |
 
-This documentation-only handoff does not claim a new complete application test run or a new dependency audit. Markdown paths, file coverage and Git diff are checked separately for this change. Earlier detailed validation is in [TEST_AND_VALIDATION_REPORT.txt](AnalyseFuture/TEST_AND_VALIDATION_REPORT.txt). No current-fork Actions success or live TeraBox transfer is certified here.
+The table above preserves the earlier onboarding evidence. The latest engine/client work additionally ran the 250 API, 50 extension and 20 browser checks summarized at the start of this section; it did not run a new vulnerability audit. Markdown paths/file coverage/diff were checked for the final docs. Earlier detailed validation remains in [TEST_AND_VALIDATION_REPORT.txt](AnalyseFuture/TEST_AND_VALIDATION_REPORT.txt). No current-fork Actions success or live TeraBox transfer is certified here.
 
 ## 6. Instructions for the implementing tool
 
@@ -547,13 +572,15 @@ Read `AGENTS.md`, this handoff, current source, and the focused docs for your ta
 
 Suggested task prompt to copy:
 
-> Continue the existing sarfiaroui-oss/create-terabox-downloader repository. Read AGENTS.md and PROJECT_STATUS_AND_TASKS.md. Inspect the latest default branch, open PRs, CI and local changes. Take T01, then propose and implement one bounded unblocked task, normally a specific T05 regression case while provider approval is missing. Preserve the current architecture and truthful disabled-provider behavior. Do not bypass provider access controls or expose operator credentials. Use a task branch and submit a PR with task ID, exact scope, commands/results, limitations and acceptance evidence. Update task status, docs/IMPLEMENTATION_CHECKLIST.md and docs/IMPLEMENTATION_LOG.md for actual progress. Do not self-merge. If blocked, identify the exact prerequisite and continue only relevant independent work.
+> Continue sarfiaroui-oss/create-terabox-downloader. Read AGENTS.md, docs/CODEX_CONTINUITY.md and PROJECT_STATUS_AND_TASKS.md. Inspect latest main, concurrent changes and relevant CI/PR evidence. Continue independent download-engine improvements against controlled permitted sources; do not make official partner credentials a dependency for generic transfer work. Preserve source-access security and truthful TeraBox-unavailable behavior. Implement one bounded meaningful improvement, test it, update continuity/status/log, commit and immediately push verified main checkpoints without force. If main is protected, push a durable named branch and use a PR. Never put incomplete work on main, expose an arbitrary URL proxy, invent download/benchmark success, or build unrelated developer APIs/billing/AI products.
 
 Each tool should work on one clearly assigned task/PR. Coordinate overlapping API, auth and schema changes before editing. Never overwrite someone else's local modifications, force-push shared history, or rewrite historical prompts/recovery records merely to match new status.
 
 Exactly two primary code references remain [TeraPlayer](https://github.com/gitmarcus07/Teraplayer) and [TeraBox Gateway](https://github.com/saahiyo/terabox-gateway), as audited in `docs/RESEARCH_AND_LICENSES.md`. Their MIT files allow potential selective reuse subject to provenance/notices; they do not prove a permitted live provider. Do not import their external workers, borrowed sessions, unsafe forwarded-IP trust, raw-link logging, or whole competing frameworks.
 
 ## 7. PR review and monitoring
+
+The later engine prompt authorizes direct verified main checkpoints; this review procedure remains applicable to PRs from other tools or protected-main fallback branches. It does not revoke that newer authorization.
 
 ### Required PR description
 

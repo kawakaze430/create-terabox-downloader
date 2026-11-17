@@ -282,3 +282,18 @@ rendered as text, invalid payloads rejected, empty list, delayed stale resolutio
 discarded and malformed validation rejected. Real local API still returns truthful
 provider-unconfigured status. Initial stale-server and route-announcer selector
 failures were diagnosed and corrected; the final current-build run passed.
+
+## 2026-11-17 — Final independent-engine continuation and inventory
+
+Remote main confirmed five meaningful checkpoints before this documentation
+checkpoint: `a03a4c3` (audit/plan), `f36a72b` (extension), `0a8117a` (engine/CLI),
+`bf1eea2` (benchmark), `5b9ac57` (typed website). Every push was accepted; no force
+push, history rewrite, source deletion or dependency change was used.
+
+Current root/status/structure/setup/roadmap/checklist docs reflect independent
+engine priority and actual evidence: 250 API, 50 extension, 20 browser checks,
+build/typecheck and pip consistency passed. All 97 tracked files are covered in
+the current handoff; the dated audit retains its 82-file/18-directory baseline.
+CODEX_CONTINUITY.md records exact checkpoint references, commands, limitations
+and the next five focused tasks. No visitor transfer API, production deployment,
+parallel/adaptive scheduling, durable resume or live TeraBox success is claimed.
