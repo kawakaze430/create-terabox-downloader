@@ -11,4 +11,6 @@ This folder keeps complete uploaded reference projects without placing them in t
 
 Both projects include MIT licenses. Their presence does not establish that their advertised TeraBox downloads work or that their external-service paths are suitable for this product. See [the archive guide](archives/REFERENCE_ARCHIVES.md) and [the repository structure audit](recovery-notes/REPOSITORY_STRUCTURE_AUDIT_2026-11-17.md).
 
+The [ZIP member inventory](archives/ZIP_MEMBER_INVENTORY.txt) names every nested file and folder in the two archives without exposing their contents.
+
 The earlier uploaded ZIPs remain in Git history with populated cookie settings. If those sessions were valid, revoke them. The current archives are sanitized; no cookie value is printed or repeated in this repository documentation.

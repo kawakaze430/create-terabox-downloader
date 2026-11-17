@@ -5,6 +5,12 @@ test evidence, not a claim of live provider compatibility. Recheck HEAD and CI
 when using it after this date. The two ZIPs in AnalyseFuture/archives are
 references; their advertised features are not features of the active product.
 
+Historical remote branches were also reviewed: p0-provider-contract and
+official-open-platform-oauth have no commits absent from main; the older
+phase-0-foundation branch contains foundation-era API, web, extension, docs
+and CI work with no branch-only file paths. Current main has the maintained
+versions. No disconnected production feature was identified for merging.
+
 STATUS KEY
 Verified offline = implemented and exercised without TeraBox network access.
 Implemented/unverified = source exists, but the relevant real-world flow is not

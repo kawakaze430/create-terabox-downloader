@@ -32,3 +32,7 @@ session values must be revoked by the owner if still valid; moving files or
 keeping a manifest does not revoke credentials. Local extracted copies live
 only in ignored AnalyseFuture/extracted/ and can be reproduced from the
 sanitized committed ZIPs using scripts/unpack_reference_archives.py.
+
+The path and declared size of every ZIP member, including deeply nested
+directories, is in archives/ZIP_MEMBER_INVENTORY.txt. It is an inventory, not
+approval to execute or import archived files.

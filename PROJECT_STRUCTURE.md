@@ -49,7 +49,7 @@ The complete path-by-path classification is in [COMPLETE_FILE_INVENTORY.txt](Ana
 
 ## Generated and ignored local folders
 
-`services/api/.venv/`, Python `__pycache__/`, `.pytest_cache/`, `apps/web/node_modules/`, `.next/`, `test-results/`, `*.tsbuildinfo`, and `AnalyseFuture/extracted/` are local generated outputs. They are classified as build, environment, test, or extracted-reference state and are not tracked source. The ZIPs plus `scripts/unpack_reference_archives.py` reproduce the extracted source. No generated file is needed to understand or restore the repository structure.
+`services/api/.venv/`, Python `__pycache__/`, `.pytest_cache/`, `apps/web/node_modules/`, `.next/`, `test-results/`, `*.tsbuildinfo`, and `AnalyseFuture/extracted/` are local generated outputs. They are classified as build, environment, test, or extracted-reference state and are not tracked source. The ZIPs plus `scripts/unpack_reference_archives.py` reproduce the extracted source; [ZIP_MEMBER_INVENTORY.txt](AnalyseFuture/archives/ZIP_MEMBER_INVENTORY.txt) names all 341 nested archive entries. No generated file is needed to understand or restore the repository structure.
 
 ## Rules for future additions
 

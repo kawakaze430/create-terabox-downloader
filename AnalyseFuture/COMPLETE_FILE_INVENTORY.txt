@@ -2,8 +2,8 @@ COMPLETE FILE INVENTORY
 Repository: kawakaze430/create-terabox-downloader
 Baseline: 5dceb2dbe5d0fbeee4560f71b47af1313334911c
 Scope: all 64 files tracked at the start of this recovery, shown at their
-post-move paths, plus 16 new structure, documentation-index and recovery
-report files (80 final tracked paths). The root project-idea TXT is mapped to
+post-move paths, plus 17 new structure, documentation-index and recovery
+report files (81 final tracked paths). The root project-idea TXT is mapped to
 its new path below; the change is recorded in ORIGINAL_TO_NEW_PATH_MAPPING.txt.
 Ignored caches, installs and extracted ZIP copies are generated local
 material, not tracked source.
@@ -82,7 +82,7 @@ Each line gives purpose, status, and an important dependency or consumer.
 63 services/api/tests/test_open_platform.py | ACTIVE | Mocked OAuth, signatures, response bounds and token tests; no live credentials.
 64 services/api/tests/test_provider_contract.py | ACTIVE | Strict provider model/error contract and injection tests; pytest.
 
-NEW FILES CREATED DURING THIS RECOVERY (65-80)
+NEW FILES CREATED DURING THIS RECOVERY (65-81)
 65 PROJECT_STRUCTURE.md | SUPPORT | Current professional directory and ownership map; linked from README and AGENTS.
 66 docs/README.md | SUPPORT | Groups stable documentation paths by product, engineering, provider, research and continuity role.
 67 AnalyseFuture/REPOSITORY_AUDIT.txt | SUPPORT | Snapshot of Git, structure and provenance findings.
@@ -99,9 +99,19 @@ NEW FILES CREATED DURING THIS RECOVERY (65-80)
 78 AnalyseFuture/MIGRATION_SUMMARY.txt | SUPPORT | Scope, moves, compatibility, risk and recovery reference.
 79 AnalyseFuture/NEXT_DEVELOPER_INSTRUCTIONS.txt | SUPPORT | Continuation order, component boundaries and future validation gate.
 80 AnalyseFuture/WORK_PROGRESS.txt | SUPPORT | Persistent checkpoint of completed and outstanding recovery work.
+81 AnalyseFuture/archives/ZIP_MEMBER_INVENTORY.txt | SUPPORT | Path, directory/file kind, area and declared size for all 341 members of both uploaded ZIPs; no contents.
 
 Binary handling: both tracked ZIPs were checked by archive CRC and sanitized
 credential-like values in the previous recovery; the DOCX has a stdlib XML/
 link validation script. Their contents are reference/history, not additional
 active modules. The ZIPs contain full external projects and must not be
 imported or executed merely because they are present in the repository.
+
+Ignored local directories classified, not committed: services/api/.venv/
+(installed Python dependencies), services/api/**/__pycache__/ and
+.pytest_cache/ (Python caches), apps/web/node_modules/ (npm dependencies),
+apps/web/.next/ and *.tsbuildinfo (web build/type state), apps/web/test-results/
+(browser output), and AnalyseFuture/extracted/ (copies of ZIP members). These
+are generated or third-party dependency trees, not additional first-party
+source. The two ZIPs' deeply nested members are individually named in
+AnalyseFuture/archives/ZIP_MEMBER_INVENTORY.txt.

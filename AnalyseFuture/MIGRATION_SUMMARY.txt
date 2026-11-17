@@ -9,10 +9,13 @@ Scope completed
   runtime ownership already follow framework conventions.
 - Moved three preservation-related documents into functional AnalyseFuture
   collections: future-ideas/, archives/, recovery-notes/.
-- Added PROJECT_STRUCTURE.md and a current 20-topic future roadmap. Updated
-  README and nearby relative links to point at the new locations.
+- Added PROJECT_STRUCTURE.md, docs/README.md and a current 20-topic future
+  roadmap. Updated README and nearby relative links to point at the new
+  locations. The documentation index groups stable docs by purpose.
 - Added file/feature/security/duplicate/debt/mapping/consolidation/archival
   records to make earlier work and the current state traceable.
+- Listed all 341 nested members of the two ZIPs by path, kind and size in
+  AnalyseFuture/archives/ZIP_MEMBER_INVENTORY.txt, without file contents.
 - Preserved all active source, tests, dependency declarations, lockfiles, CI,
   stable source index and historical handoff files at their original paths.
 

@@ -9,11 +9,13 @@ Read-only/static evidence gathered for restructuring:
 - Starting main and origin/main both pointed to 5dceb2d; the working tree was
   clean before edits. Remote main plus three historical feature branches were
   enumerated. A local backup ref records the starting SHA.
-- All 64 baseline tracked paths were listed and classified. No tracked
+- All 64 baseline tracked paths, 17 new files and 341 ZIP members were listed
+  and classified. No tracked
   submodules or branch-only file paths were found on the three historical
   remote feature branches. No active application source file was moved.
 - The moved files are TXT/Markdown documents; their known direct links in
-  README, AnalyseFuture/README and the moved documents were updated.
+  README, AnalyseFuture/README and the moved documents were updated. A docs
+  index groups stable paths without relocating the historical handoff.
 - The two sanitized ZIPs and extraction script remain in their pre-task
   locations. Ignored installations, build output and extracted reference
   copies were classified as generated state, not committed source.
