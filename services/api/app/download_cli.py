@@ -14,6 +14,7 @@ def main(argv=None) -> int:
     parser.add_argument("destination", type=Path, help="New output path; never overwrites an existing file")
     parser.add_argument("--host", action="append", required=True, help="Exact approved source hostname; repeat as needed")
     parser.add_argument("--max-bytes", type=int, default=1024 * 1024 * 1024)
+    parser.add_argument("--max-transfer-bytes", type=int, help="Total body bytes allowed across retries")
     parser.add_argument("--expected-bytes", type=int)
     parser.add_argument("--sha256", help="Independently known lowercase SHA-256, when available")
     parser.add_argument("--attempts", type=int, default=3)
@@ -25,7 +26,8 @@ def main(argv=None) -> int:
         source = DownloadSource(os.environ.get("ENGINE_SOURCE_URL", ""), frozenset(args.host),
                                 expected_sha256=args.sha256, expected_bytes=args.expected_bytes)
         policy = TransferPolicy(max_bytes=args.max_bytes, max_attempts=args.attempts,
-                                total_timeout=args.total_timeout, resume=not args.no_resume)
+                                total_timeout=args.total_timeout, resume=not args.no_resume,
+                                max_transfer_bytes=args.max_transfer_bytes)
         result = asyncio.run(DownloadEngine(policy).download(source, args.destination))
     except DownloadError as failure:
         print(json.dumps({"error": {"code": failure.code}}))

@@ -11,7 +11,7 @@ There will be no anonymous arbitrary-URL proxy endpoint. The internal library/CL
 ## Implemented algorithms
 
 1. Single streamed GET with identity encoding and fixed-size reads; connect/read/total deadlines and maximum bytes.
-2. Bound retry attempts for connection/read errors and transient statuses; exponential full jitter; respect bounded Retry-After without retrying earlier than requested.
+2. Bound retries for connection/read errors and transient statuses with exponential full jitter. Respect bounded Retry-After. An optional aggregate transfer budget counts body bytes received across attempts, including bytes received before an interrupted response.
 3. Independently check size/digest, reject truncation/encoding/incorrect status, keep partial files private, publish without overwriting existing destinations, clean on failure/cancellation.
 4. Recover interrupted transfers with a byte range only after receiving a known total size and strong ETag. Validate 206 Content-Range, exact remainder size, unchanged ETag and final digest. Range ignored with 200 resets safely; 416/malformed/version mismatch fails closed. Resume without a strong validator is not claimed.
 5. Parallel ranges/adaptive scheduling are **not implemented**. Evaluate only after controlled benchmarks demonstrate value within source limits. Fixed sequential recovery is deliberately the initial correct algorithm.
@@ -34,12 +34,15 @@ PYTHONPATH=services/api services/api/.venv/bin/python -m pytest -q \
 # Replace host/digest/size placeholders using your independently known file.
 PYTHONPATH=services/api services/api/.venv/bin/python -m app.download_cli \
   /tmp/new-download.bin --host your-approved-source.example \
-  --max-bytes 10485760 --expected-bytes 12345 --sha256 EXPECTED_LOWERCASE_DIGEST
+  --max-bytes 10485760 --max-transfer-bytes 20971520 \
+  --expected-bytes 12345 --sha256 EXPECTED_LOWERCASE_DIGEST
 ```
 
 The CLI prints sanitized JSON statistics only. Exit 0 means validated stream publication, 1 a transfer failure, 2 invalid configuration and 130 interruption. A SHA-256 is always computed; `integrity_verified` is true only when a trusted expected digest matched. `bytes_written` is the final file length; `transferred_bytes` counts body bytes yielded to the engine across attempts, including discarded retries. It is not a wire/TLS bandwidth counter.
 
-Progress callbacks get `bytes_written`, `total_bytes` (possibly unknown), and `attempt`. A full restart resets progress. Paths and callbacks are trusted internal inputs.
+Progress callbacks get `bytes_written`, `total_bytes` (possibly unknown), `attempt`, and cumulative `transferred_bytes`. A full restart resets the file position. Cumulative body bytes stay monotonic. Paths and callbacks are trusted internal inputs.
+
+The optional aggregate budget can reject a retry before another request if the expected remaining file would exceed it. Unknown-length responses are checked on each raw chunk. The count covers body bytes delivered by HTTPX to the engine. Transport read-ahead can deliver one chunk before rejection. Headers, TLS overhead, and unread response bodies are outside this count. The engine removes partial files on a budget failure.
 
 Limits: resume is within one invocation only, not durable cross-process resume. Only strong ETag plus known total supports recovery; ignored Range restarts from zero. A 416, wrong interval/size or changed 206 validator fails closed. Permanent authorization failures are not retried; refreshing expired source URLs belongs to an authorized adapter. Retry count is capped at eight, defaults to three; output max bytes is per attempt/file, while total network consumption is also bounded by attempts and total time. Disk writes are fixed-size synchronous operations; cooperative timeouts cannot interrupt blocked filesystem I/O. Atomic no-clobber publication uses a same-directory hard link, requiring filesystem support, and does not promise crash-durable directory metadata. Files remain mode 0600. Do not expose arbitrary destination paths to visitors.
 

@@ -231,6 +231,41 @@ def test_byte_budget_applies_to_declared_and_streamed_size(http_fixture, tmp_pat
     assert len(http_fixture.requests) == 1
 
 
+def test_known_size_above_transfer_budget_is_rejected_before_contact(http_fixture, tmp_path):
+    with pytest.raises(DownloadError) as failure:
+        run_download(http_fixture, tmp_path / "output", settings=policy(max_transfer_bytes=len(PAYLOAD) - 1))
+    assert failure.value.code == "transfer_limit"
+    assert failure.value.transferred_bytes == 0
+    assert http_fixture.requests == []
+    assert_clean(tmp_path)
+
+
+def test_unknown_length_stops_after_first_over_budget_raw_chunk(tmp_path):
+    class Stream(httpx.AsyncByteStream):
+        reads = 0
+        closed = False
+
+        async def __aiter__(self):
+            for chunk in (b"abcd", b"efgh", b"ijkl"):
+                self.reads += 1
+                yield chunk
+
+        async def aclose(self):
+            self.closed = True
+
+    stream = Stream()
+    events = []
+    transport = httpx.MockTransport(lambda request: httpx.Response(200, stream=stream))
+    engine = DownloadEngine(policy(chunk_bytes=2, max_transfer_bytes=6), transport=transport)
+    with pytest.raises(DownloadError) as failure:
+        asyncio.run(engine.download(source(), tmp_path / "output", on_progress=events.append))
+    assert failure.value.code == "transfer_limit"
+    assert failure.value.transferred_bytes == 8
+    assert stream.reads == 2 and stream.closed
+    assert [(event.bytes_written, event.transferred_bytes) for event in events] == [(2, 4), (4, 4)]
+    assert_clean(tmp_path)
+
+
 @pytest.mark.parametrize("status", [401, 403, 404])
 def test_permanent_errors_are_not_retried(http_fixture, tmp_path, status):
     http_fixture.replies = [Reply(status=status, body=b"upstream-private-detail"), Reply()]
@@ -246,6 +281,7 @@ def test_transient_errors_have_bounded_retry_then_recover(http_fixture, tmp_path
     http_fixture.replies = [Reply(status=status, body=b"retry", headers={"Retry-After": "0"}), Reply()]
     result = run_download(http_fixture, tmp_path / "output")
     assert result.attempts == 2
+    assert result.transferred_bytes == len(PAYLOAD)
     assert (tmp_path / "output").read_bytes() == PAYLOAD
     assert len(http_fixture.requests) == 2
 
@@ -291,10 +327,42 @@ def test_interrupted_stream_restarts_without_concatenating_partial_bytes(http_fi
     assert all("range" not in request["headers"] for request in http_fixture.requests)
 
 
+def test_transfer_budget_retains_partial_chunk_cost_when_restart_is_blocked(http_fixture, tmp_path):
+    cut = 123
+    events = []
+    http_fixture.replies = [Reply(cut_after=cut), Reply()]
+    with pytest.raises(DownloadError) as failure:
+        run_download(http_fixture, tmp_path / "output", progress=events.append,
+                     settings=policy(resume=False, max_transfer_bytes=len(PAYLOAD)))
+    assert failure.value.code == "transfer_limit"
+    assert failure.value.transferred_bytes == cut
+    assert events[-1].bytes_written == events[-1].transferred_bytes == cut
+    assert len(http_fixture.requests) == 1
+    assert_clean(tmp_path)
+
+
+def test_restart_progress_keeps_counting_consumed_bytes(http_fixture, tmp_path):
+    cut = 123
+    events = []
+    http_fixture.replies = [Reply(cut_after=cut), Reply()]
+    destination = tmp_path / "output"
+    result = run_download(http_fixture, destination, progress=events.append,
+                          settings=policy(resume=False, max_transfer_bytes=len(PAYLOAD) + cut))
+    assert result.attempts == 2
+    assert result.transferred_bytes == len(PAYLOAD) + cut
+    counts = [event.transferred_bytes for event in events]
+    assert counts == sorted(counts)
+    assert events[-1].bytes_written == len(PAYLOAD)
+    assert counts[-1] == result.transferred_bytes
+    assert destination.read_bytes() == PAYLOAD
+
+
 def test_exhausted_truncated_transfer_cleans_all_files(http_fixture, tmp_path):
     http_fixture.replies = [Reply(cut_after=16384)]
-    with pytest.raises(DownloadError):
+    with pytest.raises(DownloadError) as failure:
         run_download(http_fixture, tmp_path / "output", settings=policy(max_attempts=2, resume=False))
+    assert failure.value.code == "retry_exhausted"
+    assert failure.value.transferred_bytes == 32768
     assert len(http_fixture.requests) == 2
     assert_clean(tmp_path)
 
@@ -340,7 +408,7 @@ def test_cancellation_propagates_and_cleans_temporary_files(http_fixture, tmp_pa
 
 
 def test_interrupted_stream_resumes_only_with_matching_strong_validator(http_fixture, tmp_path):
-    offset = 16384
+    offset = 123
     http_fixture.replies = [
         Reply(headers={"ETag": '"fixture-v1"'}, cut_after=offset),
         Reply(status=206, body=PAYLOAD[offset:], headers={
@@ -348,10 +416,11 @@ def test_interrupted_stream_resumes_only_with_matching_strong_validator(http_fix
             "Content-Range": f"bytes {offset}-{len(PAYLOAD) - 1}/{len(PAYLOAD)}",
         }),
     ]
-    result = run_download(http_fixture, tmp_path / "output")
+    result = run_download(http_fixture, tmp_path / "output", settings=policy(max_transfer_bytes=len(PAYLOAD)))
     assert result.attempts == 2
     assert result.resumed is True
     assert result.bytes_written == len(PAYLOAD)
+    assert result.transferred_bytes == len(PAYLOAD)
     assert result.sha256 == DIGEST
     assert (tmp_path / "output").read_bytes() == PAYLOAD
     assert http_fixture.requests[1]["headers"]["range"] == f"bytes={offset}-"
@@ -380,6 +449,18 @@ def test_full_response_to_range_restarts_hash_and_output(http_fixture, tmp_path)
     assert result.sha256 == DIGEST
     assert (tmp_path / "output").read_bytes() == PAYLOAD
     assert "range" in http_fixture.requests[1]["headers"]
+
+
+def test_ignored_range_cannot_exceed_remaining_body_budget(http_fixture, tmp_path):
+    cut = 123
+    http_fixture.replies = [Reply(headers={"ETag": '"fixture-v1"'}, cut_after=cut), Reply()]
+    with pytest.raises(DownloadError) as failure:
+        run_download(http_fixture, tmp_path / "output", settings=policy(max_transfer_bytes=len(PAYLOAD)))
+    assert failure.value.code == "transfer_limit"
+    assert failure.value.transferred_bytes == cut
+    assert len(http_fixture.requests) == 2
+    assert http_fixture.requests[1]["headers"]["range"] == f"bytes={cut}-"
+    assert_clean(tmp_path)
 
 
 @pytest.mark.parametrize("resume_reply", [
@@ -436,6 +517,7 @@ def test_total_deadline_bounds_retries_and_cleans_output(http_fixture, tmp_path)
     {"total_timeout": float("inf")}, {"total_timeout": True},
     {"backoff_base": -1}, {"backoff_base": 2, "backoff_max": 1},
     {"max_retry_after": -1}, {"resume": "true"},
+    {"max_transfer_bytes": 0}, {"max_transfer_bytes": True}, {"max_transfer_bytes": 2**63},
 ])
 def test_invalid_policy_configuration_is_rejected(settings):
     with pytest.raises(ValueError):

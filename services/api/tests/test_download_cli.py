@@ -33,3 +33,12 @@ def test_cli_integrity_failure_is_redacted_and_cleans_output(monkeypatch, capsys
     assert download_cli.main([str(tmp_path / "file"), "--host", "fixture.example", "--sha256", "0" * 64]) == 1
     assert json.loads(capsys.readouterr().out) == {"error": {"code": "integrity_mismatch"}}
     assert list(tmp_path.iterdir()) == []
+
+
+def test_cli_applies_aggregate_transfer_budget(monkeypatch, capsys, tmp_path, http_fixture):
+    monkeypatch.setenv("ENGINE_SOURCE_URL", FIXTURE_URL)
+    monkeypatch.setattr(download_cli, "DownloadEngine", lambda policy: DownloadEngine(policy, transport=http_fixture.transport()))
+    assert download_cli.main([str(tmp_path / "file"), "--host", "fixture.example", "--max-transfer-bytes", "1024"]) == 1
+    assert json.loads(capsys.readouterr().out) == {"error": {"code": "transfer_limit"}}
+    assert len(http_fixture.requests) == 1
+    assert list(tmp_path.iterdir()) == []
