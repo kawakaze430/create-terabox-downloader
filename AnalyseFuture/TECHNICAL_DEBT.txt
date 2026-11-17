@@ -73,22 +73,22 @@ P1 — PRODUCTION OBSERVABILITY AND RELEASE PATH ABSENT.
   safe metrics/error categories, cost and bandwidth budget, privacy/support
   notices and reproducible real-fixture release checks.
 
-P2 — DOC STATUS NEEDS A SINGLE FRESH EVIDENCE POINT.
-  Evidence: docs/ROADMAP_AND_QA.md opens with 153 backend tests from an
-  earlier checkpoint; README.md and docs/IMPLEMENTATION_CHECKLIST.md cite
-  the later 173-test CI result; docs/START_HERE_PROJECT_HANDOFF.md is dated
-  before the uploaded ZIP and AnalyseFuture restructure. Need: retain dated
-  history but update the current status/checklist after fresh tests, linking
-  one current evidence table. Do not convert planned items to checked ones
-  based only on ZIP source or mock tests.
+P2 — KEEP CURRENT EVIDENCE SEPARATE FROM HISTORICAL HANDOFFS.
+  A 2026-11-17 follow-up updated README.md, docs/ROADMAP_AND_QA.md and
+  docs/IMPLEMENTATION_CHECKLIST.md with fresh local results linked to
+  TEST_AND_VALIDATION_REPORT.txt. The older 153-test checkpoint and
+  docs/START_HERE_PROJECT_HANDOFF.md remain dated historical records.
+  Continue to label local offline checks separately from GitHub Actions
+  and authorized live provider evidence; no live download was proven.
 
-P2 — LOCAL SETUP TEXT AND QUALITY GATES.
-  Evidence: docs/LOCAL_DEVELOPMENT.md describes requirements.txt while CI
-  uses requirements.lock, and its browser setup text contains `npm ciation`.
-  apps/web/package.json has build/typecheck/e2e but no lint script.
-  Need: make local instructions match the locked CI path, correct the typo,
-  add a targeted lint gate only when it provides actionable coverage, and
-  keep the Python/Node locks current through verified dependency updates.
+P2 — QUALITY GATES AND DEPENDENCY INTEGRITY.
+  The 2026-11-17 follow-up corrected docs/LOCAL_DEVELOPMENT.md to use the
+  Python lock and removed its npm installation typo. apps/web/package.json
+  still has build/typecheck/e2e but no lint script. Python requirements are
+  version-pinned without hashes, as pip-audit warned. Add targeted lint only
+  when it provides actionable coverage; update locks through verified changes.
+  The 173-test run also emitted a Starlette/httpx testclient deprecation
+  warning; monitor dependency compatibility before a future lock refresh.
 
 P2 — MEDIA, BATCH AND FUTURE PROVIDERS ARE DESIGNS, NOT DEBT IN RUNNING CODE.
   Evidence: models.py capability flags reserve future actions, but main.py

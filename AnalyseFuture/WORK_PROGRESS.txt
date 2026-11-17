@@ -20,17 +20,18 @@ Completed
 - Classified every baseline tracked file, the new reports, generated local
   directories, and all 341 members of the two preserved ZIPs.
 - Compared historical remote branches: none contains a path missing on main.
-- Pushed two non-force checkpoints directly to main: cf8417c and 4d1c35e.
+- Pushed recovery checkpoints directly to main: cf8417c, 4d1c35e and
+  08cffee, without a force-push or PR.
 
-Current task
+Restructuring phase status
 - Repository analysis, document grouping, full tracked-file inventory, nested
   ZIP-member inventory, path repair, reports and main delivery are complete.
   Use `git log -1` for the final commit. No tests were run in this task.
 
-Pending after this task
-- When the owner lifts the no-test instruction, run the deferred checks in
-  TEST_AND_VALIDATION_REPORT.txt and record fresh evidence before readiness
-  claims or further source changes.
+Pending after follow-up validation
+- Re-run affected checks from TEST_AND_VALIDATION_REPORT.txt after further
+  source or configuration changes; do not turn offline passes into a live
+  provider-readiness claim.
 - The owner should revoke any still-valid sessions represented by historical
   uploaded ZIP content and review GitHub account access settings.
 - Provider-dependent work remains gated on a lawful access path and owned
@@ -44,3 +45,16 @@ Known findings and constraints
   has been demonstrated. Offline tests cannot establish that capability.
 - GitHub account security and branch protection cannot be inferred from a
   clean checkout; assess only with available access and report limits.
+
+Follow-up validation after the owner authorized tests
+- On 17 November 2026, 173 API tests, 16 extension tests and 10 browser tests
+  passed locally, with a successful web build/type check, DOCX and ZIP checks,
+  Python dependency consistency, and npm/Python vulnerability audits.
+- The offline provider preflight returned its expected unconfigured exit 2;
+  no live TeraBox request or completed download was tested.
+- README, current roadmap/checklist, local setup, implementation log and
+  TEST_AND_VALIDATION_REPORT.txt were updated with exact results.
+- Pushed the validation report checkpoint de5e3a8 directly to main; later
+  report corrections are in the next normal main commit.
+- Remaining external work: revoke any still-valid historical ZIP sessions,
+  review GitHub account access, and establish a lawful live provider fixture.

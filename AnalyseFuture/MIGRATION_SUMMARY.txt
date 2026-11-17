@@ -31,8 +31,9 @@ valid. GitHub account access could not be audited from a checkout.
 Validation
 No tests or builds were run in this task because the owner explicitly asked
 to focus on analysis and restructuring. Prior test results are historical.
-See TEST_AND_VALIDATION_REPORT.txt for unrun checks. A runtime validation pass
-is the next gate before claiming the reorganized repository is fully verified.
+See TEST_AND_VALIDATION_REPORT.txt for the checks that were unrun in the
+restructuring phase and the later authorized results. A real provider transfer
+remains a separate gate before claiming downloader functionality.
 
 Recovery
 Git history and the local refs/backups/pre-universal-recovery-20261117 ref
@@ -40,3 +41,10 @@ identify the starting state. The remote's main history is advanced only by
 non-force commits; the three historical feature branches were not changed.
 See ORIGINAL_TO_NEW_PATH_MAPPING.txt for exact paths and
 ARCHIVED_FILES_MANIFEST.txt for preserved material.
+
+Follow-up on 17 November 2026: after the owner authorized testing, the full
+offline API/extension/browser suites, web build/typecheck, DOCX/ZIP checks,
+dependency consistency and npm/Python audits passed locally. The operator
+preflight remained unconfigured as expected. See the phase-2 results in
+TEST_AND_VALIDATION_REPORT.txt. No public provider or application source was
+changed by this validation pass.

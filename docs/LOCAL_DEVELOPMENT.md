@@ -59,7 +59,7 @@ Supported hosts are explicitly allowlisted in services/api/app/links.py and must
 ## Before production
 - Obtain and verify a permitted provider integration; do not embed untrusted proxy/cookie credentials.
 - Review CORS, ingress/egress, redirect/DNS SSRF security and rate limits.
-- Add locked dependency manifests and dependency/security scanning.
+- Maintain the existing Python/npm lockfiles and repeat dependency/security scanning.
 - Replace the local extension destination with configurable published website, test extension behavior, and publish privacy terms.
 - Add deployment, operational monitoring and legal review.
 - Follow docs/IMPLEMENTATION_CHECKLIST.md in order.
