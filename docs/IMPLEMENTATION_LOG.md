@@ -254,3 +254,14 @@ No lockfile/dependency change, public provider enablement or claimed TeraBox
 transfer. See DOWNLOAD_ENGINE.md for exact commands and limitations, including
 trusted output paths, cooperative disk deadlines and no cross-process resume.
 Parallel/adaptive algorithms remain unimplemented pending measured justification.
+
+## 2026-11-17 — Controlled recovery benchmark
+
+Added `scripts/benchmark_download_engine.py` and persisted the complete measured
+JSON as `docs/ENGINE_BENCHMARK_2026-11-17.json`. Command: API venv Python running
+the script with `--size-mib 4 --repeats 3`; a minimum-size smoke also passed.
+All nine measured actual-socket transfers matched the 4 MiB fixture hash/size.
+Median elapsed clean/restart/resume: 0.044010/0.044481/0.045834 seconds; body bytes
+4,194,304/4,718,592/4,194,304. Resume avoided 512 KiB retransmission; no speed
+advantage claimed. Traced allocations and limits are reported in DOWNLOAD_ENGINE.md.
+No third-party service, parallel scheduling or production throughput was tested.

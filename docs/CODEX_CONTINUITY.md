@@ -5,11 +5,12 @@ Updated 17 November 2026 (Asia/Kolkata). Latest owner priorities supersede the e
 ## Checkpoint state
 
 - Repository: `sarfiaroui-oss/create-terabox-downloader`; branch: `main`.
-- Last confirmed remote before this record: `f36a72b0b8538975af420a6a8e7293328b749b5c` (E04 extension checkpoint); E01 `a03a4c3` also confirmed.
+- Last confirmed remote before this record: `0a8117a86f14ac9a24b120e4f4eb0d93303c64a6` (E02/E03 engine); E04 `f36a72b` and E01 `a03a4c3` also confirmed.
 - The commit containing this record is itself a checkpoint; resolve its SHA with `git log -1 --format=%H -- docs/CODEX_CONTINUITY.md` and confirm against `git ls-remote origin refs/heads/main`. A file cannot contain its own final Git commit hash.
 - Completed: E01 baseline source/file audit; current owner workflow reconciled. E04 configurable extension destination, deterministic six-file packaging, popup failures/tests and current website source link. No framework moves/deletions required.
 - Completed E02/E03: source-independent streaming-to-file, bounded retries/backoff/Retry-After, size/SHA-256 checks, cancellation/temp cleanup, atomic no-clobber publication and strong-ETag in-call Range recovery; operator CLI. 74 engine + 3 CLI tests passed; total API suite 250 passed and pip check passed. No live TeraBox verification or new dependency.
-- Next: controlled recovery-byte benchmark, full web/browser validation, current inventory/status updates and final durable checkpoint. Parallel/adaptive algorithms and cross-process resume remain unimplemented.
+- Controlled benchmark complete: 4 MiB, 3 repetitions/scenario, interruption after 512 KiB; clean/restart/resume verified. Resume saved 524,288 body bytes against restart, without measured speed advantage. Raw samples in docs/ENGINE_BENCHMARK_2026-11-17.json; rerun with `services/api/.venv/bin/python scripts/benchmark_download_engine.py --size-mib 4 --repeats 3`.
+- Next: typed web metadata states and full browser validation, current inventory/status updates and final durable checkpoint. Parallel/adaptive algorithms and cross-process resume remain unimplemented.
 - Working files: `services/api/app/download_engine.py`, `services/api/tests/test_download_engine.py`; client work stays under extension/packaging docs and website source link.
 - Baseline: 82 tracked files, 18 tracked directories, no initial local changes, remote main at the SHA above. Fresh baseline: 173 API tests passed (one existing Starlette/httpx deprecation warning); pip check passed. Engine/client changes were not part of that baseline.
 - External limitations: current-fork GitHub PR/CI API previously returned Forbidden; native Git read/push works. TeraBox access unverified; generic engine work does not depend on partner credentials. Known historical ZIP sessions require owner revocation; no values are exposed here.

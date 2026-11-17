@@ -44,3 +44,31 @@ Progress callbacks get `bytes_written`, `total_bytes` (possibly unknown), and `a
 Limits: resume is within one invocation only, not durable cross-process resume. Only strong ETag plus known total supports recovery; ignored Range restarts from zero. A 416, wrong interval/size or changed 206 validator fails closed. Permanent authorization failures are not retried; refreshing expired source URLs belongs to an authorized adapter. Retry count is capped at eight, defaults to three; output max bytes is per attempt/file, while total network consumption is also bounded by attempts and total time. Disk writes are fixed-size synchronous operations; cooperative timeouts cannot interrupt blocked filesystem I/O. Atomic no-clobber publication uses a same-directory hard link, requiring filesystem support, and does not promise crash-durable directory metadata. Files remain mode 0600. Do not expose arbitrary destination paths to visitors.
 
 TeraBox's public provider remains disabled; this engine does not turn share URLs into accessible bytes. Website/extension integration waits for an authorized source adapter and a properly scoped transfer workflow, rather than exposing a generic URL proxy.
+
+## Controlled recovery benchmark — 17 November 2026
+
+```bash
+services/api/.venv/bin/python scripts/benchmark_download_engine.py --size-mib 4 --repeats 3
+```
+
+One loopback HTTP server, preallocated deterministic 4 MiB payload, 64 KiB chunks,
+one connection/transfer at a time, injected fixture transport, no backoff delay.
+One warmup excluded; interrupted scenarios close the first response after 512 KiB.
+All nine measured transfers matched expected size and independent SHA-256. Raw
+samples/limitations: [ENGINE_BENCHMARK_2026-11-17.json](ENGINE_BENCHMARK_2026-11-17.json).
+
+| Scenario | Median elapsed | Body bytes across attempts | Attempts | Median traced Python peak |
+| --- | --- | --- | --- | --- |
+| Clean full stream | 0.044010 s | 4,194,304 | 1 | 831,555 bytes |
+| Interrupted, restart | 0.044481 s | 4,718,592 | 2 | 923,814 bytes |
+| Interrupted, safe resume | 0.045834 s | 4,194,304 | 2 | 948,484 bytes |
+
+Resume avoided 524,288 retransmitted body bytes (11.11% of this restart scenario's
+body traffic). It did **not** show a speed advantage in this run. These are local
+observations with uncontrolled OS/filesystem caches, not production throughput
+or TeraBox performance. Tracing measures process Python allocations including
+server threads, excludes preallocated payload/imports, and is not RSS. Body
+counters exclude protocol/TLS overhead and are not acknowledged wire bytes.
+Parallel ranges/adaptive concurrency were not benchmarked because they are not
+implemented. The current evidence supports byte-efficient correct recovery,
+not a claim that more concurrency will improve performance.
