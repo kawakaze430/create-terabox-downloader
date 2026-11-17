@@ -1,5 +1,7 @@
 TEST AND VALIDATION REPORT — 17 NOVEMBER 2026 (INDIA TIME)
 
+PHASE 1: RESTRUCTURING BEFORE TEST AUTHORIZATION
+
 User instruction for this task: "Do not run tests for now." No unit, browser,
 integration, build, typecheck, startup, dependency-install, live-provider,
 security-scan or deployment test was run in this recovery turn. Passed: 0
@@ -35,5 +37,58 @@ Checks intentionally deferred for the next authorized validation pass:
 5. Review CI for the final main commit, plus any deployment or real provider
    checks only when the needed authorized credentials/fixtures are available.
 
-The docs-only moves are reviewable from the diff, but runtime readiness is not
-newly established. Do not convert an unrun check into a pass in future reports.
+At the end of phase 1, the docs-only moves were reviewable from the diff, but
+runtime readiness had not been newly established. Those unrun checks were not
+reported as passed at that time.
+
+PHASE 2: OWNER-AUTHORIZED FOLLOW-UP VALIDATION
+
+Source under test: main at 08cffeecf1f965d6e4f19f277cb920195693727d.
+This phase ran after the owner explicitly requested tests. All commands were
+local/offline with respect to TeraBox; no live provider request was made.
+
+PASSED
+- `PYTHONPATH=services/api services/api/.venv/bin/python -m pytest -q
+  services/api/tests`: 173 passed in 0.59 s. One StarletteDeprecationWarning
+  about httpx/testclient; no test failure.
+- `services/api/.venv/bin/python -m pip check`: no broken requirements.
+- `node --check apps/extension/popup.js`, `node --test
+  apps/extension/tests/*.test.mjs`, and the manifest-version check: syntax,
+  manifest and 16 parser/handoff tests passed.
+- From `apps/web`, `NEXT_TELEMETRY_DISABLED=1 npm run build` and
+  `npm run typecheck`: production build and TypeScript check passed.
+- From `apps/web`, with the API venv on PATH and system Chromium selected,
+  `npm run test:e2e`: 10 Playwright tests passed (5 desktop, 5 mobile).
+  Playwright started local web and API servers and exercised validation,
+  provider-unavailable status, fragment handoff, stale response cancellation
+  and service outage behavior.
+- `python3 docs/verify_handoff_archive.py`: DOCX package, expected topics,
+  research links and internal XML validated.
+- `python3 scripts/unpack_reference_archives.py`: both sanitized ZIPs passed
+  pinned SHA/CRC/member checks and matched existing extracted copies.
+- Local Markdown link existence in 7 entrypoint/relocated documents: 0
+  missing targets.
+- `npm audit --audit-level=high`: 0 reported vulnerabilities.
+- `pip-audit --cache-dir /tmp/terabox-pip-audit-cache -r
+  services/api/requirements.lock --no-deps --disable-pip`: no known
+  vulnerabilities. It warned that hash-pinned Python dependencies would
+  provide stronger integrity guarantees than version pins alone.
+
+EXPECTED UNCONFIGURED RESULT
+- `PYTHONPATH=services/api services/api/.venv/bin/python -m app.preflight`
+  exited 2 because partner credentials, approved hosts, approval flag and an
+  owner-controlled file fixture are absent. Its report said
+  `configuration_ready=false`, `live_verified=false`, and
+  `public_provider_enabled=false`, with no invalid configured variables.
+
+SETUP CORRECTION DURING SCAN
+- The first Python audit attempts hit read-only default uv/pip-audit cache
+  paths. Retrying with writable `/tmp` cache/tool directories succeeded;
+  package verification was not disabled. No repository files were changed by
+  the audit commands.
+
+STILL UNRUN OR UNVERIFIED
+- No `preflight --live`, real TeraBox metadata, complete provider file
+  transfer, installed extension, staging/production deployment, or current
+  GitHub Actions run was verified. API and browser passes demonstrate the
+  offline development flow, not a working live downloader.

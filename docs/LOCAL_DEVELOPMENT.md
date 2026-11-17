@@ -13,7 +13,7 @@ From repository root:
     cd services/api
     python -m venv .venv
     source .venv/bin/activate        # Windows: .venv\Scripts\activate
-    python -m pip install -r requirements.txt
+    python -m pip install -r requirements.lock
     python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 
 Open http://127.0.0.1:8000/docs for generated OpenAPI docs.
@@ -41,7 +41,7 @@ From repository root:
     PYTHONPATH=services/api python -m pytest -q services/api/tests   # bash/macOS
     node --check apps/extension/popup.js
 
-Next.js build verification requires npm ciation:
+Next.js build verification requires a lockfile install:
 
     cd apps/web && npm ci && npm run build
 

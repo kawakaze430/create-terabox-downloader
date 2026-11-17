@@ -1,9 +1,11 @@
 # Ordered Implementation Checklist
 
-**Updated:** 2026-11-14. **This is the live plan, not a claim of completion.**
+**Updated:** 2026-11-17. **This is the live plan, not a claim of completion.**
 Latest evidence: [implementation log](IMPLEMENTATION_LOG.md). Earlier branch/CI references below are historical; current implementation is on `main`.
 
 **2026-11-16 checkpoint:** [CI 43750414786](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43750414786) passed 173 offline Python tests, 16 extension tests, Next.js build/typecheck and 10 browser checks at commit 8203a017. Malformed OAuth inputs are now rejected before outbound requests. No live metadata/download was verified.
+
+**2026-11-17 local checkpoint:** The reorganized repository passed the same test counts (173 API, 16 extension, 10 browser), web build/typecheck, archive/document checks, and npm/Python dependency audits. The offline provider remains unconfigured; see [exact results](../AnalyseFuture/TEST_AND_VALIDATION_REPORT.txt). GitHub Actions for this checkpoint has not been verified.
 
 A checkmark is used only for implemented items with the evidence noted. The website validation flow passes 10 browser checks; the extension parser passes 16 unit tests, while installed-extension testing remains pending. The public TeraBox downloader engine is NOT connected.
 

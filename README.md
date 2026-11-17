@@ -10,7 +10,7 @@ The current project vision and roadmap are in [AnalyseFuture/PROJECT_VISION_AND_
 > [dated source/reference index](docs/PROJECT_SOURCE_INDEX_2026-11-16.md),
 > and the [Word copy](docs/PROJECT_MASTER_HANDOFF.docx). Future ChatGPT/Codex sessions should start here rather than rely on an old chat.
 
-> **Status (2026-11-14):** Development is on `main`. The FastAPI link validator, strict provider contract, readiness endpoint and credential-gated official OAuth client are integrated and pass 173 offline tests. The Next.js validation flow passes desktop/mobile browser checks; the MV3 extension remains a development build. **Live TeraBox authorization, metadata and downloads are still blocked and unverified.** The operator-only metadata/download probe is ready for authorized fixture testing; see [operator validation](docs/OPERATOR_VALIDATION.md) and the [implementation log](docs/IMPLEMENTATION_LOG.md).
+> **Status (2026-11-17):** Development is on `main`. Local validation after the repository reorganization passed 173 offline API tests, 16 extension parser tests, 10 desktop/mobile browser checks, the web build and type check, document/archive checks, and npm/Python dependency audits. The MV3 extension remains a development build. **Live TeraBox authorization, metadata and downloads are still blocked and unverified.** The operator-only metadata/download probe is ready for an authorized fixture test; see [validation results](AnalyseFuture/TEST_AND_VALIDATION_REPORT.txt), [operator validation](docs/OPERATOR_VALIDATION.md), and the [implementation log](docs/IMPLEMENTATION_LOG.md).
 
 ## Our mission
 
@@ -46,7 +46,7 @@ The product should be owned and operated through our own GitHub, hosting, infras
 
 ## Run and develop the starter
 
-See **[Local Development](docs/LOCAL_DEVELOPMENT.md)** for API, website and extension setup, and **[Ordered Implementation Checklist](docs/IMPLEMENTATION_CHECKLIST.md)** for the complete tracked roadmap. The website and extension source are development previews. The API passes 173 offline tests (2026-11-16 CI 43750414786), the extension parser passes 16 tests, and 10 desktop/mobile browser checks pass in GitHub Actions. Live TeraBox access and actual extension installation remain unverified. The backend currently responds with `PROVIDER_NOT_CONFIGURED` for valid links rather than claiming downloads work.
+See **[Local Development](docs/LOCAL_DEVELOPMENT.md)** for API, website and extension setup, and **[Ordered Implementation Checklist](docs/IMPLEMENTATION_CHECKLIST.md)** for the tracked roadmap. The website and extension source are development previews. On 2026-11-17, local checks passed 173 offline API tests, 16 extension parser tests and 10 desktop/mobile browser checks against the local API; the [earlier CI run](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43750414786) passed the same counts. Live TeraBox access and actual extension installation remain unverified. The backend currently responds with `PROVIDER_NOT_CONFIGURED` for valid links rather than claiming downloads work.
 
 ## Official integration research (new)
 

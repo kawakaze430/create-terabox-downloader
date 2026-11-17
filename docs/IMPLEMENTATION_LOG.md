@@ -1,5 +1,25 @@
 # Implementation log
 
+## 2026-11-17 — Reorganized repository validation
+
+After the structure and recovery documentation commits, tested `main` at
+`08cffee`. Local checks passed 173 offline API tests, 16 extension parser
+tests, 10 Playwright Chromium tests across desktop and mobile, the Next.js
+production build and TypeScript check, Python dependency consistency, the
+DOCX/archive checks, and npm/Python dependency audits (no known findings).
+Seven current entrypoint/relocated Markdown files had no missing local links.
+The API tests emitted one Starlette/httpx deprecation warning.
+
+The offline operator preflight exited 2 as designed and reported
+`configuration_ready: false`, `live_verified: false`, and
+`public_provider_enabled: false`. No provider credentials were configured,
+no `--live` probe ran, and no TeraBox metadata or file transfer was verified.
+See [the detailed validation report](../AnalyseFuture/TEST_AND_VALIDATION_REPORT.txt).
+
+Corrected the local-development instructions to use the existing Python lock
+and fixed an npm installation typo. No application source, dependency lock,
+public API or provider enablement was changed.
+
 ## 2026-11-16 — G1 OAuth outbound credential gate and reference audit
 
 Inspected main at `6a088e3795eb8c52cff46180ae1776d3487582ca`,
