@@ -1,0 +1,36 @@
+NEXT DEVELOPER INSTRUCTIONS
+
+1. Open README.md, AGENTS.md and PROJECT_STRUCTURE.md first. Then read
+   AnalyseFuture/WORK_PROGRESS.txt, FEATURE_INVENTORY.txt, SECURITY_AUDIT.txt
+   and PROJECT_VISION_AND_FUTURE_ROADMAP.txt. Verify the current main SHA;
+   these reports describe the 17 November 2026 recovery snapshot.
+2. Follow apps/web/ for website behavior, apps/extension/ for browser handoff,
+   and services/api/ for the versioned API and operator-only provider candidate.
+   Keep the public provider unconfigured until authorized live evidence exists.
+3. Find external reference ZIPs and their guide under AnalyseFuture/archives/.
+   The ZIPs are preserved but not part of the running application. Use
+   scripts/unpack_reference_archives.py only for reviewed source inspection;
+   extracted/ is ignored and should not enter CI or deployment.
+4. Do not treat a syntactically valid TeraBox link as a verified video, file or
+   download. The operator probe is mock-tested only. Confirm permitted scope,
+   own-file fixture, real metadata and checksum-matched completed transfer
+   before enabling any visitor download path. See docs/OPERATOR_VALIDATION.md.
+5. Treat the uploaded historical ZIP session values as exposed until revoked.
+   The current ZIPs are sanitized, but older commits remain available. Review
+   GitHub account sessions, collaborators, deploy keys, tokens and Actions
+   secrets through the owner's GitHub account; this checkout cannot establish
+   those settings.
+6. The owner explicitly postponed tests during this restructuring. Before
+   further feature development or a readiness claim, run the commands listed
+   in TEST_AND_VALIDATION_REPORT.txt and record exact results. Check archive
+   extraction, docs continuity, Python, extension, web and browser behavior.
+7. Preserve every useful file and history. The owner wants coherent verified
+   checkpoints pushed directly to main, without a feature branch, PR or force
+   push. Inspect origin/main and existing changes before each push. Record
+   moved paths and keep AnalyseFuture organized by actual purpose.
+
+Next engineering priority after validation: complete the lawful provider
+feasibility gate with an owner-controlled fixture. If that access remains
+unavailable, work on independently useful authorized-media import capability
+without claiming TeraBox downloads. The one/two/five-year goals are conditional
+in PROJECT_VISION_AND_FUTURE_ROADMAP.txt.

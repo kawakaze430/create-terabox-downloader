@@ -1,0 +1,55 @@
+Security audit — 2026-11-17 (Asia/Kolkata)
+
+Scope and method
+Reviewed the tracked source tree, Git history and remote references, CI workflow,
+dependency manifests and lockfiles, and both uploaded ZIP archives. Inspected
+credential presence and structure without printing or copying credential values.
+This is a repository snapshot review, not a GitHub account audit or penetration
+test.
+
+Confirmed credential exposure in Git history
+- Commit 05049dc added the original TeraPlayer ZIP. Its
+  cloudflare-worker/.dev.vars contained a populated COOKIE_JSON object with
+  session-shaped fields, and cloudflare-worker/terabox-live.html contained a
+  nonempty pcftoken field. The original gateway ZIP contained a nonempty,
+  token-like COOKIE_JSON value in .env.example. Whether any remain valid is
+  unknown. No GitHub access token was identified in these locations.
+- Commit 5dceb2d replaced these values with empty placeholders in the current
+  ZIPs and moved the references under AnalyseFuture/archives/. The local
+  extracted copies are ignored by Git. The original ZIP blobs remain reachable
+  from repository history; moving or sanitizing the current files does not
+  revoke or remove previously exposed values.
+- If any of those sessions belonged to the owner or are still valid, revoke
+  them at their provider and issue new credentials. Do not place new values in
+  Git or chat. Consider a coordinated history cleanup only after revocation;
+  old clones and downloads can retain the original ZIPs.
+
+Current repository safeguards and limits
+- All tracked files have normal non-executable mode. The only active GitHub
+  Actions workflow has read-only contents permission and runs locked installs,
+  tests, a build, and local validation scripts. No active workflow runs the
+  archived worker, webhook cron scripts, or agent helper files.
+- The active extension requests only activeTab. The backend has strict share
+  host validation, pinned outbound transport, request limits, and a provider
+  contract that currently reports the live provider as unconfigured. These
+  controls were observed in source; they do not prove a production deployment
+  secure or a real TeraBox download functional.
+- The npm lock resolves packages only from registry.npmjs.org, contains
+  integrity fields for its resolved packages, and lists no packages with
+  install scripts. Python requirements are version-pinned but not hash-pinned.
+  CI actions use release tags rather than immutable commit SHAs. No advisory
+  database or dependency vulnerability scan was completed in this review.
+- The archived projects are lower-trust reference material. TeraPlayer includes
+  .emergent cron scripts, a Cloudflare worker, .agents skills and .claude
+  settings; gateway uses an external worker and cookie flow. The current
+  application does not import or execute them. Review individual files before
+  any reuse and preserve MIT notices for copied source.
+
+What this evidence cannot establish
+The local main commit matched the remote main tip when checked, and Git object
+integrity passed. That does not verify GitHub account security, past access to
+the repository, collaborator permissions, deploy keys, personal access tokens,
+Actions secrets, login sessions, or branch protection. The owner should review
+those settings and GitHub security logs in the account UI. There is no observed
+evidence of account takeover in this repository review, and no basis to claim
+one did or did not occur outside the checked evidence.

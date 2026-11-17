@@ -1,0 +1,35 @@
+CONSOLIDATION REPORT — UNIVERSAL RECOVERY
+Baseline: 5dceb2d. Active code files combined: 0. Duplicate active frameworks
+removed: 0. Files moved into functional collections: 3.
+
+The current repository has one running FastAPI service, one Next.js site and
+one MV3 extension. The operator-only official-share candidate is deliberately
+separate from public ShareProvider. Review of imports, API calls, manifests,
+tests and CI found no second active downloader or scattered implementation
+whose behavior should be merged now. The branch comparison found no file path
+present only on the three historical remote feature branches; main contains
+the active descendants of that work. Old branches were not merged or deleted.
+
+Overlaps assessed:
+- Python links.py and JavaScript links.mjs both validate share URLs, but sit on
+  server and browser trust boundaries. The server is authoritative; removing
+  either would weaken the flow. Shared fixture data is a future option.
+- links.py, egress.py and open_platform.py all inspect URLs but apply different
+  trust policies: user input, outbound DNS/CDN, and regional API origins.
+- OAuth and operator token validation has a small repeated primitive. Merging
+  it without running existing regression tests would be premature.
+- Backend response bounds differ deliberately between OAuth JSON, share JSON
+  and byte streams. A generic helper would need contract evidence first.
+- The uploaded TeraPlayer and gateway archives contain overlapping complete
+  app stacks, but are external references with unverified provider behavior,
+  session/worker dependencies and separate license duties. They stay isolated.
+- Requirements, roadmap, handoff and idea documents have distinct current or
+  historical roles. The earlier idea and dated audit were moved to named
+  preservation collections; the new vision and PROJECT_STRUCTURE.md are the
+  current entrypoints. Original text remains intact.
+
+The resulting design has one active implementation per responsibility. No
+functional source was overwritten, no public API changed and no dependency
+manifest changed. Detailed overlap evidence is in DUPLICATE_ANALYSIS.txt and
+file ownership is in COMPLETE_FILE_INVENTORY.txt. The user asked that no tests
+run during this restructuring, so runtime compatibility is not newly claimed.

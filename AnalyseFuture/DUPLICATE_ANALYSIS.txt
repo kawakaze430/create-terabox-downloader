@@ -1,0 +1,70 @@
+DUPLICATE AND OVERLAP ANALYSIS
+Reviewed: 17 November 2026 (India time), main at 5dceb2d.
+Only active source is treated as product code. ZIP contents in
+AnalyseFuture/archives are external reference material, even when a similar
+feature appears there. No source was removed or merged by this analysis.
+
+1. Two link parsers — deliberate cross-language overlap, drift risk.
+   services/api/app/links.py is the authoritative server admission rule;
+   apps/extension/links.mjs rejects unsupported links before handoff. Both
+   carry the eight-host allowlist, token length and two path shapes. The
+   extension comment explicitly says to keep it aligned with links.py.
+   Decision: retain both at their trust boundaries. Add shared fixture cases
+   or generated policy data when host/path changes become frequent. Do not
+   route security decisions through the extension parser alone.
+
+2. URL/host validation has three distinct purposes, not three providers.
+   links.py admits user share URLs; egress.py approves outbound API/CDN URLs
+   and public DNS addresses; open_platform.py approves provider-reported
+   regional API origins. There is some string/host checking overlap, but the
+   policies have different trust scopes. Decision: keep separate; only factor
+   common parsing after tests show the same semantics and error behavior.
+
+3. OAuth/operator token checks overlap slightly.
+   open_platform.py checked_credential_token() and official_shares.py
+   validated_operator_token() both reject empty, long or non-printable token
+   input. They return/accept different types at different boundaries.
+   Decision: avoid new copies; a later small consolidation could share one
+   validation primitive while keeping public error messages redacted and
+   preserving pre-network rejection tests. No immediate rewrite is needed.
+
+4. Bounded response readers are similar but intentionally sized by endpoint.
+   open_platform.py _post_form() caps OAuth JSON at 64 KiB;
+   official_shares.py bounded_json() caps share JSON at 1 MiB; verify_download()
+   streams a byte-limited test file. Decision: retain endpoint-specific
+   deadlines, sizes and errors. If more official endpoints are implemented,
+   extract a common safe streaming helper after contract tests cover it.
+
+5. Web validate/resolve request handling repeats local state mechanics.
+   apps/web/app/page.tsx has two fetch functions with separate abort
+   controllers and timers. They call different API routes and display
+   different states. Decision: keep while this is a small development page;
+   consolidate into a typed API client/hook when real metadata and files add
+   more actions. Avoid a premature generic state framework.
+
+6. Product vision appears in several documents by design.
+   README.md is the entry point; AnalyseFuture/future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt describes
+   the broad future; docs/PRODUCT_REQUIREMENTS.md lists target capabilities;
+   docs/ROADMAP_AND_QA.md and IMPLEMENTATION_CHECKLIST.md track gates;
+   docs/START_HERE_PROJECT_HANDOFF.md and IMPLEMENTATION_LOG.md preserve dated
+   evidence; docs/MASTER_DEVELOPMENT_PROMPT_2026-11-15.md is verbatim history.
+   Decision: retain these different roles. Keep current status in a single
+   evidence-backed inventory/checklist and link to it from summaries; do not
+   delete archival text or rewrite the verbatim master prompt.
+
+7. Two uploaded ZIPs duplicate entire app categories, not active modules.
+   TeraPlayer bundles a Python backend, React frontend and extension;
+   terabox-gateway bundles a Flask/aiohttp service. The active product already
+   has FastAPI, Next.js and an extension. Docs/RESEARCH_AND_LICENSES.md and
+   AnalyseFuture/archives/REFERENCE_ARCHIVES.md flag third-party workers, session cookies,
+   differing contracts and unverified live function. Decision: keep ZIPs
+   isolated under AnalyseFuture; do not boot another server, copy extraction
+   paths or create competing endpoints. Review individual MIT-licensed ideas
+   and required notices if a verified use case later justifies adaptation.
+
+8. No second active downloader or duplicate production framework was found.
+   Public routes in services/api/app/main.py use UnconfiguredProvider;
+   operator-only OfficialShares is invoked by preflight.py, not public routes.
+   The ZIPs are ignored after extraction. Decision: preserve this separation
+   until user-scoped authorization and live proof exist. A second framework
+   would add maintenance without resolving the provider blocker.

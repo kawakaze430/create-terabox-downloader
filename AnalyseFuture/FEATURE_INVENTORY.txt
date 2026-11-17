@@ -1,0 +1,151 @@
+FEATURE INVENTORY — ACTIVE PRODUCT
+Reviewed: 17 November 2026 (India time)
+Source snapshot: main at 5dceb2d. This inventory describes source and recorded
+test evidence, not a claim of live provider compatibility. Recheck HEAD and CI
+when using it after this date. The two ZIPs in AnalyseFuture/archives are
+references; their advertised features are not features of the active product.
+
+STATUS KEY
+Verified offline = implemented and exercised without TeraBox network access.
+Implemented/unverified = source exists, but the relevant real-world flow is not
+proved. Blocked = external access or evidence is required. Planned = no active
+implementation. Archived reference = exists only in uploaded third-party ZIP.
+
+ACTIVE API: services/api/app/ (10 Python files including __init__.py)
+
+01. Share URL validation and normalization — Verified offline.
+    links.py admits exact HTTPS TeraBox hosts, /s/<token> and
+    /sharing/link?surl=<token>, rejects credentials/custom ports/unsupported
+    paths, and strips unrelated query/fragment values. main.py exposes
+    POST /api/v1/shares/validate. Evidence: tests/test_api.py and 10 web
+    browser checks in apps/web/tests/core.spec.ts (five cases in two viewports).
+    Missing: proof that every recognized URL still points to an accessible file.
+
+02. Public share resolution contract — Verified offline; live path blocked.
+    provider.py defines ShareProvider, sanitized errors and an intentionally
+    disabled default. models.py constrains files/capabilities. main.py exposes
+    POST /api/v1/shares/resolve, which returns PROVIDER_NOT_CONFIGURED (501)
+    for a valid link by default. Evidence: tests/test_provider_contract.py.
+    Missing: approved provider implementation, per-user access and live data.
+
+03. Health and readiness — Verified offline.
+    main.py implements GET /healthz and /readyz; /readyz reports 503 while
+    the provider is unconfigured. Evidence: tests/test_api.py and
+    tests/test_provider_contract.py. Missing: production uptime evidence.
+
+04. API admission, privacy and error controls — Verified offline.
+    limits.py bounds JSON bodies, time, per-process rate, client slots and
+    concurrent requests using the ASGI peer; main.py redacts validation and
+    provider errors and restricts CORS origins. Evidence: tests/test_limits.py.
+    Missing: shared edge quotas for multiple workers and deployment review.
+
+05. Outbound approved-host transport — Verified with synthetic DNS and HTTP.
+    egress.py requires exact HTTPS hosts, rejects private/non-public addresses,
+    pins a checked IP while retaining TLS SNI, and disables redirect/proxy
+    fallback in the operator path. Evidence: tests/test_egress.py.
+    Missing: approved real regional/API/CDN hosts and production egress policy.
+
+06. Official Open Platform OAuth candidate — Verified with offline fixtures.
+    open_platform.py implements fixed OAuth endpoints, signature/credential
+    checks, bounded responses and regional host approval. Evidence:
+    tests/test_open_platform.py. This is not a public login or live integration.
+    Missing: partner scope, credentials and real token/region validation.
+
+07. Operator-only share and checksum probe — Verified with mocks; live blocked.
+    official_shares.py parses bounded metadata and a selected download link;
+    preflight.py requires explicit --live plus approval, exact hosts, a small
+    owned share and trusted SHA-256, then verifies downloaded bytes. Evidence:
+    tests/test_official_shares.py, docs/OPERATOR_VALIDATION.md and CI's
+    offline-only preflight. No authorized live response or transfer is recorded.
+    This path is not connected to the public provider in main.py.
+
+ACTIVE WEB: apps/web/ (Next.js 16, React 19, TypeScript)
+
+08. Responsive development page — Verified locally/CI for current flow.
+    app/page.tsx accepts a share URL, calls the validation API, shows the
+    normalized host and an honest unavailable-provider message, cancels stale
+    requests and consumes extension handoff fragments. app/globals.css and
+    layout.tsx supply the presentation. Evidence: tests/core.spec.ts,
+    package.json build/typecheck, .github/workflows/ci.yml. No real file card,
+    media player or download UI is implemented.
+
+09. Browser security headers — Implemented; deployment unverified.
+    next.config.ts sets referrer, content-type and frame headers. A deployed
+    origin, production CORS and hosting/proxy behavior remain untested.
+
+ACTIVE EXTENSION: apps/extension/ (Manifest V3, JavaScript)
+
+10. Supported-page URL handoff — Verified parser offline; installation unverified.
+    links.mjs checks exact hosts and supported paths, removes unrelated query
+    data, then opens the local website with the URL in a fragment. popup.js,
+    popup.html, popup.css and manifest.json implement the development popup
+    with activeTab permission. Evidence: tests/links.test.mjs (16 cases) and
+    CI syntax/manifest checks. No Chrome/Edge installed-extension proof,
+    published destination or actual download action exists.
+
+BUILD, CONFIGURATION AND DOCUMENTATION
+
+11. Reproducible developer checks — Implemented and previously passed.
+    services/api/requirements.lock, apps/web/package-lock.json and
+    .github/workflows/ci.yml define Python 3.12, Node 22, 173 API tests,
+    16 extension tests, web build/typecheck and 10 Chromium browser checks
+    at the cited 2026-11-16 checkpoint in docs/IMPLEMENTATION_LOG.md.
+    These historical results are not a fresh run at this snapshot.
+
+12. Configuration examples — Implemented, no live values committed.
+    services/api/.env.example names local CORS/limits and operator probe
+    requirements; apps/web/.env.example points the dev site at local API.
+    A running production configuration and provider secrets are absent.
+
+13. Project continuity and plans — Documented, not feature proof.
+    README.md, AGENTS.md, AnalyseFuture/future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt, the 49-source
+    PUBLIC_REPOSITORY_STUDY_LIST.txt and docs/ contain requirements, handoff,
+    architecture, research, operator guide, roadmap, CI history and an archived
+    Word copy. docs/verify_handoff_archive.py checks the Word archive in CI.
+
+14. Uploaded reference projects — Archived reference only.
+    AnalyseFuture/archives/Teraplayer-main.zip and terabox-gateway-main.zip
+    have safe, checksum-checked extraction through
+    scripts/unpack_reference_archives.py into ignored AnalyseFuture/extracted/.
+    Their MIT licenses do not make their worker/cookie/provider paths an
+    approved or proven downloader. See AnalyseFuture/archives/REFERENCE_ARCHIVES.md.
+
+MISSING CAPABILITIES REQUESTED IN THE VISION
+
+15. Real TeraBox metadata and completed download — Blocked. Needs a permitted,
+    working access method, owner-controlled fixture, real names/sizes, exact
+    byte count and checksum evidence. Official partner approval is a candidate
+    route; no route is yet verified. docs/OPERATOR_VALIDATION.md is the runbook.
+
+16. Public authorization and user isolation — Planned. The operator token
+    cannot safely become a shared visitor credential. No public OAuth/session
+    lifecycle, consent boundary, account model or token store exists.
+
+17. Preview/player, actual qualities and codec detection — Planned. No media
+    source, playback component, conversion engine or real quality data exists.
+
+18. Folder browsing/search, batch selection and ZIP export — Planned. Models
+    reserve capability flags, but no public routes or resource-bounded jobs
+    exist. Folder UI in the reference ZIP is not an integrated feature.
+
+19. User-imported files and owned-storage adapter — Planned in the idea TXT.
+    No upload/import API, storage, media processing or test fixture set exists.
+
+20. Production deployment, monitoring, browser distribution and legal/support
+    surface — Planned. CI and dev configuration exist; no owned staging or
+    production environment, store listing, operational metrics or validated
+    real-user completion flow is recorded.
+
+21. Accounts, subscriptions, public developer API, additional providers,
+    PWA/mobile app and opt-in AI media features — Future concepts only.
+    AnalyseFuture/future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt and docs/PRODUCT_REQUIREMENTS.md set
+    conditions; no active implementation was found in apps/ or services/.
+
+CONSOLIDATION DECISION
+Keep one active FastAPI API and one provider contract, with the Next.js site
+and MV3 extension as clients. Keep complete uploaded projects under
+AnalyseFuture as inspectable references. Adapt individual licensed and audited
+ideas only after a concrete need and verification; do not count duplicate
+frameworks or bundled demonstrations as active features. Different languages
+communicate through the existing versioned JSON API; a one-language rewrite
+would not supply missing authorized TeraBox access.

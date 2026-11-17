@@ -1,0 +1,107 @@
+COMPLETE FILE INVENTORY
+Repository: kawakaze430/create-terabox-downloader
+Baseline: 5dceb2dbe5d0fbeee4560f71b47af1313334911c
+Scope: all 64 files tracked at the start of this recovery, shown at their
+post-move paths, plus 16 new structure, documentation-index and recovery
+report files (80 final tracked paths). The root project-idea TXT is mapped to
+its new path below; the change is recorded in ORIGINAL_TO_NEW_PATH_MAPPING.txt.
+Ignored caches, installs and extracted ZIP copies are generated local
+material, not tracked source.
+
+Legend: ACTIVE = loaded/executed in a development or test workflow;
+SUPPORT = configuration/documentation used to develop or maintain the app;
+ARCHIVE = preserved reference/history, excluded from app/CI imports.
+Each line gives purpose, status, and an important dependency or consumer.
+
+01 .github/workflows/ci.yml | SUPPORT | GitHub API/web/extension jobs; reads both lockfiles, tests, DOCX check; no archived code executed.
+02 .gitignore | SUPPORT | Excludes environment values, installs, build/test output and AnalyseFuture/extracted; used by Git.
+03 AGENTS.md | SUPPORT | Project rules and current contributor workflow; read by developers/agents, not runtime.
+04 AnalyseFuture/README.md | SUPPORT | Archive purpose and credential-history warning; links archive and audit docs.
+05 AnalyseFuture/archives/Teraplayer-main.zip | ARCHIVE | Sanitized complete third-party FastAPI/React/extension reference; checksum pinned by unpack script; not runtime input.
+06 AnalyseFuture/archives/terabox-gateway-main.zip | ARCHIVE | Sanitized complete third-party Flask/aiohttp reference; checksum pinned by unpack script; not runtime input.
+07 AnalyseFuture/future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt | ARCHIVE | Earlier detailed product/AI roadmap; retained in full and linked from README; replaced as current recovery roadmap by a new AnalyseFuture TXT.
+08 PUBLIC_REPOSITORY_STUDY_LIST.txt | SUPPORT | 49 GitHub research links and caveats; referenced by README, handoff and DOCX; no executable dependencies.
+09 README.md | SUPPORT | Product entry, verified/unverified status and navigation; refers to docs, idea, API/web/extension.
+
+10 apps/extension/links.mjs | ACTIVE | Local URL parser and website fragment handoff; imported by popup.js; tested by links.test.mjs.
+11 apps/extension/manifest.json | ACTIVE | MV3 extension metadata with activeTab only; popup.html is its action entrypoint; checked in CI.
+12 apps/extension/popup.css | ACTIVE | Extension popup styling; loaded by popup.html.
+13 apps/extension/popup.html | ACTIVE | Popup DOM/entry; loads popup.css and popup.js.
+14 apps/extension/popup.js | ACTIVE | Reads active tab and opens normalized URL in dev website; imports links.mjs; syntax checked in CI.
+15 apps/extension/tests/links.test.mjs | ACTIVE | 16 offline URL/handoff parser tests; exercises links.mjs with Node test runner.
+
+16 apps/web/.env.example | SUPPORT | Non-secret example for public API base URL; copied locally if needed, never holds production secrets.
+17 apps/web/app/globals.css | ACTIVE | Website global/mobile styles; imported by layout.tsx.
+18 apps/web/app/layout.tsx | ACTIVE | Next.js root document and metadata; wraps page.tsx and imports CSS.
+19 apps/web/app/page.tsx | ACTIVE | Paste/validate/provider-status UI; calls versioned API; exercised by Playwright core.spec.ts.
+20 apps/web/next-env.d.ts | SUPPORT | Generated Next.js TypeScript declarations; included by tsconfig.json.
+21 apps/web/next.config.ts | SUPPORT | Next.js configuration loaded by build/start; no custom provider logic.
+22 apps/web/package-lock.json | SUPPORT | Exact npm dependency tree; consumed by npm ci and CI cache.
+23 apps/web/package.json | SUPPORT | Next/React/Playwright/TypeScript versions and run/build/test scripts.
+24 apps/web/playwright.config.ts | SUPPORT | Desktop/mobile Chromium E2E setup, starts web/API locally; uses core.spec.ts.
+25 apps/web/tests/core.spec.ts | ACTIVE | Browser checks for validation, disabled provider, handoff, stale requests and outage; uses Playwright config.
+26 apps/web/tsconfig.json | SUPPORT | TypeScript compiler options for app/build/typecheck; references Next declarations.
+
+27 docs/ARCHITECTURE.md | SUPPORT | Target boundaries, API/provider plan and security principles; proposal, not runtime.
+28 docs/IMPLEMENTATION_CHECKLIST.md | SUPPORT | Ordered roadmap/checklist; complements implementation log.
+29 docs/IMPLEMENTATION_LOG.md | SUPPORT | Dated changes and test evidence; historical, not live-service proof.
+30 docs/LOCAL_DEVELOPMENT.md | SUPPORT | API/web/extension setup and checks; consumed by developers.
+31 docs/MASTER_DEVELOPMENT_PROMPT_2026-11-15.md | ARCHIVE | Verbatim earlier owner prompt; historical instruction record, not runtime.
+32 docs/OFFICIAL_OPEN_PLATFORM.md | SUPPORT | Official API candidate research, credentials/scopes caveats; relates to open_platform.py.
+33 docs/OPERATOR_VALIDATION.md | SUPPORT | Gated live-fixture procedure and limits; relates to preflight.py/official_shares.py.
+34 docs/PRODUCT_REQUIREMENTS.md | SUPPORT | Planned features and constraints; not implementation evidence.
+35 docs/PROJECT_CONVERSATION_ARCHIVE.md | ARCHIVE | Recovered conversation chronology; history, not exact full chat transcript.
+36 docs/PROJECT_MASTER_HANDOFF.docx | ARCHIVE | Office project handoff package; validated by verify_handoff_archive.py, not runtime.
+37 docs/PROJECT_SOURCE_INDEX_2026-11-16.md | SUPPORT | Dated source and research links; supports handoff provenance.
+38 docs/PROVIDER_FEASIBILITY.md | SUPPORT | Provider access/rights limits and feasibility gate; informs operator validation.
+39 AnalyseFuture/archives/REFERENCE_ARCHIVES.md | SUPPORT | ZIP location/extraction, language and security notes; consumed with unpack script.
+40 AnalyseFuture/recovery-notes/REPOSITORY_STRUCTURE_AUDIT_2026-11-17.md | SUPPORT | Prior structural recovery findings and archive moves; historical snapshot.
+41 docs/RESEARCH_AND_LICENSES.md | SUPPORT | External source audits and license caveats; informs any selective reuse.
+42 docs/ROADMAP_AND_QA.md | SUPPORT | Milestones, acceptance checks and statuses; roadmap, not runtime.
+43 docs/START_HERE_PROJECT_HANDOFF.md | SUPPORT | Project continuation snapshot; points to docs/source, verify against HEAD.
+44 docs/verify_handoff_archive.py | ACTIVE | Stdlib CI verifier for DOCX structure and expected content; executed by API job.
+
+45 scripts/unpack_reference_archives.py | ACTIVE | SHA/CRC/path-checked extraction of two sanitized ZIPs to ignored AnalyseFuture/extracted; not part of app startup.
+46 services/api/.env.example | SUPPORT | Non-secret example variables for CORS, limits and gated partner probe; source of variable names only.
+47 services/api/app/__init__.py | ACTIVE | Python package marker for app imports.
+48 services/api/app/egress.py | ACTIVE (operator only) | Exact-host HTTPS/DNS-pinned transport; used by preflight/open-platform candidate; test_egress.py.
+49 services/api/app/limits.py | ACTIVE | Request body/time/rate/concurrency/privacy middleware; imported by main.py; test_limits.py.
+50 services/api/app/links.py | ACTIVE | Strict offline TeraBox URL normalization; imported by main.py/official_shares.py; test_api.py.
+51 services/api/app/main.py | ACTIVE | FastAPI health/readiness/validate/resolve routes; imports limits, links, models, provider; test_api.py.
+52 services/api/app/models.py | ACTIVE | Strict Pydantic capability/file/response models; used by main.py and official_shares.py; provider contract tests.
+53 services/api/app/official_shares.py | ACTIVE (operator only) | Candidate metadata/download URL and bounded SHA-256 probe; imports egress/open_platform; test_official_shares.py.
+54 services/api/app/open_platform.py | ACTIVE (operator only) | Official OAuth/signature/token-info client; used by preflight and official_shares; test_open_platform.py.
+55 services/api/app/preflight.py | ACTIVE (operator only) | Offline configuration report and opt-in authorized fixture probe; invokes OAuth/official_shares/egress.
+56 services/api/app/provider.py | ACTIVE | ShareProvider protocol, bounded errors, unconfigured public default; main.py and provider tests depend on it.
+57 services/api/requirements.lock | SUPPORT | Pinned full Python dependency set; CI and local venv installation.
+58 services/api/requirements.txt | SUPPORT | Direct Python dependencies; docs/local setup references, lock is reproducible install target.
+59 services/api/tests/test_api.py | ACTIVE | Route, parsing, response/privacy/error tests for main.py/links.py/models.py; pytest.
+60 services/api/tests/test_egress.py | ACTIVE | DNS/host/pinned transport tests for egress.py; pytest with mocked network.
+61 services/api/tests/test_limits.py | ACTIVE | Admission/body/timeout/CORS behavior tests for limits.py and API; pytest.
+62 services/api/tests/test_official_shares.py | ACTIVE | Mocked operator share, download and preflight tests; no live provider transfer.
+63 services/api/tests/test_open_platform.py | ACTIVE | Mocked OAuth, signatures, response bounds and token tests; no live credentials.
+64 services/api/tests/test_provider_contract.py | ACTIVE | Strict provider model/error contract and injection tests; pytest.
+
+NEW FILES CREATED DURING THIS RECOVERY (65-80)
+65 PROJECT_STRUCTURE.md | SUPPORT | Current professional directory and ownership map; linked from README and AGENTS.
+66 docs/README.md | SUPPORT | Groups stable documentation paths by product, engineering, provider, research and continuity role.
+67 AnalyseFuture/REPOSITORY_AUDIT.txt | SUPPORT | Snapshot of Git, structure and provenance findings.
+68 AnalyseFuture/COMPLETE_FILE_INVENTORY.txt | SUPPORT | This path-by-path inventory of baseline and new tracked files.
+69 AnalyseFuture/FEATURE_INVENTORY.txt | SUPPORT | 21 active, blocked and planned capability categories with evidence.
+70 AnalyseFuture/DUPLICATE_ANALYSIS.txt | SUPPORT | Cross-language, security-boundary and external-archive overlap assessment.
+71 AnalyseFuture/SECURITY_AUDIT.txt | SUPPORT | Confirmed historical session exposure, current safeguards and unknown account state.
+72 AnalyseFuture/ORIGINAL_TO_NEW_PATH_MAPPING.txt | SUPPORT | Exact paths and reasons for three moves this task.
+73 AnalyseFuture/CONSOLIDATION_REPORT.txt | SUPPORT | Records why no active code merge is justified and what was organized.
+74 AnalyseFuture/ARCHIVED_FILES_MANIFEST.txt | SUPPORT | Preservation location, prior path and security note for archived material.
+75 AnalyseFuture/PROJECT_VISION_AND_FUTURE_ROADMAP.txt | SUPPORT | Current evidence-based product vision and conditional multi-year roadmap.
+76 AnalyseFuture/TECHNICAL_DEBT.txt | SUPPORT | Prioritized gaps, evidence and next decision points.
+77 AnalyseFuture/TEST_AND_VALIDATION_REPORT.txt | SUPPORT | Distinguishes prior evidence from tests intentionally unrun in this task.
+78 AnalyseFuture/MIGRATION_SUMMARY.txt | SUPPORT | Scope, moves, compatibility, risk and recovery reference.
+79 AnalyseFuture/NEXT_DEVELOPER_INSTRUCTIONS.txt | SUPPORT | Continuation order, component boundaries and future validation gate.
+80 AnalyseFuture/WORK_PROGRESS.txt | SUPPORT | Persistent checkpoint of completed and outstanding recovery work.
+
+Binary handling: both tracked ZIPs were checked by archive CRC and sanitized
+credential-like values in the previous recovery; the DOCX has a stdlib XML/
+link validation script. Their contents are reference/history, not additional
+active modules. The ZIPs contain full external projects and must not be
+imported or executed merely because they are present in the repository.

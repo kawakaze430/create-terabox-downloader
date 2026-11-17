@@ -1,0 +1,37 @@
+TEST AND VALIDATION REPORT — 17 NOVEMBER 2026 (INDIA TIME)
+
+User instruction for this task: "Do not run tests for now." No unit, browser,
+integration, build, typecheck, startup, dependency-install, live-provider,
+security-scan or deployment test was run in this recovery turn. Passed: 0
+new tests. Failed: 0 new tests. Unrun: all runtime checks listed below.
+
+Read-only/static evidence gathered for restructuring:
+- Starting main and origin/main both pointed to 5dceb2d; the working tree was
+  clean before edits. Remote main plus three historical feature branches were
+  enumerated. A local backup ref records the starting SHA.
+- All 64 baseline tracked paths were listed and classified. No tracked
+  submodules or branch-only file paths were found on the three historical
+  remote feature branches. No active application source file was moved.
+- The moved files are TXT/Markdown documents; their known direct links in
+  README, AnalyseFuture/README and the moved documents were updated.
+- The two sanitized ZIPs and extraction script remain in their pre-task
+  locations. Ignored installations, build output and extracted reference
+  copies were classified as generated state, not committed source.
+
+Historical evidence only, not rerun here: a prior development checkpoint
+recorded 173 offline API tests, 16 extension parser tests, 10 Chromium
+desktop/mobile browser checks, a web build and typecheck. Those results do not
+verify the current restructuring or live TeraBox downloads.
+
+Checks intentionally deferred for the next authorized validation pass:
+1. PYTHONPATH=services/api services/api/.venv/bin/python -m pytest -q services/api/tests
+2. node --test apps/extension/tests/*.test.mjs
+3. From apps/web: NEXT_TELEMETRY_DISABLED=1 npm run build, npm run typecheck,
+   and the Playwright browser flow with the local API.
+4. python3 docs/verify_handoff_archive.py and python3
+   scripts/unpack_reference_archives.py.
+5. Review CI for the final main commit, plus any deployment or real provider
+   checks only when the needed authorized credentials/fixtures are available.
+
+The docs-only moves are reviewable from the diff, but runtime readiness is not
+newly established. Do not convert an unrun check into a pass in future reports.

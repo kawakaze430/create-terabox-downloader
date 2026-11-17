@@ -43,7 +43,7 @@ The complete path-by-path classification is in [COMPLETE_FILE_INVENTORY.txt](Ana
 
 ## Documentation and historical material
 
-`docs/` is the current documentation collection. Its requirements, architecture, roadmap, local setup, provider validation, research, and handoff files have distinct roles and many stable cross-links; filenames are kept for compatibility. `docs/verify_handoff_archive.py` remains beside the handoff document because CI calls it there. The immutable source index and verbatim original prompt retain historical paths as evidence.
+`docs/` is the current documentation collection. Its [documentation index](docs/README.md) groups requirements, architecture, roadmap, local setup, provider validation, research, and handoff files by purpose. These files have many stable cross-links, so filenames are kept for compatibility. `docs/verify_handoff_archive.py` remains beside the handoff document because CI calls it there. The immutable source index and verbatim original prompt retain historical paths as evidence.
 
 `AnalyseFuture/` is a review area, never an application entrypoint. The two uploaded ZIPs remain whole except for credential-like values emptied in the current copies; earlier Git history still holds the original blobs. The earlier project idea is preserved in `future-ideas/`; the current vision is the roadmap at the `AnalyseFuture/` root. The dated earlier structure audit is under `recovery-notes/`. None of these files should be imported, executed, installed or deployed as application code without a separate review.
 

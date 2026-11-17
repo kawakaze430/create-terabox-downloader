@@ -1,0 +1,106 @@
+TECHNICAL DEBT AND BLOCKERS
+Reviewed: 17 November 2026 (India time), main at 5dceb2d.
+This is a source review with historical test evidence, not a fresh live
+provider or production audit. Priority denotes sequence, not a claim of a
+newly discovered exploit. The public provider must remain truthful while
+external access and real transfer evidence are missing.
+
+P0 — EXTERNAL BLOCKER: lawful, working source access.
+  Evidence: services/api/app/provider.py installs UnconfiguredProvider;
+  main.py returns 501 for valid links; docs/OPERATOR_VALIDATION.md lists the
+  required approved scope, exact hosts, owned share/file and SHA-256.
+  Need: determine a permitted provider path, obtain its required authorization
+  and owner-controlled fixture, record real metadata and a full completed
+  checksum-matched transfer. The operator probe in preflight.py is offline
+  tested, not live evidence. Do not expose operator credentials to visitors.
+
+P0 — SECURITY FOLLOW-UP: uploaded session material remains in Git history.
+  Evidence: AnalyseFuture/README.md and
+  AnalyseFuture/recovery-notes/REPOSITORY_STRUCTURE_AUDIT_2026-11-17.md record sanitization of current
+  ZIPs and the history caveat. Need: owner revokes any affected sessions and
+  reviews GitHub account security. This report contains no secret values.
+
+P0 — PUBLIC AUTHORIZATION DESIGN BEFORE PROVIDER ENABLEMENT.
+  Evidence: OfficialShares in official_shares.py and OAuth in
+  open_platform.py are operator-only; main.py never wires them to public
+  resolve. Need: user consent, per-user token/session isolation, secret
+  storage, scoped sharing, revocation and abuse policy before public metadata
+  or download routes use any provider. A successful operator probe alone does
+  not complete this gate.
+
+P1 — NEGATIVE EGRESS AND TRANSFER TESTS.
+  Evidence: egress.py and tests/test_egress.py already cover exact hosts,
+  private/mixed DNS and DNS rebinding; tests/test_official_shares.py covers
+  redirects, checksum and size rejection. Need: expand malformed URL/host,
+  HTTP edge, connection failure, content length/encoding and cancellation
+  cases around the same fixed transport and bounded transfer. This is
+  feasible offline and should precede live provider use.
+
+P1 — DEPLOYMENT LIMITS ARE PER PROCESS.
+  Evidence: limits.py Admission stores counters in process memory;
+  services/api/.env.example and docs/LOCAL_DEVELOPMENT.md call for aggregate
+  ingress quotas. Need: trusted edge rate/concurrency limits, proxy address
+  configuration, exact production CORS/origin policy and operational tests
+  before multiple workers or public hosting. Current code handles dev/API
+  admission but does not establish production abuse resistance.
+
+P1 — PROVIDER RESPONSES ARE UNCONFIRMED.
+  Evidence: official_shares.py notes inconsistent documented `access_token`
+  versus `access_tokens`, and `fs_id` versus `fid_id`; only MockTransport
+  fixtures exercise these paths. Need: compare a sanitized response from an
+  approved regional host to typed models, confirm supported share shapes,
+  expiry and file identifiers, then update contract tests. Do not guess
+  alternative cookie/worker protocols from the ZIPs.
+
+P1 — CROSS-CLIENT CONTRACT DRIFT.
+  Evidence: services/api/app/links.py and apps/extension/links.mjs contain
+  separate host/path rules; apps/web/app/page.tsx defines local response
+  types. Need: shared fixtures and, when API growth warrants it, generated
+  client types from OpenAPI. The backend remains the security authority.
+
+P1 — BROWSER PRODUCT IS DEVELOPMENT ONLY.
+  Evidence: apps/extension/links.mjs hardcodes localhost:3000;
+  manifest.json names the development extension; web .env.example targets
+  local API; apps/web/tests/core.spec.ts tests page flow but not installed
+  extension behavior. Need: owned HTTPS destination, installed Chrome/Edge
+  smoke tests, permission/privacy review and publication process after the
+  provider user journey is verified.
+
+P1 — PRODUCTION OBSERVABILITY AND RELEASE PATH ABSENT.
+  Evidence: .github/workflows/ci.yml runs tests/build but no deployment,
+  staging smoke test, monitoring or incident checks; docs/ARCHITECTURE.md and
+  PRODUCT_REQUIREMENTS.md describe these as targets. Need: owned deployment,
+  safe metrics/error categories, cost and bandwidth budget, privacy/support
+  notices and reproducible real-fixture release checks.
+
+P2 — DOC STATUS NEEDS A SINGLE FRESH EVIDENCE POINT.
+  Evidence: docs/ROADMAP_AND_QA.md opens with 153 backend tests from an
+  earlier checkpoint; README.md and docs/IMPLEMENTATION_CHECKLIST.md cite
+  the later 173-test CI result; docs/START_HERE_PROJECT_HANDOFF.md is dated
+  before the uploaded ZIP and AnalyseFuture restructure. Need: retain dated
+  history but update the current status/checklist after fresh tests, linking
+  one current evidence table. Do not convert planned items to checked ones
+  based only on ZIP source or mock tests.
+
+P2 — LOCAL SETUP TEXT AND QUALITY GATES.
+  Evidence: docs/LOCAL_DEVELOPMENT.md describes requirements.txt while CI
+  uses requirements.lock, and its browser setup text contains `npm ciation`.
+  apps/web/package.json has build/typecheck/e2e but no lint script.
+  Need: make local instructions match the locked CI path, correct the typo,
+  add a targeted lint gate only when it provides actionable coverage, and
+  keep the Python/Node locks current through verified dependency updates.
+
+P2 — MEDIA, BATCH AND FUTURE PROVIDERS ARE DESIGNS, NOT DEBT IN RUNNING CODE.
+  Evidence: models.py capability flags reserve future actions, but main.py
+  has no download/folder/job routes and apps/web/app/page.tsx has no player.
+  AnalyseFuture/future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt proposes local import, codec handling,
+  conversion and AI search. Need: prioritize these after an accessible source
+  path or an explicit user-owned media path has real fixtures and budgets.
+  Avoid counting every future idea as a regression in the current starter.
+
+PRESERVATION DECISION
+  Keep existing working paths, tests and historical documents. Keep the two
+  complete, sanitized reference projects in AnalyseFuture. Address risks in
+  small, verified changes directly on main; do not introduce a second active
+  provider framework or switch programming languages as a substitute for
+  source authorization.

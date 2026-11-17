@@ -1,5 +1,7 @@
 # TeraBox Downloader Platform — Product Vision & Developer Hub
 
+See [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) for the current file ownership map and [docs/README.md](docs/README.md) for the documentation index.
+
 The current project vision and roadmap are in [AnalyseFuture/PROJECT_VISION_AND_FUTURE_ROADMAP.txt](AnalyseFuture/PROJECT_VISION_AND_FUTURE_ROADMAP.txt). The [earlier idea](AnalyseFuture/future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt) and uploaded reference projects remain preserved in [AnalyseFuture](AnalyseFuture/README.md); the [structure audit](AnalyseFuture/recovery-notes/REPOSITORY_STRUCTURE_AUDIT_2026-11-17.md) records earlier moves.
 
 > **Long-chat continuity:** Read [Permanent Project Master Handoff](docs/START_HERE_PROJECT_HANDOFF.md),

@@ -1,0 +1,36 @@
+ORIGINAL TO NEW PATH MAPPING — UNIVERSAL RECOVERY
+Baseline: 5dceb2dbe5d0fbeee4560f71b47af1313334911c
+Three tracked files moved in this recovery. Git history preserves their prior
+locations and contents. No active application import, test or CI path moved.
+
+Starting path -> Current path | Reason | Replacement/consumer
+
+PROJECT_IDEA_AND_FUTURE_VISION.txt
+  -> AnalyseFuture/future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt
+  Earlier detailed idea is retained verbatim. The more complete current
+  AnalyseFuture/PROJECT_VISION_AND_FUTURE_ROADMAP.txt now serves as the roadmap;
+  README.md and PROJECT_STRUCTURE.md point readers to both.
+
+docs/REFERENCE_ARCHIVES.md
+  -> AnalyseFuture/archives/REFERENCE_ARCHIVES.md
+  The guide belongs with its two quarantined third-party ZIPs. Its architecture
+  and license links were adjusted for the new relative path. AnalyseFuture/
+  README.md now links to this location. The extraction command is unchanged.
+
+docs/REPOSITORY_STRUCTURE_AUDIT_2026-11-17.md
+  -> AnalyseFuture/recovery-notes/REPOSITORY_STRUCTURE_AUDIT_2026-11-17.md
+  This is a dated previous recovery snapshot, not a live architecture spec.
+  README.md and AnalyseFuture/README.md now link to this location; its link to
+  the earlier idea was adjusted. PROJECT_STRUCTURE.md is the current map.
+
+Earlier moves already present at the baseline (not counted as this task):
+  Teraplayer-main.zip -> AnalyseFuture/archives/Teraplayer-main.zip
+  terabox-gateway-main.zip -> AnalyseFuture/archives/terabox-gateway-main.zip
+  Those archives were sanitized in 5dceb2d; original blobs remain in history.
+
+Unchanged by design:
+  apps/web/, apps/extension/, services/api/, .github/workflows/ci.yml,
+  docs/ handoff/product/provider files, scripts/unpack_reference_archives.py,
+  PUBLIC_REPOSITORY_STUDY_LIST.txt. They are already grouped by runtime or
+  document responsibility and have working imports, framework conventions or
+  stable cross-references. A move would add risk without consolidating code.

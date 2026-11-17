@@ -1,0 +1,49 @@
+Repository audit — 2026-11-17 (Asia/Kolkata)
+
+Snapshot checked
+- Active branch: main. Local HEAD and origin/main both pointed to
+  5dceb2dbe5d0fbeee4560f71b47af1313334911c. Working tree was clean before
+  these audit files were written. The existing local work branch remained at
+  05049dc; it was not used or modified.
+- git fsck --no-reflogs --unreachable completed successfully. The remote
+  advertised main and three historical feat branches
+  (official-open-platform-oauth, p0-provider-contract,
+  phase-0-foundation); it advertised no tags. These references alone do not
+  establish whether any account activity was authorized.
+- The checkout had 64 tracked files and 38 commits reachable from its local
+  refs. Tracked file modes were all 100644. No tracked submodule, executable,
+  separate deploy script, or additional active workflow appeared in the tree.
+
+Project structure
+- services/api/: Python FastAPI shared API, provider contract, outbound host
+  controls, official partner integration scaffold, and offline tests.
+- apps/web/: TypeScript Next.js website and Playwright tests.
+- apps/extension/: minimal JavaScript Manifest V3 development extension.
+- docs/, the top-level study-list TXT, and AnalyseFuture/future-ideas/:
+  requirements, source research, handoff, roadmap, and the preserved earlier
+  vision. The Word handoff is a DOCX archive
+  with no macro file. .github/workflows/ci.yml is the sole active workflow.
+- AnalyseFuture/archives/: complete sanitized ZIP references. Their matching
+  extracted trees live in ignored AnalyseFuture/extracted/. The extraction
+  script checks archive SHA-256, CRC, paths, symlinks, and size limits. Both
+  current ZIPs passed CRC inspection. No archive source is on the running
+  application's import or startup path.
+
+History and provenance
+- 05049dc uploaded the two third-party ZIPs. bc9b78b added an isolated
+  unpacker and guide. 35eb415 added the future-vision TXT. 5dceb2d moved the
+  ZIPs to AnalyseFuture and sanitized the bundled session fields. Earlier
+  commits contain the API, web, extension, CI, and project handoff.
+- The archives are MIT-licensed reference projects: TeraPlayer has a Python
+  backend, React/JavaScript frontend, worker and extension; Gateway is a
+  Flask/aiohttp service. Their advertised provider features have not been
+  verified for this product. The existing Python/TypeScript split is connected
+  by one JSON API and does not require a language rewrite.
+
+Disposition
+Keep the archived projects isolated for individual review. Preserve the
+current active app and tests on main. Do not execute archived cron, worker or
+agent files as part of normal development. The historical credential exposure
+and unknown GitHub account state are documented in SECURITY_AUDIT.txt.
+The current file ownership map is PROJECT_STRUCTURE.md, and the complete
+post-move path accounting is in COMPLETE_FILE_INVENTORY.txt.

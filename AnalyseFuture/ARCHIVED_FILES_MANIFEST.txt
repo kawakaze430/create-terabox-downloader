@@ -1,0 +1,34 @@
+ARCHIVED AND PRESERVED FILES MANIFEST
+Baseline: 5dceb2d. No file deleted. Two historical/future documents were
+archived in this task; one reference guide was co-located with archived ZIPs.
+
+Current path | Original path | Reason and active replacement
+
+AnalyseFuture/future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt
+  Original: PROJECT_IDEA_AND_FUTURE_VISION.txt
+  Preserved in full as the earlier 268-line product idea. Current roadmap:
+  AnalyseFuture/PROJECT_VISION_AND_FUTURE_ROADMAP.txt. README links both.
+
+AnalyseFuture/recovery-notes/REPOSITORY_STRUCTURE_AUDIT_2026-11-17.md
+  Original: docs/REPOSITORY_STRUCTURE_AUDIT_2026-11-17.md
+  Preserved dated recovery snapshot. Current structure: PROJECT_STRUCTURE.md.
+
+AnalyseFuture/archives/REFERENCE_ARCHIVES.md
+  Original: docs/REFERENCE_ARCHIVES.md
+  Still an active reference guide; moved beside the archives it describes.
+  Relative links repaired. No runtime import or CI command uses this file.
+
+Previously archived, unchanged in location during this task:
+AnalyseFuture/archives/Teraplayer-main.zip
+  Original root path: Teraplayer-main.zip. Complete external project with
+  credential-like values emptied in the current ZIP. SHA-256 pinned in the
+  unpack script. Do not execute archived worker/cron/agent helper files.
+AnalyseFuture/archives/terabox-gateway-main.zip
+  Original root path: terabox-gateway-main.zip. Complete external project with
+  a cookie-like value emptied in the current ZIP. SHA-256 pinned in the script.
+
+The original uploaded ZIP blobs remain in earlier Git history. Their possible
+session values must be revoked by the owner if still valid; moving files or
+keeping a manifest does not revoke credentials. Local extracted copies live
+only in ignored AnalyseFuture/extracted/ and can be reproduced from the
+sanitized committed ZIPs using scripts/unpack_reference_archives.py.

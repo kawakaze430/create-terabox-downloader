@@ -1,0 +1,39 @@
+MIGRATION SUMMARY — UNIVERSAL RECOVERY
+Repository: kawakaze430/create-terabox-downloader
+Starting commit: 5dceb2dbe5d0fbeee4560f71b47af1313334911c
+
+Scope completed
+- Examined all 64 baseline tracked paths, active source, tests, configs,
+  documents, ZIP references and historical remote branch path inventories.
+- Kept the active FastAPI/Next.js/MV3 layout because imports, toolchains and
+  runtime ownership already follow framework conventions.
+- Moved three preservation-related documents into functional AnalyseFuture
+  collections: future-ideas/, archives/, recovery-notes/.
+- Added PROJECT_STRUCTURE.md and a current 20-topic future roadmap. Updated
+  README and nearby relative links to point at the new locations.
+- Added file/feature/security/duplicate/debt/mapping/consolidation/archival
+  records to make earlier work and the current state traceable.
+- Preserved all active source, tests, dependency declarations, lockfiles, CI,
+  stable source index and historical handoff files at their original paths.
+
+Compatibility and risk
+No Python/JavaScript imports, package scripts, web routes, public API models,
+CI commands, asset paths, database schemas or dependency versions changed.
+The original owner idea and historical audit remain byte-for-byte in Git via
+git mv; the archive guide changed only its relative links. The sanitized ZIPs
+from the preceding commit remain isolated. The historical uploaded blobs still
+contain credential-like values, so affected sessions require revocation if
+valid. GitHub account access could not be audited from a checkout.
+
+Validation
+No tests or builds were run in this task because the owner explicitly asked
+to focus on analysis and restructuring. Prior test results are historical.
+See TEST_AND_VALIDATION_REPORT.txt for unrun checks. A runtime validation pass
+is the next gate before claiming the reorganized repository is fully verified.
+
+Recovery
+Git history and the local refs/backups/pre-universal-recovery-20261117 ref
+identify the starting state. The remote's main history is advanced only by
+non-force commits; the three historical feature branches were not changed.
+See ORIGINAL_TO_NEW_PATH_MAPPING.txt for exact paths and
+ARCHIVED_FILES_MANIFEST.txt for preserved material.
