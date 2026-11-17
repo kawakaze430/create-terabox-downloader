@@ -1,8 +1,16 @@
 # Codex continuation record
 
-Updated 17 November 2026 (Asia/Kolkata). Latest owner priorities supersede the earlier PR-only/provider-first workflow: build a generic source-independent download engine, verify controlled transfers, and push each completed task directly to main when permitted. Never force-push; use a durable remote branch if protection blocks main.
+Updated 18 November 2026 (Asia/Kolkata). Resume current work from the recovery branch while the owner verifies GitHub account and repository access. Keep main at the owner's reviewed baseline and never force-push.
 
-## Checkpoint state
+## Current recovery checkpoint
+
+- Work branch: `recovery/incident-review-2026-11-18`. Verified GitHub checkpoint `1cd4c80410a40ddc427a6f8005564c4235672dd3` preserves the evidence record and reorganizes all 21 former `AnalyseFuture/` paths.
+- GitHub `main` at review time: `c0163c24ffdcf4391c0e2874cb508f52172958f1`. Recheck both refs with `git ls-remote origin refs/heads/main refs/heads/recovery/incident-review-2026-11-18`. Use the existing isolated checkout and preserve unrelated changes.
+- Current records: [incident evidence and owner actions](security/incident-review.md), [97-file baseline inventory](history/repository-reviews/baseline-inventory-2026-11-18.md), [migration ledger](history/repository-reviews/move-ledger-2026-11-18.md), and [baseline verification](history/repository-reviews/baseline-validation-2026-11-18.md).
+- Fresh baseline passed 250 API, 50 extension, and 20 Playwright tests, web build/typecheck, package advisories, Word/archive validation and nine bounded local engine samples. After migration, the links and Word verifier passed, and both relocated archives restored and reverified in a disposable directory. Browser-based extension installation is blocked by the cloud Chromium policy.
+- Next action: finish and verify the opt-in, loopback-only controlled fixture job flow. The public TeraBox provider remains disabled and the owner needs to review account settings and revoke affected historical sessions.
+
+## Earlier engine and client checkpoint state
 
 - Repository: `sarfiaroui-oss/create-terabox-downloader`; branch: `main`.
 - Last confirmed remote before this record: `5b9ac5709f22e9409c3b51d680b681855a660aff` (typed website); benchmark `bf1eea2`, engine `0a8117a`, extension `f36a72b` and audit `a03a4c3` also confirmed on main.
@@ -17,7 +25,7 @@ Updated 17 November 2026 (Asia/Kolkata). Latest owner priorities supersede the e
 - External limitations: current-fork GitHub PR/CI API previously returned Forbidden; native Git read/push works. TeraBox access unverified; generic engine work does not depend on partner credentials. Known historical ZIP sessions require owner revocation; no values are exposed here.
 - E04 validation: 50 extension/parser/popup/package tests passed, popup syntax/default package passed. Manifest remains MV3 activeTab-only. Website build/typecheck and all 20 desktop/mobile browser checks passed after typed metadata changes. Installed Chrome/Edge, production hosting and store submission remain unrun.
 
-## Completed checkpoints
+## Earlier implementation checkpoints
 
 1. E01 `a03a4c3`: complete initial classification, newest owner priorities, engine architecture and continuity.
 2. E04 `f36a72b`: extension destination/popup/package and current source link.
