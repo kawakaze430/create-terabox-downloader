@@ -1,0 +1,106 @@
+{
+  "fixture_bytes": 4194304,
+  "interruption_bytes": 524288,
+  "repeats": 3,
+  "sha256": "2b07811057df887086f06a67edc6ebf911de8b6741156e7a2eb1416a4b8b1b2e",
+  "scenarios": {
+    "clean_stream": {
+      "samples": [
+        {
+          "elapsed_seconds": 0.04400999500103353,
+          "server_body_bytes_written": 4194304,
+          "engine_body_bytes_yielded": 4194304,
+          "attempts": 1,
+          "peak_traced_allocations_bytes": 832835,
+          "checksum_verified": true
+        },
+        {
+          "elapsed_seconds": 0.03801414200097497,
+          "server_body_bytes_written": 4194304,
+          "engine_body_bytes_yielded": 4194304,
+          "attempts": 1,
+          "peak_traced_allocations_bytes": 794533,
+          "checksum_verified": true
+        },
+        {
+          "elapsed_seconds": 0.04678675100149121,
+          "server_body_bytes_written": 4194304,
+          "engine_body_bytes_yielded": 4194304,
+          "attempts": 1,
+          "peak_traced_allocations_bytes": 831555,
+          "checksum_verified": true
+        }
+      ],
+      "median_elapsed_seconds": 0.04400999500103353,
+      "median_peak_traced_allocations_bytes": 831555
+    },
+    "interrupted_restart": {
+      "samples": [
+        {
+          "elapsed_seconds": 0.050242154000443406,
+          "server_body_bytes_written": 4718592,
+          "engine_body_bytes_yielded": 4718592,
+          "attempts": 2,
+          "peak_traced_allocations_bytes": 849270,
+          "checksum_verified": true
+        },
+        {
+          "elapsed_seconds": 0.04440181199970539,
+          "server_body_bytes_written": 4718592,
+          "engine_body_bytes_yielded": 4718592,
+          "attempts": 2,
+          "peak_traced_allocations_bytes": 923814,
+          "checksum_verified": true
+        },
+        {
+          "elapsed_seconds": 0.0444806260002224,
+          "server_body_bytes_written": 4718592,
+          "engine_body_bytes_yielded": 4718592,
+          "attempts": 2,
+          "peak_traced_allocations_bytes": 948721,
+          "checksum_verified": true
+        }
+      ],
+      "median_elapsed_seconds": 0.0444806260002224,
+      "median_peak_traced_allocations_bytes": 923814
+    },
+    "interrupted_resume": {
+      "samples": [
+        {
+          "elapsed_seconds": 0.04583377900053165,
+          "server_body_bytes_written": 4194304,
+          "engine_body_bytes_yielded": 4194304,
+          "attempts": 2,
+          "peak_traced_allocations_bytes": 948484,
+          "checksum_verified": true
+        },
+        {
+          "elapsed_seconds": 0.04862424900056794,
+          "server_body_bytes_written": 4194304,
+          "engine_body_bytes_yielded": 4194304,
+          "attempts": 2,
+          "peak_traced_allocations_bytes": 921314,
+          "checksum_verified": true
+        },
+        {
+          "elapsed_seconds": 0.04256536399952893,
+          "server_body_bytes_written": 4194304,
+          "engine_body_bytes_yielded": 4194304,
+          "attempts": 2,
+          "peak_traced_allocations_bytes": 1023962,
+          "checksum_verified": true
+        }
+      ],
+      "median_elapsed_seconds": 0.04583377900053165,
+      "median_peak_traced_allocations_bytes": 948484
+    }
+  },
+  "limitations": [
+    "Local HTTP socket fixture through explicit injected transport; no external network or provider.",
+    "Sequential transfers only; no parallel-transfer or production speed claim.",
+    "Elapsed includes asyncio loop/client setup, transfer, integrity check, filesystem flush and cleanup; tracing is enabled.",
+    "Body counters exclude headers/TCP/TLS; server bytes mean successful application writes, not acknowledged wire bytes.",
+    "tracemalloc measures process Python allocations including shared server threads; fixture payload preallocation and imports excluded; not RSS.",
+    "One clean warmup excluded; OS and filesystem caches are uncontrolled."
+  ]
+}

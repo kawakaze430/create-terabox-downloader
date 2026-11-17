@@ -2,18 +2,21 @@
 
 This repository is one TeraBox-oriented media product with a Python API, a TypeScript website, and a small browser extension. The running code keeps each framework's normal layout. Research projects, older ideas, and recovery records are separate from the application under `AnalyseFuture/`. No AI media feature or live TeraBox downloader is currently enabled.
 
+The source-independent transfer engine is now implemented within the Python service, separately from source authorization. See [engine design/results](docs/DOWNLOAD_ENGINE.md) and [current continuation](docs/CODEX_CONTINUITY.md). Local HTTP fixture tests prove generic streaming/recovery, not TeraBox access. The [new organization audit](docs/REPOSITORY_ORGANIZATION_AUDIT.md) classified all 82 baseline files and 18 directories; unique historical records and conventional framework paths were retained.
+
 ```text
 create-terabox-downloader/
 ├── README.md                         project entry point and current status
 ├── AGENTS.md                         development rules and continuity
 ├── PROJECT_STRUCTURE.md              this ownership map
+├── PROJECT_STATUS_AND_TASKS.md       complete current file/task/feature handoff
 ├── PUBLIC_REPOSITORY_STUDY_LIST.txt   stable 49-source research index
 ├── .github/workflows/ci.yml          checks for the three active surfaces
 ├── apps/
 │   ├── web/                          Next.js website, config, tests, lockfile
 │   └── extension/                    Manifest V3 popup, link parser, tests
 ├── services/api/                     FastAPI app, tests, locked dependencies
-├── scripts/                          reference archive extraction utility
+├── scripts/                          extraction, extension packaging, engine benchmark
 ├── docs/                             product, architecture, setup, provider,
 │                                     research, and continuity documents
 └── AnalyseFuture/
@@ -28,12 +31,16 @@ create-terabox-downloader/
 
 | Responsibility | Current files | Relationship |
 | --- | --- | --- |
+| Independent byte transfer | `services/api/app/download_engine.py`, `download_cli.py`, corresponding local-socket/CLI tests | Already-approved source → bounded stream/retry/resume/integrity → private temp → atomic completion; no OAuth dependency or public arbitrary-URL endpoint |
 | Share-link admission | `services/api/app/links.py`, `apps/extension/links.mjs` | The API is authoritative. The extension performs local preflight before opening the site. Both have their own tests because they run in different languages and trust boundaries. |
 | Public API and contract | `services/api/app/main.py`, `models.py`, `provider.py` | The website calls the versioned API. The default provider is intentionally unconfigured. |
 | API privacy and request limits | `services/api/app/limits.py` and API routes | Bounds requests and sanitizes public errors. |
 | Candidate upstream access | `services/api/app/open_platform.py`, `official_shares.py`, `egress.py`, `preflight.py` | Operator-only, offline-tested integration candidate. It is separate from anonymous public routes until real authorization and file-transfer proof exist. |
 | Website | `apps/web/app/`, `apps/web/next.config.ts`, `apps/web/tests/` | Next.js page, styling, security headers and browser checks. Its npm manifest and lockfile stay with the app. |
+| Internal client validation | `apps/web/app/api-contract.ts` | Runtime response guards and small TypeScript metadata contracts, not a public SDK or generated package |
 | Browser extension | `apps/extension/manifest.json`, popup files, `links.mjs`, `tests/` | Minimal-permission browser handoff to the website. |
+| Extension release config | `apps/extension/config.mjs`, `scripts/package_extension.py`, `docs/EXTENSION_DEVELOPMENT.md` | Validated local/owned HTTPS origin; deterministic minimal ZIP without changing source config/permissions |
+| Controlled engine measurements | `scripts/benchmark_download_engine.py`, `docs/ENGINE_BENCHMARK_2026-11-17.json` | Reproducible local restart/resume body-byte measurements; no parallel/TeraBox speed claim |
 | Reproducible dependencies | `services/api/requirements.lock`, `apps/web/package-lock.json` | Pinned installs remain next to their consumers. |
 | CI and developer entrypoints | `.github/workflows/ci.yml`, `docs/LOCAL_DEVELOPMENT.md`, `AGENTS.md` | Existing command paths remain stable. |
 | Product and research records | `docs/`, `PUBLIC_REPOSITORY_STUDY_LIST.txt` | Historical and current documents remain available; the root study list is a widely referenced public entrypoint. |

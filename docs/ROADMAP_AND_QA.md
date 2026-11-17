@@ -3,6 +3,16 @@
 **Status:** Planned; this document does not certify any implementation.  
 **Updated:** 2026-11-17
 
+**Latest owner execution update:** generic transfer engineering does not depend
+on TeraBox partner approval. The independent engine now has 74 engine and 3 CLI
+checks within a passing 250-test API suite: bounded streaming/retry, integrity,
+cancellation/cleanup, atomic completion and strong-ETag in-call Range recovery.
+Extension configuration/popup/package checks pass 50 tests. A controlled 4 MiB
+benchmark verified 512 KiB avoided retransmission after interruption, with no
+speed advantage established. See [engine evidence](DOWNLOAD_ENGINE.md) and
+[current continuation](CODEX_CONTINUITY.md). Public TeraBox access remains unverified;
+keep that source milestone separate from local generic-engine completion.
+
 ## What is actually in the repository?
 
 The implementation is on `main`. On 2026-11-14, [commit 5ed2df6](https://github.com/kawakaze430/create-terabox-downloader/commit/5ed2df64a15701342232030ccfb78b30d6aa00bb) passed all jobs in [CI run 43586842144](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43586842144): **153 backend tests, 16 extension link tests, Next.js build/type checks, and 10 desktop/mobile browser tests**. Python and Node dependency audits reported no known vulnerabilities in the resolved sets.

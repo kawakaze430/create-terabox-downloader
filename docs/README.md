@@ -1,9 +1,13 @@
 # Documentation index
 
+**Current operational entrypoint:** [Continuation record](CODEX_CONTINUITY.md) records pushed checkpoints and next actions. [Project status and tasks](../PROJECT_STATUS_AND_TASKS.md) explains every tracked file/folder, implemented features, remaining work and acceptance criteria. The latest owner engine prompt authorizes verified incremental main pushes; older PR-only/provider-first execution instructions are superseded.
+
 The documents below stay at stable paths because they are linked throughout the project, the historical handoff, and the published source index. This index groups them by responsibility without changing archived text or CI paths. [PROJECT_STRUCTURE.md](../PROJECT_STRUCTURE.md) maps the running code; [AnalyseFuture](../AnalyseFuture/README.md) contains preserved references and recovery reports.
 
 | Collection | Documents | Role |
 | --- | --- | --- |
+| Independent engine | [Algorithms and CLI](DOWNLOAD_ENGINE.md), [benchmark samples](ENGINE_BENCHMARK_2026-11-17.json) | Generic safe transfer implementation and controlled measured recovery, independent of TeraBox OAuth; not public provider proof |
+| Current continuation and audit | [Continuation](CODEX_CONTINUITY.md), [organization audit](REPOSITORY_ORGANIZATION_AUDIT.md), [extension setup/package](EXTENSION_DEVELOPMENT.md) | Durable checkpoints, complete baseline classification and validated client build settings |
 | Product and delivery | [Requirements](PRODUCT_REQUIREMENTS.md), [roadmap and QA](ROADMAP_AND_QA.md), [implementation checklist](IMPLEMENTATION_CHECKLIST.md), [implementation log](IMPLEMENTATION_LOG.md) | Desired capabilities, gates, tasks and dated evidence. Targets are separate from verified behavior. |
 | Architecture and local work | [Architecture](ARCHITECTURE.md), [local development](LOCAL_DEVELOPMENT.md) | Component boundaries, setup and development commands. |
 | Provider and operator | [Feasibility](PROVIDER_FEASIBILITY.md), [official Open Platform](OFFICIAL_OPEN_PLATFORM.md), [operator validation](OPERATOR_VALIDATION.md) | Access constraints and the gated live-file proof procedure. |

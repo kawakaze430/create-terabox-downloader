@@ -1,7 +1,26 @@
 # Ordered Implementation Checklist
 
+For the current file-by-file handoff, task IDs/dependencies/acceptance criteria and PR review workflow, use [PROJECT_STATUS_AND_TASKS.md](../PROJECT_STATUS_AND_TASKS.md). Maintain this gate checklist alongside that operational plan; older branch/CI references below remain historical evidence.
+
 **Updated:** 2026-11-17. **This is the live plan, not a claim of completion.**
 Latest evidence: [implementation log](IMPLEMENTATION_LOG.md). Earlier branch/CI references below are historical; current implementation is on `main`.
+
+## Latest independent-engine milestone (new owner priority)
+
+- [x] Audit/classify all 82 initial tracked files and 18 directories without unnecessary framework moves; persist continuation and current main-checkpoint workflow.
+- [x] Separate accessible-source byte transfer from optional TeraBox source access/OAuth.
+- [x] Implement bounded single-stream output, connect/read/total deadlines, size/hash checks, atomic no-clobber completion and cancellation/temp cleanup.
+- [x] Implement finite idempotent retry/backoff/jitter and bounded Retry-After without retrying earlier than the source asks.
+- [x] Implement strict strong-ETag/known-size in-call Range recovery, safe full restart on ignored Range and fail-closed malformed/changed 206 handling.
+- [x] Test 74 engine cases plus 3 CLI cases against controlled local sockets and contract failures; full API suite 250 passed, pip check passed.
+- [x] Measure three repetitions of 4 MiB clean/restart/resume transfers with independent size/hash; resume avoided 512 KiB retransmission. No speed advantage claimed.
+- [x] Add validated extension website configuration, safe popup failures and deterministic minimal ZIP packaging; 50 extension tests passed, permissions unchanged.
+- [x] Add strict runtime typed metadata/empty/error rendering and stale-result clearing, without fictional actions; web build/typecheck and 20 desktop/mobile browser checks passed, with simulated provider cases explicitly labelled.
+- [ ] Durable cross-process resume, parallel ranges, adaptive scheduling or bandwidth shaping: not implemented; require justified design and controlled comparative evidence.
+- [ ] Visitor-facing engine jobs/download routes and authorized source adapter integration: not implemented; do not expose arbitrary URL/destination input.
+- [ ] Actual TeraBox compatible authorized source/transfer: unverified, separate from generic-engine work.
+
+See [engine commands/results](DOWNLOAD_ENGINE.md) and [continuation](CODEX_CONTINUITY.md). The dated historical counts below are retained as earlier checkpoints, not the latest suite totals.
 
 **2026-11-16 checkpoint:** [CI 43750414786](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43750414786) passed 173 offline Python tests, 16 extension tests, Next.js build/typecheck and 10 browser checks at commit 8203a017. Malformed OAuth inputs are now rejected before outbound requests. No live metadata/download was verified.
 

@@ -1,5 +1,9 @@
 # TeraBox Downloader Platform — Product Vision & Developer Hub
 
+**Developer / AI-tool handoff:** [Project status, every file and folder, and detailed implementation tasks](PROJECT_STATUS_AND_TASKS.md). Resume from [CODEX_CONTINUITY.md](docs/CODEX_CONTINUITY.md). The latest owner engine prompt authorizes frequent verified main checkpoints; older PR-only instructions are superseded.
+
+**Independent transfer engine:** [Streaming, bounded retries, integrity and safe Range recovery](docs/DOWNLOAD_ENGINE.md) now work against controlled accessible sources without OAuth. The operator CLI uses approved direct HTTPS sources and does not expose an arbitrary-URL proxy. [Measured recovery benchmark](docs/ENGINE_BENCHMARK_2026-11-17.json) shows avoided retransmission, with no speed claim. **TeraBox share access and public website downloads remain unverified and disabled.**
+
 See [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) for the current file ownership map and [docs/README.md](docs/README.md) for the documentation index.
 
 The current project vision and roadmap are in [AnalyseFuture/PROJECT_VISION_AND_FUTURE_ROADMAP.txt](AnalyseFuture/PROJECT_VISION_AND_FUTURE_ROADMAP.txt). The [earlier idea](AnalyseFuture/future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt) and uploaded reference projects remain preserved in [AnalyseFuture](AnalyseFuture/README.md); the [structure audit](AnalyseFuture/recovery-notes/REPOSITORY_STRUCTURE_AUDIT_2026-11-17.md) records earlier moves.
@@ -10,7 +14,7 @@ The current project vision and roadmap are in [AnalyseFuture/PROJECT_VISION_AND_
 > [dated source/reference index](docs/PROJECT_SOURCE_INDEX_2026-11-16.md),
 > and the [Word copy](docs/PROJECT_MASTER_HANDOFF.docx). Future ChatGPT/Codex sessions should start here rather than rely on an old chat.
 
-> **Status (2026-11-17):** Development is on `main`. Local validation after the repository reorganization passed 173 offline API tests, 16 extension parser tests, 10 desktop/mobile browser checks, the web build and type check, document/archive checks, and npm/Python dependency audits. The MV3 extension remains a development build. **Live TeraBox authorization, metadata and downloads are still blocked and unverified.** The operator-only metadata/download probe is ready for an authorized fixture test; see [validation results](AnalyseFuture/TEST_AND_VALIDATION_REPORT.txt), [operator validation](docs/OPERATOR_VALIDATION.md), and the [implementation log](docs/IMPLEMENTATION_LOG.md).
+> **Status (2026-11-17, independent-engine checkpoint):** Local checks passed **250 API tests** (74 engine + 3 CLI + 173 existing), **50 extension tests**, **20 desktop/mobile browser checks**, web build/typecheck and Python dependency consistency. Generic streaming/recovery is verified on controlled local sources; website metadata rendering is tested with explicitly simulated provider payloads. Live TeraBox access, installed Chrome/Edge behavior and production deployment remain unverified. See [engine results](docs/DOWNLOAD_ENGINE.md), [continuation](docs/CODEX_CONTINUITY.md) and [implementation log](docs/IMPLEMENTATION_LOG.md). No new vulnerability audit or current-fork CI success is claimed.
 
 ## Our mission
 
@@ -46,15 +50,15 @@ The product should be owned and operated through our own GitHub, hosting, infras
 
 ## Run and develop the starter
 
-See **[Local Development](docs/LOCAL_DEVELOPMENT.md)** for API, website and extension setup, and **[Ordered Implementation Checklist](docs/IMPLEMENTATION_CHECKLIST.md)** for the tracked roadmap. The website and extension source are development previews. On 2026-11-17, local checks passed 173 offline API tests, 16 extension parser tests and 10 desktop/mobile browser checks against the local API; the [earlier CI run](https://github.com/kawakaze430/create-terabox-downloader/actions/runs/43750414786) passed the same counts. Live TeraBox access and actual extension installation remain unverified. The backend currently responds with `PROVIDER_NOT_CONFIGURED` for valid links rather than claiming downloads work.
+See **[Local Development](docs/LOCAL_DEVELOPMENT.md)** for API/web setup, **[engine CLI](docs/DOWNLOAD_ENGINE.md)** for permitted direct-source transfers and **[extension development](docs/EXTENSION_DEVELOPMENT.md)** for validated destination configuration/packaging. Current local results: 250 API, 50 extension and 20 browser checks passed. Browser metadata cases include simulated responses and are not TeraBox proof. The public provider still responds with `PROVIDER_NOT_CONFIGURED` for valid share links. The historical CI links in older records refer to previous checkpoints, not these new results.
 
 ## Official integration research (new)
 
 TeraBox's [own Open Platform documentation](https://www.terabox.com/integrations/docs?lang=en) describes OAuth, file metadata and download endpoints for approved partners. We have added an **offline-tested OAuth client scaffold**, but have **not received partner credentials or verified public-share download permissions**. See **[Official Open Platform integration handoff](docs/OFFICIAL_OPEN_PLATFORM.md)** for exact implementation, safety constraints and the application process.
 
-## Immediate, non-negotiable first milestone
+## TeraBox source milestone (separate from generic engine work)
 
-**Prove a reliable, compliant TeraBox integration with authorized test files before spending substantial time on cosmetic or premium features.**
+**Continue independent engine engineering without waiting for partnership credentials.** For the TeraBox-specific user journey, prove permitted source access and a real authorized transfer before enabling visitor downloads. Unrelated cosmetic/premium work remains deferred.
 
 1. Audit existing code and referenced projects.
 2. Verify current provider terms, legitimate access methods and known limitations.

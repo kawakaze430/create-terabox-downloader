@@ -3,6 +3,14 @@
 **Status:** Proposed target architecture — validate against the real codebase before committing to implementation.  
 **Updated:** 2026-11-13
 
+**Implemented update — 2026-11-17:** source-independent byte transfer now lives in
+`app/download_engine.py` with an operator CLI, real-local-socket tests and a measured
+recovery benchmark. A source adapter supplies an already authorized approved HTTPS
+URL; the engine streams/retries/resumes/verifies it without depending on OAuth.
+The optional TeraBox adapter remains separate and publicly disabled. No anonymous
+URL-fetch/download job endpoint was added. See [DOWNLOAD_ENGINE.md](DOWNLOAD_ENGINE.md)
+for actual algorithms, interfaces and limits; the broader design below remains a target.
+
 ## Architectural north star
 
 **One owned monorepo, multiple presentation surfaces, one backend/API contract, one replaceable authorized provider integration.** Prefer a modular monolith until traffic and engineering evidence justify separate services.

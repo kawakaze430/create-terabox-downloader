@@ -195,3 +195,105 @@ The next engineering gate is a partner-authorized live probe, resolving document
 protocol ambiguities, followed by per-user authorization/session isolation before
 exposing metadata/downloads to website users. G1 is still blocked; folders, player,
 ZIP, accounts, billing and production launch must not be marked complete.
+
+## 2026-11-17 — Root-level task and review handoff
+
+At the owner's request, added [PROJECT_STATUS_AND_TASKS.md](../PROJECT_STATUS_AND_TASKS.md)
+as the operational entrypoint for another implementation tool. It maps every
+tracked file/folder, separates implemented local behavior from mock-only provider
+candidates and absent features, and defines 25 ordered tasks with dependencies,
+acceptance criteria, an implementer prompt and PR review procedure. README and
+the documentation index/checklist link to it. AGENTS.md now records the owner's
+new request that follow-up implementation tools submit PRs for review instead
+of following the historical direct-to-main implementation instructions.
+
+Source reviewed: `de7e4b34f4a935bcfe96f47594d0c2b31abc60df` in the current
+`sarfiaroui-oss/create-terabox-downloader` checkout. Read-only Git access confirmed
+the remote main tip at that SHA. GitHub PR and Actions API reads returned
+`Forbidden`; current-fork PR/CI state and future continuous monitoring are not
+claimed. No live TeraBox operation was attempted and no application code changed.
+
+Validation for this documentation change: all 81 pre-existing tracked file paths
+plus the new guide are covered; relative Markdown file links resolve; all task
+IDs T01–T25 have detailed sections; `git diff --check` passes. API and client
+source reviews checked the implementation claims. Application test counts in the
+guide refer explicitly to the preceding local onboarding validation at the same
+application revision, not a new test run for this documentation-only change.
+
+## 2026-11-17 — Independent-engine priorities and extension checkpoint
+
+The latest owner engine prompt supersedes PR-only/provider-first execution.
+Checkpoint `a03a4c3` persisted the complete 82-file/18-directory organization
+audit, independent-engine design and continuation record. Fresh baseline:
+173 API tests passed; pip check passed, with the existing testclient deprecation.
+No source moves/deletions, dependency changes or provider enablement occurred.
+
+E04 adds validated build-time extension website origins, safe popup tab/error
+states and a deterministic minimal ZIP builder. Source config is unchanged by
+packaging; MV3 activeTab-only permissions and fragment privacy are retained.
+The website View source href now names the current repository. Validation:
+50 extension tests, popup syntax and package command passed. Installed Chrome/
+Edge/store verification remains unrun. See EXTENSION_DEVELOPMENT.md and
+CODEX_CONTINUITY.md. Generic engine work is being tested separately.
+
+## 2026-11-17 — Source-independent streaming and Range recovery
+
+E02/E03 add `app/download_engine.py` and the operator `app/download_cli.py`.
+Production uses existing approved HTTPS host/DNS-pinned TLS transport, without
+OAuth dependency or a public arbitrary-URL endpoint. Transfers stream bounded
+chunks to private temporary files, retry transient GET failures within attempts/
+deadlines, respect Retry-After, verify expected size/SHA-256 and publish atomically
+without clobbering existing files. Cancellation/failure cleans temporary files.
+Interrupted streams can resume within the call only when a known total and strong
+ETag permit validated Range/If-Range recovery; ignored Range resets safely.
+
+Validation: 74 real-local-socket/contract engine tests and 3 CLI tests passed;
+the complete API suite passed 250 tests, pip check passed. Independent review
+identified a non-string digest validation bug; its regression test now passes.
+No lockfile/dependency change, public provider enablement or claimed TeraBox
+transfer. See DOWNLOAD_ENGINE.md for exact commands and limitations, including
+trusted output paths, cooperative disk deadlines and no cross-process resume.
+Parallel/adaptive algorithms remain unimplemented pending measured justification.
+
+## 2026-11-17 — Controlled recovery benchmark
+
+Added `scripts/benchmark_download_engine.py` and persisted the complete measured
+JSON as `docs/ENGINE_BENCHMARK_2026-11-17.json`. Command: API venv Python running
+the script with `--size-mib 4 --repeats 3`; a minimum-size smoke also passed.
+All nine measured actual-socket transfers matched the 4 MiB fixture hash/size.
+Median elapsed clean/restart/resume: 0.044010/0.044481/0.045834 seconds; body bytes
+4,194,304/4,718,592/4,194,304. Resume avoided 512 KiB retransmission; no speed
+advantage claimed. Traced allocations and limits are reported in DOWNLOAD_ENGINE.md.
+No third-party service, parallel scheduling or production throughput was tested.
+
+## 2026-11-17 — Typed website metadata and truthful states
+
+Added `apps/web/app/api-contract.ts` to validate successful validation/resolution
+JSON at runtime and provide TypeScript models aligned with current API schemas.
+The page renders only returned file name/kind/byte size/MIME/quality labels, has
+an honest empty state, rejects malformed responses and clears metadata on edits,
+new validation or resolution. No download/preview action or progress was invented.
+Existing abort/deadline logic remains; stale provider references on new validation
+were also cleared. String validation bounds allocation before counting Unicode.
+
+Build and typecheck passed. Fresh-server Playwright passed 20 checks (10 scenarios
+in desktop/mobile). New metadata cases are explicitly simulated: hostile names
+rendered as text, invalid payloads rejected, empty list, delayed stale resolution
+discarded and malformed validation rejected. Real local API still returns truthful
+provider-unconfigured status. Initial stale-server and route-announcer selector
+failures were diagnosed and corrected; the final current-build run passed.
+
+## 2026-11-17 — Final independent-engine continuation and inventory
+
+Remote main confirmed five meaningful checkpoints before this documentation
+checkpoint: `a03a4c3` (audit/plan), `f36a72b` (extension), `0a8117a` (engine/CLI),
+`bf1eea2` (benchmark), `5b9ac57` (typed website). Every push was accepted; no force
+push, history rewrite, source deletion or dependency change was used.
+
+Current root/status/structure/setup/roadmap/checklist docs reflect independent
+engine priority and actual evidence: 250 API, 50 extension, 20 browser checks,
+build/typecheck and pip consistency passed. All 97 tracked files are covered in
+the current handoff; the dated audit retains its 82-file/18-directory baseline.
+CODEX_CONTINUITY.md records exact checkpoint references, commands, limitations
+and the next five focused tasks. No visitor transfer API, production deployment,
+parallel/adaptive scheduling, durable resume or live TeraBox success is claimed.
