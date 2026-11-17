@@ -1,0 +1,39 @@
+UNIVERSAL REPOSITORY RECOVERY — WORK PROGRESS
+Date: 17 November 2026 (India time)
+Repository: https://github.com/kawakaze430/create-terabox-downloader
+Starting main: 5dceb2dbe5d0fbeee4560f71b47af1313334911c
+Recovery reference: local refs/backups/pre-universal-recovery-20261117
+
+Completed so far
+- Confirmed clean main tracking origin/main at the starting commit.
+- Inventoried 64 tracked paths and identified active apps, API, documentation,
+  reference archives and generated ignored outputs.
+- Read the attached universal recovery request in full.
+- Fetched remote branch history; main and three historical feature branches
+  are present, with no remote tags reported.
+- Preserved the earlier 268-line project idea under AnalyseFuture/future-ideas/
+  and updated its README and audit links. The new required vision will become
+  the current roadmap while the earlier idea remains available.
+- Assigned independent source/feature, security/history, file-inventory and
+  future-vision reviews. No application code has been replaced.
+
+Current task
+- Complete branch comparison, file-by-file and feature inventory, and
+  security/dependency review; then decide whether any active code actually
+  needs consolidation.
+
+Pending
+- Produce the requested audit, inventory, mapping, consolidation, vision,
+  validation, debt and next-developer reports.
+- Run repository checks and inspect the complete diff for secrets and broken
+  references.
+- Push verified checkpoints directly to main and confirm the remote SHA.
+
+Known findings and constraints
+- Earlier uploaded ZIP history contained session-like values; the current
+  archives were sanitized in the prior checkpoint, but Git history still
+  requires session revocation by the owner if those values were valid.
+- The public TeraBox provider remains disabled; no authorized live download
+  has been demonstrated. Offline tests cannot establish that capability.
+- GitHub account security and branch protection cannot be inferred from a
+  clean checkout; assess only with available access and report limits.

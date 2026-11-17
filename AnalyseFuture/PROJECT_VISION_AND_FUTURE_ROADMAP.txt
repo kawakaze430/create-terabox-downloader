@@ -1,0 +1,248 @@
+PROJECT VISION AND FUTURE ROADMAP
+Prepared 17 November 2026 (India time)
+Repository: kawakaze430/create-terabox-downloader
+Evidence base: source tree at 5dceb2d, README, product requirements,
+implementation log, operator validation guide, and the existing
+AnalyseFuture/future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt. This document adds decision gates and
+longer-term research to that earlier idea; it does not replace it.
+
+STATUS LANGUAGE
+
+VERIFIED OFFLINE: implementation passed local or CI checks without live
+TeraBox access. IMPLEMENTED/UNVERIFIED: code exists but has no live proof.
+BLOCKED: an external prerequisite prevents the intended outcome.
+FEASIBLE NOW: a bounded engineering task with no provider dependency.
+CONDITIONAL: feasible only after access, rights, source capabilities, cost or
+demand are confirmed. EXPERIMENTAL: testable research with uncertain value.
+INFEASIBLE FROM A LINK ALONE: a remote source has not supplied the bytes,
+rights or keys. No status here implies production readiness.
+
+01. WHAT THE PROJECT IS TODAY
+
+An independent TeraBox-focused product foundation: one Python FastAPI API,
+one Next.js/TypeScript website, and a Chrome/Edge Manifest V3 development
+extension. The versioned API validates supported link shapes and returns
+safe structured errors. The site presents link validation and an honest
+provider-unavailable state. The extension hands a supported page URL to the
+website. A provider contract and an operator-only candidate integration are
+present, but the public provider is intentionally disabled. The two uploaded
+third-party ZIPs are isolated under AnalyseFuture/archives as references, not
+running components. [VERIFIED OFFLINE for the existing validation workflows]
+
+02. ORIGINAL INTENT SUPPORTED BY REPOSITORY EVIDENCE
+
+README.md, docs/PRODUCT_REQUIREMENTS.md and docs/ARCHITECTURE.md call for a
+commercially competitive, independently branded website, browser extension
+and shared backend. The intended path is paste permitted link, inspect real
+files, preview supported content, and complete an authorized download with
+accurate error handling. The longer-term plan includes folders, bounded
+batch/ZIP, accessible player, optional accounts and more clients. This is
+product intent, not proof of existing capabilities.
+
+03. WHAT IS ALREADY IMPLEMENTED
+
+VERIFIED OFFLINE: exact-host HTTPS URL admission; API validation; readiness
+and liveness separation; provider error contract; request size, timeout,
+rate/concurrency guards; privacy-safe browser handoff; desktop/mobile web
+validation flow; locked API and web dependency sets; automated unit/browser
+checks. Earlier verification includes 173 Python API tests, 16 extension
+parser tests and 10 Playwright cases, plus web build/type checks.
+
+IMPLEMENTED/UNVERIFIED LIVE: credential-gated official OAuth helper,
+operator-only share metadata/download candidate, approved-host pinned egress
+and bounded SHA-256 fixture probe. They have mock/fixture evidence only.
+Public resolve deliberately returns PROVIDER_NOT_CONFIGURED; no actual
+TeraBox file metadata, preview or completed transfer has been proven.
+
+04. WHAT MAKES IT USEFUL NOW
+
+It offers a truthful front door for supported share-link shapes and a tested
+security-oriented foundation for a future provider adapter. Developers can
+reproduce offline API, web and extension behavior. Its value is the coherent
+contract and honest status, not a working downloader today. A user-facing
+release should clearly say that actual downloading is unavailable until the
+access path has completed live acceptance tests.
+
+05. WHAT IS MISSING
+
+Required for the TeraBox-specific goal: confirmed permitted scope; a safe
+per-user authorization model; owner-controlled live fixtures; actual
+metadata and download response mapping; a completed, checksum-verified
+transfer; public UI actions wired only to verified capabilities. Also absent:
+real player, file details, folder listing, bounded batch/ZIP, published
+extension, deployment, monitoring, production privacy/support operations.
+The existence of related code in a ZIP does not fill any of these gaps.
+
+06. WHAT TO IMPROVE IMMEDIATELY (NEXT 0-3 MONTHS)
+
+FEASIBLE NOW: maintain the passing baseline; add negative tests for DNS,
+redirect, malformed upstream responses and transfer bounds; verify the
+archive extraction and security report; create small owned fixture videos
+with known byte counts and hashes; test a provider-neutral transfer engine
+against an endpoint we operate. Document source capability flags so UI never
+guesses download or preview support. Keep the API contract stable. Research
+provider terms and access using an owner-controlled share in parallel.
+
+Gate to advance: tests demonstrate accurate behavior and no regression to
+link admission, credential handling or error redaction. Local fixture tests
+do not count as live TeraBox proof.
+
+07. WHAT TO BUILD NEXT (AFTER SOURCE ACCESS IS PROVEN)
+
+CONDITIONAL: demonstrate one authorized real file's metadata and full
+transfer, including advertised length and independently known SHA-256.
+Confirm scope, regional hosts, expiry and rate behavior. Then design user-
+scoped consent and token isolation before connecting the provider to public
+routes. Add real file cards, accurate download handoff and structured access
+errors. Add preview, folder navigation and selected downloads only when the
+same authorized source reports those capabilities. No anonymous public route
+may reuse an operator's privileged token.
+
+08. HOW TO MAKE THE PRODUCT SIGNIFICANTLY BETTER
+
+Compete on measurable user outcomes: accessible mobile-first paste-to-file
+flow; honest success/failure states; no fake qualities; low-friction but
+minimal-permission extension; predictable cancel/retry; fast, safe metadata
+when available; private-by-default links; verified completed transfers;
+clear help for expired or protected shares. Benchmark against competitors on
+defined owner-authorized fixtures, not marketing screenshots. Measure time
+to metadata, full transfer completion, cost per success and support burden.
+
+09. ADVANCED CAPABILITIES TO EXPLORE
+
+CONDITIONAL: folder search, pagination, batch selection, bounded streaming
+ZIP, HTTP Range resume, source-supported video variants, subtitles and
+picture-in-picture. Each requires real provider or owned-file capability,
+user value and cost limits. EXPERIMENTAL: local-first semantic search,
+chapter suggestions, duplicate detection, user-owned media libraries,
+multi-provider imports and creator collaboration. Keep these outside the
+first release gate until the basic source path is reliable.
+
+10. MEANINGFUL AI CAPABILITIES
+
+For media users own or may process: opt-in transcripts and captions, chapter
+suggestions, semantic search, language translation, duplicate grouping and
+accessible content summaries. For operations: classify known error codes,
+predict resource cost before a user launches a large job, and detect failed
+fixtures without retaining raw private links. Prefer local processing or a
+clearly consented private service; give users deletion controls and show
+uncertainty. AI output must never be treated as proof of a real file, source
+quality, entitlement, download URL or completed transfer. AI cannot recover
+provider-withheld bytes, access rights, DRM keys or deleted files.
+
+11. TECHNOLOGIES TO RESEARCH
+
+The existing FastAPI/HTTPX/Pydantic and Next.js/TypeScript stack can remain.
+Research OpenAPI-to-TypeScript contract generation when drift appears;
+browser-native media APIs and accessible player libraries for verified
+streams; WebCodecs/MediaSource for supported browser formats; sandboxed
+FFmpeg-style conversion only for authorized bytes; bounded object storage
+and queues for large jobs; content hashing and retry design. Confirm each
+library's license, update health, browser support and resource cost before
+adoption. Research legal provider access and consent flows alongside code.
+
+12. WHAT CAN REALISTICALLY BE BUILT TODAY
+
+FEASIBLE NOW: a tested local-file or owner-hosted media demonstration;
+provider-neutral metadata and transfer contracts; format detection on bytes
+already obtained; validation/error UX; accessibility improvements; documented
+deployment architecture; security regression tests. A local demo must be
+labelled as a local/owned-media path. These tasks make the eventual product
+more resilient without implying that TeraBox currently serves the file.
+
+13. WHAT IS TECHNICALLY POSSIBLE BUT EXPENSIVE OR DIFFICULT
+
+CONDITIONAL: large-file proxying, video transcoding, reliable ZIP assembly,
+regional delivery, per-user OAuth lifecycle, multi-provider sync and mobile
+applications. The main burdens are bandwidth, storage, CPU/GPU time,
+privacy, abuse control, incident response, licensing and long-term support.
+Prefer direct permitted browser handoff when safe and supported. If a server
+must proxy bytes, set maximum size, count, duration, concurrency, temporary
+storage lifecycle and cost budgets before launch.
+
+14. WHAT IS CURRENTLY IMPRACTICAL OR UNSUPPORTED
+
+INFEASIBLE FROM A LINK ALONE: guarantee a download for every TeraBox video;
+recover a deleted/revoked file with no independent copy; create encryption
+keys, credentials or premium entitlement; force a remote server to send
+bytes; infer true resolution/filename from URL shape. Password, account,
+geo and DRM restrictions must not be bypassed. The current source does not
+support claims of a working public video downloader, player or batch ZIP.
+
+15. WHAT DEPENDS ON FUTURE RESEARCH OR INFRASTRUCTURE
+
+An authorized TeraBox integration depends on a lawful, functioning access
+path, test account/owned fixtures, approved scopes and region/host behavior.
+Production depends on owned hosting/domain, deployment pipeline, egress
+controls, aggregate rate limits, observability, support, privacy notices,
+copyright process and sustainable unit economics. Without TeraBox access,
+research user-owned imports or other permitted providers rather than
+pretending an unavailable upstream path works.
+
+16. ONE-YEAR INVESTIGATION (AROUND LATE 2027)
+
+Target a dependable first release on at least one fully verified source
+path. If TeraBox access is permitted and proven, support real metadata,
+completed downloads, truthful preview and the extension's end-to-end user
+journey. If it is still blocked, focus the release on owned files or another
+permitted provider while retaining transparent TeraBox link validation.
+Require measured supported-share completion rate, p95 latency, mobile and
+accessibility checks, security review, staged deployment and cost per
+completed transfer before making competitive claims. These are goals, not
+commitments or evidence that release will occur by a date.
+
+17. TWO-YEAR INVESTIGATION (AROUND LATE 2028)
+
+With proven demand and finances, explore more lawful storage adapters,
+user-controlled history/bookmarks, optional synced preferences, Firefox/PWA
+or mobile clients, and a documented developer API. Consider paid tiers only
+after stable core outcomes, secure account/data handling, payment compliance
+and support capacity. Evaluate local/opt-in AI search and captions with
+quality and privacy tests. Revisit the TeraBox path based on contemporary
+terms and real fixtures rather than a fixed assumption that it will improve.
+
+18. THREE-TO-FIVE-YEAR INVESTIGATION (2029-2031)
+
+Explore a provider-neutral personal media workspace with local-first
+indexing, collaborative libraries for content participants may share,
+creator workflows, reliable conversion and more surfaces. Consider an open
+capability contract so adapters report exactly what each source supports.
+Reevaluate codecs, hardware acceleration and AI models as the landscape
+changes. Future models may lower the cost of organization and accessibility,
+but cannot guarantee source access or remove legal and operational duties.
+
+19. FEATURES NOT TO PURSUE
+
+Do not use borrowed cookies, leaked tokens, uncontrolled third-party workers,
+CAPTCHA or DRM bypass, premium-limit circumvention, silent browser scraping
+or fake completion/quality indicators. Do not move to one programming
+language merely for visual symmetry; Python backend and TypeScript clients
+already have a coherent API boundary. Do not add billing, AI media processing
+at scale or gigabyte proxying before the core transfer and unit economics are
+proven. Do not import the two full ZIP projects into the live app: isolate and
+review individual ideas, code, license notices and risks first.
+
+20. DEFENSIBLE LONG-TERM ADVANTAGES
+
+Our strongest potential advantages are trust and accumulated evidence:
+verified real-byte outcomes, transparent feature capability, privacy,
+accessible mobile UX, reproducible fixture tests, predictable cost and
+rapid adaptation to provider changes. A multi-provider architecture can
+reduce reliance on one upstream service without claiming independence from
+the source of any particular file. These advantages require continuous
+engineering, support and honest measurement; none is won by a large list of
+unimplemented features.
+
+DECISION RULE AND OWNERSHIP
+
+The product owner defines lawful use cases, budget and the choice to pursue
+provider access or a broader media path. Integration engineers verify source
+behavior with owned fixtures. Backend/security engineers own authorization,
+transport, limits and integrity. Web/extension engineers own accessible
+capability-driven UX. QA/operations engineers own test evidence, incidents
+and cost. Privacy/legal reviewers own terms, user rights and release policy.
+One person may hold several roles, but each gate needs a named owner.
+
+Move to the next phase only when its evidence exists. A mocked test is useful
+engineering evidence but not proof of a TeraBox download. The project should
+be ambitious about what it owns and precise about what the source controls.

@@ -13,7 +13,7 @@ The active `main` was compared with the last known project checkpoint (`35eb415`
 | `.github/workflows/ci.yml` | Existing API, web and extension checks | Keep CI working against the same paths. |
 | `docs/` | Requirements, architecture, handoff, operator guides, research and implementation history | Keep references and the document-archive verification path. |
 | `scripts/` | Reproducible, checksum-checked reference extraction | Point at the preserved archives below. |
-| Repository root | README, AGENTS, project idea TXT, 49-source study list and ignore rules | Keep the requested idea easy to find; the study list is referenced by existing docs. |
+| Repository root | README, AGENTS, 49-source study list and ignore rules | Keep stable entrypoints; the study list is referenced by existing docs. The earlier idea now lives in `AnalyseFuture/future-ideas/`. |
 
 ## Files moved for analysis, not deleted
 
@@ -23,6 +23,6 @@ The original cookie-bearing ZIPs are still reachable in earlier Git history. Mov
 
 ## Project status and next boundary
 
-The existing [project idea TXT](../PROJECT_IDEA_AND_FUTURE_VISION.txt) contains the requested present capabilities, video-format ambition, limits, AI-era ideas and one/two-year future path. This restructuring does not claim a working TeraBox downloader: the public provider remains unconfigured, and authorized live metadata and a completed file transfer have not been verified. Any integration of reference ZIP code needs a separate source/license/security review and evidence of a permitted provider path.
+The preserved [project idea TXT](../future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt) contains the requested present capabilities, video-format ambition, limits, AI-era ideas and one/two-year future path. This restructuring does not claim a working TeraBox downloader: the public provider remains unconfigured, and authorized live metadata and a completed file transfer have not been verified. Any integration of reference ZIP code needs a separate source/license/security review and evidence of a permitted provider path.
 
-The aim of this layout is clear ownership: `apps/` and `services/` are the running product; `docs/` and the root idea describe it; `AnalyseFuture/` preserves external material for later decisions.
+The aim of this layout is clear ownership: `apps/` and `services/` are the running product; `docs/` describes it; `AnalyseFuture/` preserves external material and future ideas for later decisions.
