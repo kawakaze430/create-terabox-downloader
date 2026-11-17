@@ -9,8 +9,8 @@ from zipfile import ZipFile
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ARCHIVE_DIR = ROOT / "AnalyseFuture" / "archives"
-OUTPUT = ROOT / "AnalyseFuture" / "extracted"
+ARCHIVE_DIR = ROOT / "research" / "archives"
+OUTPUT = ROOT / "research" / "extracted"
 ARCHIVES = {
     "Teraplayer-main.zip": (
         "Teraplayer-main",

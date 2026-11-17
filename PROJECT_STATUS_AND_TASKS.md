@@ -1,16 +1,6 @@
 # Project status, file guide, and implementation tasks
 
-> **Latest owner priority update (17 November 2026):** the subsequent engine prompt supersedes the PR-only and provider-first execution order below. Build and test the source-independent transfer engine against controlled accessible sources now; TeraBox authorization remains a separate adapter gap. Verified task checkpoints may be pushed directly to `main` without force. Use [CODEX_CONTINUITY.md](docs/CODEX_CONTINUITY.md) for current tasks/checkpoints, [repository organization audit](docs/REPOSITORY_ORGANIZATION_AUDIT.md) for the new classification, and [engine design](docs/DOWNLOAD_ENGINE.md) for algorithms and evidence. Historical provider-specific tasks remain useful; do not treat their prerequisites as a blocker for generic engine work.
-
-**Start here when handing this project to another developer or AI tool.**
-
-- **Updated:** 17 November 2026 (Asia/Kolkata).
-- **Current repository:** [sarfiaroui-oss/create-terabox-downloader](https://github.com/sarfiaroui-oss/create-terabox-downloader).
-- **Source checkpoints:** original handoff `076205b`; independent-engine audit `a03a4c3`; extension `f36a72b`; streaming/recovery engine `0a8117a`. Recheck the latest source when resuming.
-- **Owner's current workflow:** the later engine prompt authorizes frequent verified direct `main` checkpoints, with a durable branch/PR fallback if main is protected. Never force-push or put unfinished work on main. Maintain `docs/CODEX_CONTINUITY.md` at each checkpoint.
-- **Critical status:** a generic operator download engine now works against controlled accessible sources independently of OAuth. **Real TeraBox authorization, metadata, previews, and completed downloads have not been verified.** Its public provider remains deliberately disabled.
-
-Older documents refer to `kawakaze430/create-terabox-downloader`, earlier commits, and earlier CI runs. Preserve those historical references, but use this checkout's actual remote for new work. An issue numbered `#2` or a passing workflow in the historical repository does not establish the same state in the current repository.
+> Historical implementation handoff from 17 November 2026. Current checkpoints and tasks are in [CODEX_CONTINUITY.md](docs/CODEX_CONTINUITY.md). See the [incident review](docs/security/incident-review.md) for current repository handling and owner actions. The task and verification history below describes the earlier baseline.
 
 ## Contents
 
@@ -107,7 +97,7 @@ Status definitions:
 
 ## 3. Every folder and tracked file
 
-The tables cover every versioned file at the inspected snapshot, plus this new handoff. Excluded dependency files and generated caches are explained separately. Files *inside* the third-party ZIPs are reference-project internals: their full 341-member listing is in [ZIP_MEMBER_INVENTORY.txt](AnalyseFuture/archives/ZIP_MEMBER_INVENTORY.txt), not part of our implemented feature count.
+The tables cover every versioned file at the inspected snapshot, plus this new handoff. Excluded dependency files and generated caches are explained separately. Files *inside* the third-party ZIPs are reference-project internals: their full 341-member listing is in [ZIP_MEMBER_INVENTORY.txt](research/archives/ZIP_MEMBER_INVENTORY.txt), not part of our implemented feature count.
 
 ### Folder map
 
@@ -126,10 +116,10 @@ The tables cover every versioned file at the inspected snapshot, plus this new h
 | `services/api/tests/` | Engine/CLI local-socket and existing API/provider/OAuth/egress/limit/probe tests |
 | `scripts/` | Controlled benchmarks, deterministic extension packaging and safe reference extraction, not an application service |
 | `docs/` | Requirements, technical plans, operator/setup guides and dated continuity records |
-| `AnalyseFuture/` | Review reports, inventories, recovered ideas and reference material; not a second application |
-| `AnalyseFuture/archives/` | Two sanitized third-party ZIPs and their inventory/extraction guide |
-| `AnalyseFuture/future-ideas/` | Preserved older broad product/media/AI vision |
-| `AnalyseFuture/recovery-notes/` | Dated repository restructuring audit |
+| `docs/history/repository-reviews/` | Review reports, inventories, recovered ideas and reference material; not a second application |
+| `research/archives/` | Two sanitized third-party ZIPs and their inventory/extraction guide |
+| `research/future-ideas/` | Preserved older broad product/media/AI vision |
+| `docs/security/recovery/` | Dated repository restructuring audit |
 
 ### Root and automation files
 
@@ -238,27 +228,27 @@ These reports describe earlier inspections. Recheck claims against current code;
 
 | File | Why it exists |
 | --- | --- |
-| `AnalyseFuture/README.md` | Entry to isolated references, recovery records and known credential-history caveat |
-| `AnalyseFuture/REPOSITORY_AUDIT.txt` | Dated repository/Git/structure/provenance findings |
-| `AnalyseFuture/COMPLETE_FILE_INVENTORY.txt` | Earlier path-by-path classification; this handoff includes newly added paths |
-| `AnalyseFuture/FEATURE_INVENTORY.txt` | Active/blocked/planned feature inventory and evidence distinctions |
-| `AnalyseFuture/PROJECT_VISION_AND_FUTURE_ROADMAP.txt` | Current recovery-era vision, conditional future goals and research horizons |
-| `AnalyseFuture/TECHNICAL_DEBT.txt` | Known external blockers and prioritized security/contract/deployment gaps |
-| `AnalyseFuture/SECURITY_AUDIT.txt` | Dated source/ZIP review; records session-shaped values in historical archive commits, not a full production security certification |
-| `AnalyseFuture/TEST_AND_VALIDATION_REPORT.txt` | Exact earlier local checks, counts, outcomes and live-provider limits |
-| `AnalyseFuture/WORK_PROGRESS.txt` | Recovery and follow-up progress checkpoints |
-| `AnalyseFuture/CONSOLIDATION_REPORT.txt` | Decision to keep one running API/web/extension and isolate references |
-| `AnalyseFuture/DUPLICATE_ANALYSIS.txt` | Duplicate/overlap review and why whole reference projects were not merged |
-| `AnalyseFuture/MIGRATION_SUMMARY.txt` | Summary of previous structural changes |
-| `AnalyseFuture/ORIGINAL_TO_NEW_PATH_MAPPING.txt` | Old-to-new path mapping for preserved/moved files |
-| `AnalyseFuture/ARCHIVED_FILES_MANIFEST.txt` | Preserved material manifest and disposition |
-| `AnalyseFuture/NEXT_DEVELOPER_INSTRUCTIONS.txt` | Older continuation notes; useful context but its main-push workflow is superseded |
-| `AnalyseFuture/archives/REFERENCE_ARCHIVES.md` | Archive provenance, extraction, licensing and security guide |
-| `AnalyseFuture/archives/ZIP_MEMBER_INVENTORY.txt` | Every nested file/folder in both uploaded ZIPs; reference-only inventory |
-| `AnalyseFuture/archives/Teraplayer-main.zip` | Sanitized third-party FastAPI/React/extension product reference. Player/folder ideas exist there, not in our active app |
-| `AnalyseFuture/archives/terabox-gateway-main.zip` | Sanitized third-party Flask/aiohttp provider/failure-handling reference; not our running backend |
-| `AnalyseFuture/future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt` | Full older media/import/conversion/AI idea; speculative scope, not existing features or automatic task authorization |
-| `AnalyseFuture/recovery-notes/REPOSITORY_STRUCTURE_AUDIT_2026-11-17.md` | Earlier restructuring and archive security findings |
+| `docs/history/repository-reviews/README.md` | Entry to isolated references, recovery records and known credential-history caveat |
+| `docs/history/repository-reviews/REPOSITORY_AUDIT.txt` | Dated repository/Git/structure/provenance findings |
+| `docs/history/repository-reviews/COMPLETE_FILE_INVENTORY.txt` | Earlier path-by-path classification; this handoff includes newly added paths |
+| `docs/history/repository-reviews/FEATURE_INVENTORY.txt` | Active/blocked/planned feature inventory and evidence distinctions |
+| `docs/history/repository-reviews/PROJECT_VISION_AND_FUTURE_ROADMAP.txt` | Current recovery-era vision, conditional future goals and research horizons |
+| `docs/history/repository-reviews/TECHNICAL_DEBT.txt` | Known external blockers and prioritized security/contract/deployment gaps |
+| `docs/security/recovery/SECURITY_AUDIT.txt` | Dated source/ZIP review; records session-shaped values in historical archive commits, not a full production security certification |
+| `docs/history/repository-reviews/TEST_AND_VALIDATION_REPORT.txt` | Exact earlier local checks, counts, outcomes and live-provider limits |
+| `docs/history/repository-reviews/WORK_PROGRESS.txt` | Recovery and follow-up progress checkpoints |
+| `docs/history/repository-reviews/CONSOLIDATION_REPORT.txt` | Decision to keep one running API/web/extension and isolate references |
+| `docs/history/repository-reviews/DUPLICATE_ANALYSIS.txt` | Duplicate/overlap review and why whole reference projects were not merged |
+| `docs/history/repository-reviews/MIGRATION_SUMMARY.txt` | Summary of previous structural changes |
+| `docs/history/repository-reviews/ORIGINAL_TO_NEW_PATH_MAPPING.txt` | Old-to-new path mapping for preserved/moved files |
+| `docs/history/repository-reviews/ARCHIVED_FILES_MANIFEST.txt` | Preserved material manifest and disposition |
+| `docs/history/repository-reviews/NEXT_DEVELOPER_INSTRUCTIONS.txt` | Older continuation notes; useful context but its main-push workflow is superseded |
+| `research/archives/REFERENCE_ARCHIVES.md` | Archive provenance, extraction, licensing and security guide |
+| `research/archives/ZIP_MEMBER_INVENTORY.txt` | Every nested file/folder in both uploaded ZIPs; reference-only inventory |
+| `research/archives/Teraplayer-main.zip` | Sanitized third-party FastAPI/React/extension product reference. Player/folder ideas exist there, not in our active app |
+| `research/archives/terabox-gateway-main.zip` | Sanitized third-party Flask/aiohttp provider/failure-handling reference; not our running backend |
+| `research/future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt` | Full older media/import/conversion/AI idea; speculative scope, not existing features or automatic task authorization |
+| `docs/security/recovery/REPOSITORY_STRUCTURE_AUDIT_2026-11-17.md` | Earlier restructuring and archive security findings |
 
 ### Generated/local folders, not product source
 
@@ -268,7 +258,7 @@ These reports describe earlier inspections. Recheck claims against current code;
 - Python `__pycache__/`, `.pytest_cache/`: bytecode/test caches.
 - `apps/web/test-results/`, `playwright-report/`: generated browser-test results; never retain private-link traces without a reviewed need.
 - `.env`, `.env.local` and other real environment files: local configuration, not shared credentials. Example files are intentionally tracked.
-- `AnalyseFuture/extracted/Teraplayer-main/` and `AnalyseFuture/extracted/terabox-gateway-main/`: ignored copies recreated by the extraction script. Third-party workers, helper agents, cron scripts and cookie paths are not our startup instructions.
+- `research/extracted/Teraplayer-main/` and `research/extracted/terabox-gateway-main/`: ignored copies recreated by the extraction script. Third-party workers, helper agents, cron scripts and cookie paths are not our startup instructions.
 - `/workspace/.npm-cache/`: cloud machine package cache outside the checkout; not a project feature.
 - `.git/`: repository metadata; do not edit manually. Workspace-level platform folders outside this checkout are not application folders.
 
@@ -322,7 +312,7 @@ Use these IDs in branches, commits and PRs. An unchecked item is not finished. S
 
 ### T02 — Resolve the known historical reference-session exposure
 
-- [ ] Owner confirms whether sessions/token-like values recorded in `AnalyseFuture/SECURITY_AUDIT.txt` were theirs or valid; revoke any affected credentials at the provider.
+- [ ] Owner confirms whether sessions/token-like values recorded in `docs/security/recovery/SECURITY_AUDIT.txt` were theirs or valid; revoke any affected credentials at the provider.
 - [ ] Record only remediation status/date, never the values. Current ZIP sanitization does not remove old Git blobs or revoke sessions.
 - [ ] If history cleanup is needed, plan it separately with the owner and collaborators; no force-push/history rewrite as part of routine development.
 - **Acceptance:** owner-confirmed remediation or an explicit unresolved owner action. Source inspection cannot certify account security or revocation.
@@ -564,7 +554,7 @@ The earlier cloud onboarding in this conversation tested the same `de7e4b3` appl
 | Service requests | API health and valid-link normalization; dev and production homepage content verified | Local services only |
 | Offline preflight | Exit 2, required partner/fixture settings missing, provider disabled | Expected blocked live setup |
 
-The table above preserves the earlier onboarding evidence. The latest engine/client work additionally ran the 250 API, 50 extension and 20 browser checks summarized at the start of this section; it did not run a new vulnerability audit. Markdown paths/file coverage/diff were checked for the final docs. Earlier detailed validation remains in [TEST_AND_VALIDATION_REPORT.txt](AnalyseFuture/TEST_AND_VALIDATION_REPORT.txt). No current-fork Actions success or live TeraBox transfer is certified here.
+The table above preserves the earlier onboarding evidence. The latest engine/client work additionally ran the 250 API, 50 extension and 20 browser checks summarized at the start of this section; it did not run a new vulnerability audit. Markdown paths/file coverage/diff were checked for the final docs. Earlier detailed validation remains in [TEST_AND_VALIDATION_REPORT.txt](docs/history/repository-reviews/TEST_AND_VALIDATION_REPORT.txt). No current-fork Actions success or live TeraBox transfer is certified here.
 
 ## 6. Instructions for the implementing tool
 

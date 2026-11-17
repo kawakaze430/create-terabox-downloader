@@ -14,7 +14,7 @@ The offline operator preflight exited 2 as designed and reported
 `configuration_ready: false`, `live_verified: false`, and
 `public_provider_enabled: false`. No provider credentials were configured,
 no `--live` probe ran, and no TeraBox metadata or file transfer was verified.
-See [the detailed validation report](../AnalyseFuture/TEST_AND_VALIDATION_REPORT.txt).
+See [the detailed validation report](history/repository-reviews/TEST_AND_VALIDATION_REPORT.txt).
 
 Corrected the local-development instructions to use the existing Python lock
 and fixed an npm installation typo. No application source, dependency lock,

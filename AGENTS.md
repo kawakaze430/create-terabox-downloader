@@ -1,10 +1,10 @@
 # Instructions for All Developers and Codex Agents
 
-**Latest owner update — 2026-11-17:** Build our source-independent download engine first. Official partner approval is not a prerequisite for generic transfer work against controlled permitted sources. Keep source access separate and preserve all existing security controls. The latest uploaded engine prompt authorizes verified incremental direct commits to `main`, superseding the earlier PR-only instruction. Push each completed tested task immediately, never force-push; use a remote checkpoint branch/PR if direct push is blocked. Keep [docs/CODEX_CONTINUITY.md](docs/CODEX_CONTINUITY.md) current so another workspace can resume. The current remote is authoritative; historical documents refer to an earlier repository owner.
+**Latest owner update — 2026-11-17:** Build our source-independent download engine first. Official partner approval is not a prerequisite for generic transfer work against controlled permitted sources. Keep source access separate and preserve all existing security controls. During the suspected-compromise review, keep recovery checkpoints on a named branch until the owner has verified account access. Never force-push. See the [incident review](docs/security/incident-review.md). Keep [docs/CODEX_CONTINUITY.md](docs/CODEX_CONTINUITY.md) current so another workspace can resume. The current remote is authoritative; historical documents refer to an earlier repository owner.
 
 **NEW SESSION CONTINUITY:** First read [docs/START_HERE_PROJECT_HANDOFF.md](docs/START_HERE_PROJECT_HANDOFF.md) and [docs/PROJECT_CONVERSATION_ARCHIVE.md](docs/PROJECT_CONVERSATION_ARCHIVE.md), plus [original master prompt](docs/MASTER_DEVELOPMENT_PROMPT_2026-11-15.md). The handoff is a snapshot; always verify latest HEAD, CI, issue #2 and source before changes.
 
-The current [repository structure](PROJECT_STRUCTURE.md), [documentation index](docs/README.md), and [recovery reports](AnalyseFuture/README.md) explain file ownership and historical material. These current records supplement the dated handoff.
+The current [repository structure](PROJECT_STRUCTURE.md), [documentation index](docs/README.md), and [recovery reports](docs/history/repository-reviews/README.md) explain file ownership and historical material. These current records supplement the dated handoff.
 
 **Project:** Independently operated, commercially competitive TeraBox downloader website + browser extension.  
 **Updated:** 2026-11-14.
@@ -41,7 +41,7 @@ These documents describe **planned targets**, not proof of implementation. The a
 For each task:
 1. Inspect and summarize relevant existing code/behavior and expected feature acceptance.
 2. Choose the smallest high-value solution; reuse existing code and suitable libraries.
-3. Implement a bounded task with tests and clear commits. Following the latest engine prompt, use normal direct `main` commits for completed verified work; push and confirm each remote checkpoint. If protection/concurrency prevents that, preserve the work on a pushed named branch and submit a PR when supported. Keep incomplete work off main. Never force-push shared history or overwrite concurrent changes. Use the existing isolated checkout; do not create a worktree unless explicitly requested.
+3. Implement a bounded task with tests and clear commits. During incident review, preserve verified work on the recovery branch and confirm any permitted remote checkpoint. Keep incomplete work off main. Never force-push shared history or overwrite concurrent changes. Use the existing isolated checkout; do not create a worktree unless explicitly requested.
 4. Run relevant lint/type/unit checks, then targeted integration/browser checks. A mocked pass is not a successful real TeraBox download.
 5. Update feature status and any architecture decision or known limitation.
 6. Report what changed, exact commands/tests executed, results, untested items, security/license implications, and next prioritized work.
