@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { normalizeShareUrl, websiteUrl } from "../links.mjs";
+import { normalizeShareUrl, normalizeWebsiteOrigin, websiteUrl } from "../links.mjs";
 
 for (const [input, expected] of [
   ["https://terabox.com/s/1Abc_123?pwd=secret#private", "https://terabox.com/s/1Abc_123"],
@@ -21,4 +21,32 @@ test("handoff puts only the normalized link in a fragment", () => {
   assert.equal(destination.search, "");
   assert.equal(new URLSearchParams(destination.hash.slice(1)).get("url"), "https://terabox.com/s/abcd");
   assert.ok(!destination.href.includes("secret"));
+});
+
+for (const [input, expected] of [
+  ["https://downloads.example", "https://downloads.example"],
+  ["https://DOWNLOADS.example:443", "https://downloads.example"],
+  ["http://localhost:3000", "http://localhost:3000"],
+  ["http://127.0.0.1:3000", "http://127.0.0.1:3000"],
+]) test(`accepts configured website origin ${input}`, () => {
+  assert.equal(normalizeWebsiteOrigin(input), expected);
+  const destination = new URL(websiteUrl("https://terabox.com/s/abcd?pwd=private", input));
+  assert.equal(destination.origin, expected);
+  assert.equal(destination.pathname, "/");
+  assert.equal(destination.search, "");
+  assert.equal(new URLSearchParams(destination.hash.slice(1)).get("url"), "https://terabox.com/s/abcd");
+});
+
+for (const input of [
+  undefined, "", " http://localhost:3000", "https://downloads.example\n",
+  "http://downloads.example", "javascript:alert(1)", "https://user:pass@downloads.example",
+  "https://downloads.example/", "https://downloads.example/path", "https://downloads.example?url=private",
+  "https://downloads.example#url=private", "https://downloads.example:8443",
+  "http://localhost", "http://localhost:8000", "http://localhost:3000/path",
+  "http://127.1:3000", "http://localhost.evil.example:3000", "https://downloads.example\\@evil.example",
+  "https://downloads..example", "https://-downloads.example", "https://downloads.example.",
+  "https://%65xample.com", "https://0x7f000001", "https://downloads.example:0443",
+]) test(`rejects configured website origin ${JSON.stringify(input)}`, () => {
+  assert.throws(() => normalizeWebsiteOrigin(input));
+  if (input !== undefined) assert.throws(() => websiteUrl("https://terabox.com/s/abcd", input));
 });

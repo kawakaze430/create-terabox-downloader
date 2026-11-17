@@ -1,3 +1,5 @@
+import { WEBSITE_ORIGIN } from "./config.mjs";
+
 // Keep this offline parser aligned with services/api/app/links.py.
 const hosts = new Set(["terabox.com", "www.terabox.com", "teraboxapp.com", "www.teraboxapp.com", "1024terabox.com", "www.1024terabox.com", "terasharefile.com", "www.terasharefile.com"]);
 const tokenPattern = /^[A-Za-z0-9_-]{4,128}$/;
@@ -19,7 +21,23 @@ export function normalizeShareUrl(raw) {
   throw new Error("Invalid share path");
 }
 
-export function websiteUrl(shareUrl) {
+export function normalizeWebsiteOrigin(raw) {
+  // A build setting, never a destination supplied by the active share page.
+  // Reject syntax WHATWG URL would silently repair (spaces, slashes, escapes).
+  if (typeof raw !== "string" || raw.length > 300) throw new Error("Invalid website origin");
+  if (raw === "http://localhost:3000" || raw === "http://127.0.0.1:3000") return raw;
+  if (!/^https:\/\/[A-Za-z0-9.-]+(?::443)?$/.test(raw)) throw new Error("Invalid website origin");
+  const authority = raw.slice("https://".length).replace(/:443$/, "");
+  if (authority.length > 253 || authority.split(".").some(label =>
+    !/^[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?$/.test(label))) {
+    throw new Error("Invalid website origin");
+  }
+  const parsed = new URL(raw);
+  if (parsed.hostname !== authority.toLowerCase()) throw new Error("Invalid website origin");
+  return parsed.origin;
+}
+
+export function websiteUrl(shareUrl, websiteOrigin = WEBSITE_ORIGIN) {
   // Fragments are not sent to the web server or in HTTP Referrer headers.
-  return "http://localhost:3000/#url=" + encodeURIComponent(normalizeShareUrl(shareUrl));
+  return normalizeWebsiteOrigin(websiteOrigin) + "/#url=" + encodeURIComponent(normalizeShareUrl(shareUrl));
 }

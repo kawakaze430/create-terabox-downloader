@@ -219,3 +219,19 @@ IDs T01–T25 have detailed sections; `git diff --check` passes. API and client
 source reviews checked the implementation claims. Application test counts in the
 guide refer explicitly to the preceding local onboarding validation at the same
 application revision, not a new test run for this documentation-only change.
+
+## 2026-11-17 — Independent-engine priorities and extension checkpoint
+
+The latest owner engine prompt supersedes PR-only/provider-first execution.
+Checkpoint `a03a4c3` persisted the complete 82-file/18-directory organization
+audit, independent-engine design and continuation record. Fresh baseline:
+173 API tests passed; pip check passed, with the existing testclient deprecation.
+No source moves/deletions, dependency changes or provider enablement occurred.
+
+E04 adds validated build-time extension website origins, safe popup tab/error
+states and a deterministic minimal ZIP builder. Source config is unchanged by
+packaging; MV3 activeTab-only permissions and fragment privacy are retained.
+The website View source href now names the current repository. Validation:
+50 extension tests, popup syntax and package command passed. Installed Chrome/
+Edge/store verification remains unrun. See EXTENSION_DEVELOPMENT.md and
+CODEX_CONTINUITY.md. Generic engine work is being tested separately.

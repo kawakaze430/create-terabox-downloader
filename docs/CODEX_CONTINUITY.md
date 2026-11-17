@@ -5,13 +5,14 @@ Updated 17 November 2026 (Asia/Kolkata). Latest owner priorities supersede the e
 ## Checkpoint state
 
 - Repository: `sarfiaroui-oss/create-terabox-downloader`; branch: `main`.
-- Last confirmed remote before this record: `076205b8243ce621e7251865d44d645e160fc515`.
+- Last confirmed remote before this record: `a03a4c3222899d0cb2c30aaa702c6339589d2246` (E01 audit/plan checkpoint).
 - The commit containing this record is itself a checkpoint; resolve its SHA with `git log -1 --format=%H -- docs/CODEX_CONTINUITY.md` and confirm against `git ls-remote origin refs/heads/main`. A file cannot contain its own final Git commit hash.
-- Completed: baseline source/file audit; current owner workflow reconciled. No framework moves/deletions required.
-- In progress: safe generic streaming/retry/integrity engine and controlled HTTP fixture tests; extension destination configuration and packaging; current website source-link repair.
+- Completed: E01 baseline source/file audit; current owner workflow reconciled. E04 configurable extension destination, deterministic six-file packaging, popup failures/tests and current website source link. No framework moves/deletions required.
+- In progress: safe generic streaming/retry/integrity engine and controlled HTTP fixture tests; strict validator-protected in-call recovery. Engine review/CLI/benchmark are next.
 - Working files: `services/api/app/download_engine.py`, `services/api/tests/test_download_engine.py`; client work stays under extension/packaging docs and website source link.
 - Baseline: 82 tracked files, 18 tracked directories, no initial local changes, remote main at the SHA above. Fresh baseline: 173 API tests passed (one existing Starlette/httpx deprecation warning); pip check passed. Engine/client changes were not part of that baseline.
 - External limitations: current-fork GitHub PR/CI API previously returned Forbidden; native Git read/push works. TeraBox access unverified; generic engine work does not depend on partner credentials. Known historical ZIP sessions require owner revocation; no values are exposed here.
+- E04 validation: 50 extension/parser/popup/package tests passed, popup syntax passed; default package command passed. Manifest remains MV3 activeTab-only. Installed Chrome/Edge and store submission unrun. Website source href only changed; full web checks follow in E05.
 
 ## Current queue
 

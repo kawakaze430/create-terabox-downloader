@@ -77,7 +77,7 @@ export default function Home() {
   }
 
   return <main className="shell">
-    <header className="topbar"><div className="logo"><span className="logo-mark">↧</span> CloudLink <span className="beta">DEV PREVIEW</span></div><a href="https://github.com/kawakaze430/create-terabox-downloader" target="_blank" rel="noopener noreferrer">View source ↗</a></header>
+    <header className="topbar"><div className="logo"><span className="logo-mark">↧</span> CloudLink <span className="beta">DEV PREVIEW</span></div><a href="https://github.com/sarfiaroui-oss/create-terabox-downloader" target="_blank" rel="noopener noreferrer">View source ↗</a></header>
     <section className="hero">
       <div className="eyebrow">INDEPENDENT TERABOX LINK TOOL</div>
       <h1>Understand your shared files.<br /><span>Download support is coming.</span></h1>
