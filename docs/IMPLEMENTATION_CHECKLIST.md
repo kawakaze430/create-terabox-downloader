@@ -1,5 +1,7 @@
 # Ordered Implementation Checklist
 
+For the current file-by-file handoff, task IDs/dependencies/acceptance criteria and PR review workflow, use [PROJECT_STATUS_AND_TASKS.md](../PROJECT_STATUS_AND_TASKS.md). Maintain this gate checklist alongside that operational plan; older branch/CI references below remain historical evidence.
+
 **Updated:** 2026-11-17. **This is the live plan, not a claim of completion.**
 Latest evidence: [implementation log](IMPLEMENTATION_LOG.md). Earlier branch/CI references below are historical; current implementation is on `main`.
 

@@ -1,5 +1,7 @@
 # TeraBox Downloader Platform — Product Vision & Developer Hub
 
+**Developer / AI-tool handoff:** [Project status, every file and folder, and detailed implementation tasks](PROJECT_STATUS_AND_TASKS.md). Start here to see what is implemented, what remains blocked, the ordered task backlog, and the current PR review workflow.
+
 See [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) for the current file ownership map and [docs/README.md](docs/README.md) for the documentation index.
 
 The current project vision and roadmap are in [AnalyseFuture/PROJECT_VISION_AND_FUTURE_ROADMAP.txt](AnalyseFuture/PROJECT_VISION_AND_FUTURE_ROADMAP.txt). The [earlier idea](AnalyseFuture/future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt) and uploaded reference projects remain preserved in [AnalyseFuture](AnalyseFuture/README.md); the [structure audit](AnalyseFuture/recovery-notes/REPOSITORY_STRUCTURE_AUDIT_2026-11-17.md) records earlier moves.

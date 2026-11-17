@@ -1,5 +1,7 @@
 # Instructions for All Developers and Codex Agents
 
+**Owner update — 2026-11-17:** Use [PROJECT_STATUS_AND_TASKS.md](PROJECT_STATUS_AND_TASKS.md) for the current status, complete file guide, ordered tasks and PR review procedure. Follow-up implementation tools must submit bounded pull requests for review; this replaces the older direct-to-main implementation workflow. Do not self-merge. The current checkout's remote is authoritative; historical documents refer to an earlier repository owner.
+
 **NEW SESSION CONTINUITY:** First read [docs/START_HERE_PROJECT_HANDOFF.md](docs/START_HERE_PROJECT_HANDOFF.md) and [docs/PROJECT_CONVERSATION_ARCHIVE.md](docs/PROJECT_CONVERSATION_ARCHIVE.md), plus [original master prompt](docs/MASTER_DEVELOPMENT_PROMPT_2026-11-15.md). The handoff is a snapshot; always verify latest HEAD, CI, issue #2 and source before changes.
 
 The current [repository structure](PROJECT_STRUCTURE.md), [documentation index](docs/README.md), and [recovery reports](AnalyseFuture/README.md) explain file ownership and historical material. These current records supplement the dated handoff.
@@ -39,7 +41,7 @@ These documents describe **planned targets**, not proof of implementation. The a
 For each task:
 1. Inspect and summarize relevant existing code/behavior and expected feature acceptance.
 2. Choose the smallest high-value solution; reuse existing code and suitable libraries.
-3. Implement a bounded change with tests and clear commits. Current owner instruction: work directly on `main`, create no new branch or PR, and push coherent verified checkpoints roughly every 5 minutes during active work. Never force-push or overwrite concurrent changes.
+3. Implement a bounded task with tests and clear commits on a task branch, then submit a pull request for review, following the owner's 2026-11-17 instruction. Include the task ID and acceptance evidence from `PROJECT_STATUS_AND_TASKS.md`. Do not self-merge, force-push shared history, or overwrite concurrent changes. Use the existing isolated checkout; do not create a worktree unless explicitly requested.
 4. Run relevant lint/type/unit checks, then targeted integration/browser checks. A mocked pass is not a successful real TeraBox download.
 5. Update feature status and any architecture decision or known limitation.
 6. Report what changed, exact commands/tests executed, results, untested items, security/license implications, and next prioritized work.

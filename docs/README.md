@@ -1,5 +1,7 @@
 # Documentation index
 
+**Current operational entrypoint:** [Project status and tasks](../PROJECT_STATUS_AND_TASKS.md) explains every tracked file/folder, implemented features, ordered remaining work, acceptance criteria, and the owner's current PR review workflow. Use it to hand work to another tool; historical prompts and snapshots remain below for context.
+
 The documents below stay at stable paths because they are linked throughout the project, the historical handoff, and the published source index. This index groups them by responsibility without changing archived text or CI paths. [PROJECT_STRUCTURE.md](../PROJECT_STRUCTURE.md) maps the running code; [AnalyseFuture](../AnalyseFuture/README.md) contains preserved references and recovery reports.
 
 | Collection | Documents | Role |

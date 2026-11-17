@@ -195,3 +195,27 @@ The next engineering gate is a partner-authorized live probe, resolving document
 protocol ambiguities, followed by per-user authorization/session isolation before
 exposing metadata/downloads to website users. G1 is still blocked; folders, player,
 ZIP, accounts, billing and production launch must not be marked complete.
+
+## 2026-11-17 — Root-level task and review handoff
+
+At the owner's request, added [PROJECT_STATUS_AND_TASKS.md](../PROJECT_STATUS_AND_TASKS.md)
+as the operational entrypoint for another implementation tool. It maps every
+tracked file/folder, separates implemented local behavior from mock-only provider
+candidates and absent features, and defines 25 ordered tasks with dependencies,
+acceptance criteria, an implementer prompt and PR review procedure. README and
+the documentation index/checklist link to it. AGENTS.md now records the owner's
+new request that follow-up implementation tools submit PRs for review instead
+of following the historical direct-to-main implementation instructions.
+
+Source reviewed: `de7e4b34f4a935bcfe96f47594d0c2b31abc60df` in the current
+`sarfiaroui-oss/create-terabox-downloader` checkout. Read-only Git access confirmed
+the remote main tip at that SHA. GitHub PR and Actions API reads returned
+`Forbidden`; current-fork PR/CI state and future continuous monitoring are not
+claimed. No live TeraBox operation was attempted and no application code changed.
+
+Validation for this documentation change: all 81 pre-existing tracked file paths
+plus the new guide are covered; relative Markdown file links resolve; all task
+IDs T01–T25 have detailed sections; `git diff --check` passes. API and client
+source reviews checked the implementation claims. Application test counts in the
+guide refer explicitly to the preceding local onboarding validation at the same
+application revision, not a new test run for this documentation-only change.
