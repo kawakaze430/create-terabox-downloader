@@ -23,6 +23,6 @@ The original cookie-bearing ZIPs are still reachable in earlier Git history. Mov
 
 ## Project status and next boundary
 
-The preserved [project idea TXT](../future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt) contains the requested present capabilities, video-format ambition, limits, AI-era ideas and one/two-year future path. This restructuring does not claim a working TeraBox downloader: the public provider remains unconfigured, and authorized live metadata and a completed file transfer have not been verified. Any integration of reference ZIP code needs a separate source/license/security review and evidence of a permitted provider path.
+The preserved [project idea TXT](../../../research/future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt) contains the requested present capabilities, video-format ambition, limits, AI-era ideas and one/two-year future path. This restructuring does not claim a working TeraBox downloader: the public provider remains unconfigured, and authorized live metadata and a completed file transfer have not been verified. Any integration of reference ZIP code needs a separate source/license/security review and evidence of a permitted provider path.
 
 The aim of this layout is clear ownership: `apps/` and `services/` are the running product; `docs/` describes it; `AnalyseFuture/` preserves external material and future ideas for later decisions.

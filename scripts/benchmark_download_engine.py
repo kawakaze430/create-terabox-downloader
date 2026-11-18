@@ -22,7 +22,7 @@ import tracemalloc
 import httpx
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "services" / "api"))
-from app.download_engine import DownloadEngine, DownloadSource, TransferPolicy
+from app.download_engine import DownloadEngine, DownloadError, DownloadSource, TransferPolicy
 
 
 class LocalTransport(httpx.AsyncBaseTransport):
@@ -47,11 +47,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--size-mib", type=int, choices=range(1, 33), default=4, metavar="1..32")
     parser.add_argument("--repeats", type=int, choices=range(1, 11), default=3, metavar="1..10")
-    parser.add_argument("--cut-kib", type=int, choices=(256, 512), default=512)
+    interruption = parser.add_mutually_exclusive_group()
+    interruption.add_argument("--cut-kib", type=int, choices=(256, 512), default=512)
+    interruption.add_argument("--cut-bytes", type=int, help="Force an exact, possibly unaligned interruption offset")
+    parser.add_argument("--chunk-delay-ms", type=int, choices=range(11), default=0, metavar="0..10")
     args = parser.parse_args()
     payload = bytes(range(256)) * (args.size_mib * 1024 * 1024 // 256)
     expected = hashlib.sha256(payload).hexdigest()
-    cut = args.cut_kib * 1024
+    cut = args.cut_kib * 1024 if args.cut_bytes is None else args.cut_bytes
+    if not 0 < cut < len(payload):
+        parser.error("Interruption offset must be positive and smaller than the fixture")
     etag = '"controlled-fixture-v1"'
     condition = threading.Condition()
     state = {"requests": 0, "completed": 0, "sent": 0, "interrupt": False}
@@ -87,6 +92,8 @@ def main():
                 self.end_headers()
                 end = cut if interrupt else len(payload)
                 for start in range(offset, end, 65536):
+                    if args.chunk_delay_ms:
+                        time.sleep(args.chunk_delay_ms / 1000)
                     chunk = memoryview(payload)[start:min(start + 65536, end)]
                     self.wfile.write(chunk)
                     with condition:
@@ -109,21 +116,35 @@ def main():
     source = DownloadSource("https://fixture.example/owned-test-file", frozenset({"fixture.example"}),
                             expected_sha256=expected, expected_bytes=len(payload))
 
-    def sample(interrupted, resume):
+    def sample(interrupted, resume, block_restart=False):
         with condition:
             state.update(requests=0, completed=0, sent=0, interrupt=interrupted)
+        expected_body = len(payload) + (cut if interrupted and not resume else 0)
+        budget = len(payload) if block_restart else expected_body
         settings = TransferPolicy(max_bytes=len(payload), max_attempts=2, resume=resume,
-                                  chunk_bytes=65536, backoff_base=0, backoff_max=0)
+                                  chunk_bytes=65536, backoff_base=0, backoff_max=0,
+                                  max_transfer_bytes=budget)
         with tempfile.TemporaryDirectory(prefix="download-engine-benchmark-") as directory:
             destination = Path(directory) / "verified.bin"
+            last_progress_body = 0
+
+            def on_progress(event):
+                nonlocal last_progress_body
+                assert last_progress_body <= event.transferred_bytes <= budget
+                assert event.bytes_written <= event.transferred_bytes
+                last_progress_body = event.transferred_bytes
 
             async def transfer():
-                return await DownloadEngine(settings, transport=LocalTransport(server.server_port)).download(source, destination)
+                engine = DownloadEngine(settings, transport=LocalTransport(server.server_port))
+                return await engine.download(source, destination, on_progress=on_progress)
 
             tracemalloc.start()
             started = time.perf_counter()
             try:
-                result = asyncio.run(transfer())
+                try:
+                    result = asyncio.run(transfer())
+                except DownloadError as failure:
+                    result = failure
                 elapsed = time.perf_counter() - started
                 peak = tracemalloc.get_traced_memory()[1]
             finally:
@@ -131,6 +152,18 @@ def main():
             with condition:
                 assert condition.wait_for(lambda: state["completed"] == state["requests"], timeout=2)
                 sent, requests = state["sent"], state["requests"]
+            report = {"elapsed_seconds": elapsed, "server_body_bytes_written": sent,
+                      "engine_body_bytes_yielded": result.transferred_bytes, "attempts": requests,
+                      "transfer_budget_bytes": budget, "last_progress_body_bytes": last_progress_body,
+                      "peak_traced_allocations_bytes": peak}
+            assert sent == result.transferred_bytes == last_progress_body
+            if block_restart:
+                assert isinstance(result, DownloadError) and result.code == "transfer_limit"
+                assert sent == cut and requests == 1
+                assert not list(Path(directory).iterdir())
+                return {**report, "checksum_verified": False, "error": result.code}
+
+            assert not isinstance(result, DownloadError)
             digest = hashlib.sha256()
             with destination.open("rb") as output:
                 while chunk := output.read(65536):
@@ -139,28 +172,27 @@ def main():
             assert digest.hexdigest() == result.sha256 == expected and result.integrity_verified
             assert result.attempts == requests == (2 if interrupted else 1)
             assert result.resumed is bool(interrupted and resume)
-            expected_sent = len(payload) + (cut if interrupted and not resume else 0)
-            assert sent == result.transferred_bytes == expected_sent
-            return {"elapsed_seconds": elapsed, "server_body_bytes_written": sent,
-                    "engine_body_bytes_yielded": result.transferred_bytes, "attempts": result.attempts,
-                    "peak_traced_allocations_bytes": peak, "checksum_verified": True}
+            assert sent == expected_body
+            return {**report, "checksum_verified": True}
 
     try:
         sample(False, False)  # Warm import/client paths before measured samples.
         results = {}
-        for label, interrupted, resume in (("clean_stream", False, False),
-                                            ("interrupted_restart", True, False),
-                                            ("interrupted_resume", True, True)):
-            runs = [sample(interrupted, resume) for _ in range(args.repeats)]
+        for label, interrupted, resume, block_restart in (("clean_stream", False, False, False),
+                                                           ("interrupted_restart", True, False, False),
+                                                           ("interrupted_resume", True, True, False),
+                                                           ("budget_blocked_restart", True, False, True)):
+            runs = [sample(interrupted, resume, block_restart) for _ in range(args.repeats)]
             results[label] = {"samples": runs,
                 "median_elapsed_seconds": statistics.median(run["elapsed_seconds"] for run in runs),
                 "median_peak_traced_allocations_bytes": statistics.median(run["peak_traced_allocations_bytes"] for run in runs)}
         print(json.dumps({"fixture_bytes": len(payload), "interruption_bytes": cut,
-            "repeats": args.repeats, "sha256": expected, "scenarios": results,
+            "repeats": args.repeats, "chunk_delay_ms": args.chunk_delay_ms, "sha256": expected, "scenarios": results,
             "limitations": ["Local HTTP socket fixture through explicit injected transport; no external network or provider.",
                 "Sequential transfers only; no parallel-transfer or production speed claim.",
                 "Elapsed includes asyncio loop/client setup, transfer, integrity check, filesystem flush and cleanup; tracing is enabled.",
                 "Body counters exclude headers/TCP/TLS; server bytes mean successful application writes, not acknowledged wire bytes.",
+                "Fixture delays, when selected, apply before each server write and do not emulate network latency.",
                 "tracemalloc measures process Python allocations including shared server threads; fixture payload preallocation and imports excluded; not RSS.",
                 "One clean warmup excluded; OS and filesystem caches are uncontrolled."]}, indent=2))
     finally:

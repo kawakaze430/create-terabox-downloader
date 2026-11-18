@@ -26,8 +26,9 @@ from .egress import PinnedTransport, UnsafeDestination, approved_url, validate_h
 class DownloadError(Exception):
     """Bounded codes only: never include an upstream URL, body or exception."""
 
-    def __init__(self, code: str):
+    def __init__(self, code: str, *, transferred_bytes: int = 0):
         self.code = code
+        self.transferred_bytes = transferred_bytes
         super().__init__(code)
 
 
@@ -61,12 +62,17 @@ class TransferPolicy:
     backoff_max: float = 5
     max_retry_after: float = 30
     resume: bool = True
+    max_transfer_bytes: int | None = None
 
     def __post_init__(self):
         for name, maximum in (("max_bytes", 2**63 - 1), ("max_attempts", 8), ("chunk_bytes", 1024 * 1024)):
             value = getattr(self, name)
             if type(value) is not int or not 1 <= value <= maximum:
                 raise ValueError(f"Invalid {name}.")
+        if self.max_transfer_bytes is not None and (
+            type(self.max_transfer_bytes) is not int or not 1 <= self.max_transfer_bytes <= 2**63 - 1
+        ):
+            raise ValueError("Invalid max_transfer_bytes.")
         for name in ("connect_timeout", "read_timeout", "total_timeout", "backoff_base", "backoff_max", "max_retry_after"):
             value = getattr(self, name)
             minimum = 0 if name.startswith("backoff") or name == "max_retry_after" else 0.000001
@@ -81,6 +87,7 @@ class TransferProgress:
     bytes_written: int
     total_bytes: int | None
     attempt: int
+    transferred_bytes: int = 0
 
 
 @dataclass(frozen=True)
@@ -146,6 +153,8 @@ class DownloadEngine:
         Caller supplies a trusted output path; this is not a visitor path API.
         File writes are fixed-size synchronous operations; asyncio deadlines and
         cancellation are cooperative and do not preempt blocked filesystem I/O.
+        The optional aggregate budget counts response body bytes received from
+        HTTPX. Transport read-ahead can deliver one chunk beyond the limit.
         """
         policy, destination = self.policy, Path(destination)
         if source.expected_bytes is not None and source.expected_bytes > policy.max_bytes:
@@ -154,6 +163,8 @@ class DownloadEngine:
             raise DownloadError("destination_exists")
         started = time.monotonic()
         temporary = None
+        transferred = 0
+        budget = policy.max_transfer_bytes
         try:
             descriptor, temporary = tempfile.mkstemp(prefix=".download-", suffix=".part", dir=destination.parent)
             with os.fdopen(descriptor, "w+b") as output:
@@ -164,9 +175,11 @@ class DownloadEngine:
                         trust_env=False, follow_redirects=False, timeout=timeout,
                     ) as client:
                         digest, size, total, etag, resumed = hashlib.sha256(), 0, None, None, False
-                        transferred = 0
                         for attempt in range(1, policy.max_attempts + 1):
                             offset = size if policy.resume and etag and total is not None and 0 < size < total else 0
+                            if (budget is not None and source.expected_bytes is not None and
+                                    transferred + source.expected_bytes - offset > budget):
+                                raise DownloadError("transfer_limit")
                             headers = {"Accept-Encoding": "identity"}
                             if offset:
                                 headers.update({"Range": f"bytes={offset}-", "If-Range": etag})
@@ -205,23 +218,32 @@ class DownloadEngine:
                                         raise DownloadError("size_limit")
                                     if source.expected_bytes is not None and total != source.expected_bytes:
                                         raise DownloadError("integrity_mismatch")
+                                    if budget is not None and total is not None and transferred + total - size > budget:
+                                        raise DownloadError("transfer_limit")
                                     received = 0
-                                    async for chunk in response.aiter_raw(chunk_size=policy.chunk_bytes):
-                                        transferred += len(chunk)
-                                        if size + len(chunk) > policy.max_bytes:
+                                    # Meter raw chunks before splitting into bounded writes so a
+                                    # protocol error cannot hide an incomplete buffered chunk.
+                                    async for raw in response.aiter_raw():
+                                        transferred += len(raw)
+                                        if budget is not None and transferred > budget:
+                                            raise DownloadError("transfer_limit")
+                                        if size + len(raw) > policy.max_bytes:
                                             raise DownloadError("size_limit")
-                                        if total is not None and size + len(chunk) > total:
+                                        if total is not None and size + len(raw) > total:
                                             raise DownloadError("integrity_mismatch")
-                                        written = output.write(chunk)
-                                        if written != len(chunk):
-                                            raise DownloadError("storage_failure")
-                                        digest.update(chunk)
-                                        size += written
-                                        received += written
-                                        if on_progress is not None:
-                                            on_progress(TransferProgress(size, total, attempt))
-                                        # Observe cancellation even for an already-buffered final chunk.
-                                        await asyncio.sleep(0)
+                                        data = memoryview(raw)
+                                        for start in range(0, len(data), policy.chunk_bytes):
+                                            chunk = data[start:start + policy.chunk_bytes]
+                                            written = output.write(chunk)
+                                            if written != len(chunk):
+                                                raise DownloadError("storage_failure")
+                                            digest.update(chunk)
+                                            size += written
+                                            received += written
+                                            if on_progress is not None:
+                                                on_progress(TransferProgress(size, total, attempt, transferred))
+                                            # Observe cancellation even for an already-buffered final chunk.
+                                            await asyncio.sleep(0)
                                     if (length is not None and received != length) or (total is not None and size != total):
                                         raise _Retry()
                                 break
@@ -246,14 +268,17 @@ class DownloadEngine:
                 os.link(temporary, destination)
                 return TransferResult(size, actual_digest, attempt, resumed, time.monotonic() - started,
                                       source.expected_sha256 is not None, transferred)
+        except DownloadError as failure:
+            failure.transferred_bytes = transferred
+            raise
         except TimeoutError:
-            raise DownloadError("timeout") from None
+            raise DownloadError("timeout", transferred_bytes=transferred) from None
         except UnsafeDestination:
-            raise DownloadError("unsafe_destination") from None
+            raise DownloadError("unsafe_destination", transferred_bytes=transferred) from None
         except FileExistsError:
-            raise DownloadError("destination_exists") from None
+            raise DownloadError("destination_exists", transferred_bytes=transferred) from None
         except OSError:
-            raise DownloadError("storage_failure") from None
+            raise DownloadError("storage_failure", transferred_bytes=transferred) from None
         finally:
             if temporary is not None:
                 Path(temporary).unlink(missing_ok=True)

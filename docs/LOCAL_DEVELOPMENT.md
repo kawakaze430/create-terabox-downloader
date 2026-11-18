@@ -5,6 +5,7 @@ the operator CLI and generic streaming/retry/Range/integrity behavior against
 permitted direct sources, independently of TeraBox OAuth. [EXTENSION_DEVELOPMENT.md](EXTENSION_DEVELOPMENT.md)
 documents configurable website origins and deterministic release packaging. Current
 validation results and resume commands are in [CODEX_CONTINUITY.md](CODEX_CONTINUITY.md).
+Operators can also configure [managed HTTPS downloads](MANAGED_DOWNLOADS.md) from a private source registry.
 The public TeraBox provider described below remains disabled.
 
 **Development-only starter.** Real TeraBox metadata, previews and downloads are not implemented. The API intentionally returns HTTP 501 PROVIDER_NOT_CONFIGURED for recognized links.
@@ -38,8 +39,7 @@ Open http://localhost:3000. The interface validates supported share URL shapes w
 
 ## Extension (unpublished developer proof)
 Chrome/Edge → Extensions → Developer mode → Load unpacked → select apps/extension.
-Open a supported TeraBox public share, click the extension icon, and then "Open in website".
-The extension opens localhost:3000 and pre-fills the share link. It does **not** download content, request cookies or interact with other tabs. Localhost is hard-coded in this development-only build; replace it with an independently owned production domain before release.
+On a supported TeraBox share, choose **Open share in CloudLink** to prefill the local website. On any other page, choose **Open CloudLink** to open the configured homepage. Use the [extension package command](EXTENSION_DEVELOPMENT.md#build-an-owned-site-package) to set an owned HTTPS origin for release.
 
 ## Tests
 From repository root:
@@ -86,6 +86,36 @@ uses the API virtual environment. For a preinstalled Chromium, set
 `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium`. Both desktop and mobile
 viewports exercise the real validation API; the live provider stays disabled.
 Extension checks: `node --test apps/extension/tests/*.test.mjs` from the repo root.
+
+### Local browser-to-engine transfer fixture
+
+The development fixture streams a deterministic 256 KiB file through the engine and delivers the verified bytes to the browser. The API and website each require an explicit flag. Keep both services bound to loopback and start Uvicorn without proxy headers.
+
+From the repository root, start the API in its own terminal.
+
+```bash
+ENABLE_TRANSFER_FIXTURE=1 services/api/.venv/bin/python -m uvicorn app.main:app \
+  --app-dir services/api --host 127.0.0.1 --port 8000 --no-proxy-headers --no-access-log
+```
+
+In `apps/web`, build and serve the opted-in website.
+
+```bash
+NEXT_PUBLIC_ENABLE_TRANSFER_FIXTURE=1 npm run build
+npm run start -- --hostname 127.0.0.1
+```
+
+Open the local site on port 3000 and use **Local test transfer**. The fixture uses synthetic project-owned bytes. The normal TeraBox share workflow still reports provider availability independently.
+
+For browser automation, stop any processes you started on ports 3000 and 8000. With the API virtual environment on `PATH`, run the following from `apps/web`. The Playwright runner starts both test services.
+
+```bash
+export NEXT_PUBLIC_ENABLE_TRANSFER_FIXTURE=1
+npm run build
+npm run test:e2e -- fixture-transfer.spec.ts
+```
+
+Use `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium` if the cloud image already supplies Chromium. Unset the fixture flag and rebuild to return to the regular website.
 
 ### API limits and privacy
 

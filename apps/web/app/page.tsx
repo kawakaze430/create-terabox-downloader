@@ -2,6 +2,8 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { apiErrorMessage, parseShareResolution, parseValidationResult, readApiJson, type ShareResolution, type ValidResult } from "./api-contract";
+import { FixtureTransfer } from "./fixture-transfer";
+import { ManagedTransfer } from "./managed-transfer";
 
 const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 
@@ -108,6 +110,8 @@ export default function Home() {
         </li>)}</ul>}
       </section>}
       {message && <p className="notice" role="alert">{message}</p>}
+      {process.env.NEXT_PUBLIC_ENABLE_TRANSFER_FIXTURE === "1" && <FixtureTransfer />}
+      {process.env.NEXT_PUBLIC_ENABLE_MANAGED_TRANSFERS === "1" && <ManagedTransfer configuredApi={process.env.NEXT_PUBLIC_API_BASE_URL} />}
     </section>
     <section className="features" aria-label="Development milestones"><article><span>01</span><h2>Safe link handling</h2><p>Explicit allowed domains and supported share paths, without fetching untrusted URLs.</p></article><article><span>02</span><h2>Real file metadata</h2><p>Planned next: verified filename, size, preview and supported formats.</p></article><article><span>03</span><h2>Authorized downloads</h2><p>Planned next: a tested provider adapter, permitted file access and clear errors.</p></article></section>
     <footer>This independent prototype is not affiliated with TeraBox. Use it only for files you own or are authorized to access.</footer>

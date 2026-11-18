@@ -1,20 +1,18 @@
 # TeraBox Downloader Platform — Product Vision & Developer Hub
 
-**Developer / AI-tool handoff:** [Project status, every file and folder, and detailed implementation tasks](PROJECT_STATUS_AND_TASKS.md). Resume from [CODEX_CONTINUITY.md](docs/CODEX_CONTINUITY.md). The latest owner engine prompt authorizes frequent verified main checkpoints; older PR-only instructions are superseded.
+**Developer handoff:** Resume from the [continuation record](docs/CODEX_CONTINUITY.md) for verified recovery checkpoints and outstanding provider or release requirements.
 
-**Independent transfer engine:** [Streaming, bounded retries, integrity and safe Range recovery](docs/DOWNLOAD_ENGINE.md) now work against controlled accessible sources without OAuth. The operator CLI uses approved direct HTTPS sources and does not expose an arbitrary-URL proxy. [Measured recovery benchmark](docs/ENGINE_BENCHMARK_2026-11-17.json) shows avoided retransmission, with no speed claim. **TeraBox share access and public website downloads remain unverified and disabled.**
+**Managed downloads:** Operators can register approved HTTPS files and grant access to an opt-in web catalog. The [managed deployment guide](docs/MANAGED_DOWNLOADS.md) covers setup, source verification, and browser acceptance. The [engine](docs/DOWNLOAD_ENGINE.md) supports bounded streaming, retry budgets, integrity checks, and safe Range recovery. **Public TeraBox share resolution remains disabled pending an authorized live verification.**
 
 See [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) for the current file ownership map and [docs/README.md](docs/README.md) for the documentation index.
 
-The current project vision and roadmap are in [AnalyseFuture/PROJECT_VISION_AND_FUTURE_ROADMAP.txt](AnalyseFuture/PROJECT_VISION_AND_FUTURE_ROADMAP.txt). The [earlier idea](AnalyseFuture/future-ideas/PROJECT_IDEA_AND_FUTURE_VISION.txt) and uploaded reference projects remain preserved in [AnalyseFuture](AnalyseFuture/README.md); the [structure audit](AnalyseFuture/recovery-notes/REPOSITORY_STRUCTURE_AUDIT_2026-11-17.md) records earlier moves.
+See the [product roadmap](docs/ROADMAP_AND_QA.md) for current goals, the [research archives](research/archives/REFERENCE_ARCHIVES.md) for third-party references, and the [incident review](docs/security/incident-review.md) for repository security findings.
 
 > **Long-chat continuity:** Read [Permanent Project Master Handoff](docs/START_HERE_PROJECT_HANDOFF.md),
 > [recoverable chat archive](docs/PROJECT_CONVERSATION_ARCHIVE.md),
 > [verbatim 1,160-line master development prompt](docs/MASTER_DEVELOPMENT_PROMPT_2026-11-15.md),
 > [dated source/reference index](docs/PROJECT_SOURCE_INDEX_2026-11-16.md),
 > and the [Word copy](docs/PROJECT_MASTER_HANDOFF.docx). Future ChatGPT/Codex sessions should start here rather than rely on an old chat.
-
-> **Status (2026-11-17, independent-engine checkpoint):** Local checks passed **250 API tests** (74 engine + 3 CLI + 173 existing), **50 extension tests**, **20 desktop/mobile browser checks**, web build/typecheck and Python dependency consistency. Generic streaming/recovery is verified on controlled local sources; website metadata rendering is tested with explicitly simulated provider payloads. Live TeraBox access, installed Chrome/Edge behavior and production deployment remain unverified. See [engine results](docs/DOWNLOAD_ENGINE.md), [continuation](docs/CODEX_CONTINUITY.md) and [implementation log](docs/IMPLEMENTATION_LOG.md). No new vulnerability audit or current-fork CI success is claimed.
 
 ## Our mission
 
@@ -50,7 +48,7 @@ The product should be owned and operated through our own GitHub, hosting, infras
 
 ## Run and develop the starter
 
-See **[Local Development](docs/LOCAL_DEVELOPMENT.md)** for API/web setup, **[engine CLI](docs/DOWNLOAD_ENGINE.md)** for permitted direct-source transfers and **[extension development](docs/EXTENSION_DEVELOPMENT.md)** for validated destination configuration/packaging. Current local results: 250 API, 50 extension and 20 browser checks passed. Browser metadata cases include simulated responses and are not TeraBox proof. The public provider still responds with `PROVIDER_NOT_CONFIGURED` for valid share links. The historical CI links in older records refer to previous checkpoints, not these new results.
+See [local development](docs/LOCAL_DEVELOPMENT.md) for API/web setup, [the engine CLI](docs/DOWNLOAD_ENGINE.md) for direct-source transfers, and [extension development](docs/EXTENSION_DEVELOPMENT.md) for packaging an owned website destination. The [continuation record](docs/CODEX_CONTINUITY.md) records what was tested and what remains blocked.
 
 ## Official integration research (new)
 

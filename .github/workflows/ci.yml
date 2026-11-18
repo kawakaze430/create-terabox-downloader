@@ -1,8 +1,14 @@
 name: Platform CI
 on:
   push:
-    branches: [main]
+    branches: [main, 'recovery/**']
   pull_request:
+  workflow_dispatch:
+    inputs:
+      live_managed_source:
+        description: Verify downloads against the commit-pinned repository HTTPS source
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
@@ -60,6 +66,28 @@ jobs:
       - run: npx playwright install --with-deps chromium
         working-directory: apps/web
       - run: npm run test:e2e
+        working-directory: apps/web
+      - name: Verify the opt-in local transfer fixture
+        env:
+          NEXT_PUBLIC_ENABLE_TRANSFER_FIXTURE: '1'
+        run: |
+          npm run build
+          npm run test:e2e -- fixture-transfer.spec.ts
+        working-directory: apps/web
+      - name: Verify managed downloads
+        env:
+          NEXT_PUBLIC_API_BASE_URL: 'http://127.0.0.1:8000'
+          NEXT_PUBLIC_ENABLE_MANAGED_TRANSFERS: '1'
+        run: |
+          npm run build
+          npm run test:e2e -- managed-transfers.spec.ts
+          npm run test:e2e -- --config playwright.managed.config.ts
+        working-directory: apps/web
+      - name: Verify the live repository HTTPS source
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.live_managed_source }}
+        env:
+          MANAGED_E2E_LIVE: '1'
+        run: npm run test:e2e -- --config playwright.managed.config.ts
         working-directory: apps/web
   extension:
     runs-on: ubuntu-latest

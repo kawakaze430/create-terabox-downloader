@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "CloudLink TeraBox Link Assistant (Development)",
   "version": "0.1.0",
-  "description": "Detect supported TeraBox share pages and open them in the local development website. No download engine yet.",
+  "description": "Open the configured CloudLink website and hand off supported TeraBox share links.",
   "permissions": ["activeTab"],
-  "action": {"default_title": "Open TeraBox share in CloudLink", "default_popup": "popup.html"}
+  "action": {"default_title": "Open CloudLink", "default_popup": "popup.html"}
 }

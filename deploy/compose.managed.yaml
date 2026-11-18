@@ -1,0 +1,18 @@
+services:
+  api:
+    env_file:
+      - ${TRANSFER_ENV_FILE:?Set the path to a private runtime file containing TRANSFER_ACCESS_KEY}
+    environment:
+      ALLOWED_ORIGINS: ${PUBLIC_ORIGIN:?Set the exact public HTTPS origin}
+      TRANSFER_REGISTRY_PATH: /var/lib/transfers/registry.json
+      TRANSFER_STORAGE_DIR: /var/lib/transfers/storage
+    volumes:
+      - transfer-data:/var/lib/transfers
+
+  web:
+    build:
+      args:
+        NEXT_PUBLIC_ENABLE_MANAGED_TRANSFERS: "1"
+
+volumes:
+  transfer-data:

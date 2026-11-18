@@ -6,7 +6,7 @@ The repository contains two complete third-party projects as ZIP files. To unpac
 python3 scripts/unpack_reference_archives.py
 ```
 
-The checked-in ZIPs are preserved under `AnalyseFuture/archives/`. The command verifies each archive's SHA-256 and member CRC, rejects unsafe paths and symlinks, and creates `AnalyseFuture/extracted/Teraplayer-main/` and `AnalyseFuture/extracted/terabox-gateway-main/`. Rerunning it checks the extracted files without overwriting edits. `AnalyseFuture/extracted/` is ignored by Git because the ZIPs already preserve the source; run the command again in a new checkout. These directories are for inspection, not an application startup path.
+The checked-in ZIPs are preserved under `research/archives/`. The command verifies each archive's SHA-256 and member CRC, rejects unsafe paths and symlinks, and creates `research/extracted/Teraplayer-main/` and `research/extracted/terabox-gateway-main/`. Rerunning it checks the extracted files without overwriting edits. `research/extracted/` is ignored by Git because the ZIPs already preserve the source; run the command again in a new checkout. These directories are for inspection, not an application startup path.
 
 The uploaded ZIPs contained populated cookie settings (`.dev.vars` in TeraPlayer and `.env.example` in gateway); TeraPlayer also included a captured page token in `cloudflare-worker/terabox-live.html`. The current archives and extracted copies replace those values with empty placeholders; the rest of both projects remains preserved. The earlier ZIP commit remains in Git history, so the owner should revoke any sessions represented by those settings. Do not run the archives' worker or helper scripts without reviewing them.
 

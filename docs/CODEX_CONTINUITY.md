@@ -1,64 +1,46 @@
 # Codex continuation record
 
-Updated 17 November 2026 (Asia/Kolkata). Latest owner priorities supersede the earlier PR-only/provider-first workflow: build a generic source-independent download engine, verify controlled transfers, and push each completed task directly to main when permitted. Never force-push; use a durable remote branch if protection blocks main.
+Updated 18 November 2026 (Asia/Kolkata). Work is on `recovery/incident-review-2026-11-18` while the owner verifies GitHub account and repository access. Keep `main` at the reviewed baseline and use normal, non-force pushes for recovery checkpoints.
 
-## Checkpoint state
+## Managed-download release candidate
 
-- Repository: `sarfiaroui-oss/create-terabox-downloader`; branch: `main`.
-- Last confirmed remote before this record: `5b9ac5709f22e9409c3b51d680b681855a660aff` (typed website); benchmark `bf1eea2`, engine `0a8117a`, extension `f36a72b` and audit `a03a4c3` also confirmed on main.
-- The commit containing this record is itself a checkpoint; resolve its SHA with `git log -1 --format=%H -- docs/CODEX_CONTINUITY.md` and confirm against `git ls-remote origin refs/heads/main`. A file cannot contain its own final Git commit hash.
-- Completed: E01 baseline source/file audit; current owner workflow reconciled. E04 configurable extension destination, deterministic six-file packaging, popup failures/tests and current website source link. No framework moves/deletions required.
-- Completed E02/E03: source-independent streaming-to-file, bounded retries/backoff/Retry-After, size/SHA-256 checks, cancellation/temp cleanup, atomic no-clobber publication and strong-ETag in-call Range recovery; operator CLI. 74 engine + 3 CLI tests passed; total API suite 250 passed and pip check passed. No live TeraBox verification or new dependency.
-- Controlled benchmark complete: 4 MiB, 3 repetitions/scenario, interruption after 512 KiB; clean/restart/resume verified. Resume saved 524,288 body bytes against restart, without measured speed advantage. Raw samples in docs/ENGINE_BENCHMARK_2026-11-17.json; rerun with `services/api/.venv/bin/python scripts/benchmark_download_engine.py --size-mib 4 --repeats 3`.
-- Completed web metadata milestone: strict runtime/TypeScript contract guards, real returned file metadata/empty states, malformed-response rejection and stale-resolution clearing. No fake preview/download/progress action. Build/typecheck passed; 20 desktop/mobile browser checks passed (10 scenarios, including explicitly simulated metadata/error cases).
-- E05 complete: current file/feature/command documentation reconciled; all 97 tracked files mapped. No source moved/deleted, no dependency/lock changes. Final documentation checkpoint follows the five confirmed implementation/audit checkpoints listed above.
-- No unfinished application work is part of this checkpoint. Parallel/adaptive scheduling, bandwidth shaping, cross-process resume, expiring-source refresh and browser transfer jobs remain unimplemented.
-- Baseline: branch `work`, 82 tracked files/18 directories, clean at `076205b8243ce621e7251865d44d645e160fc515`; switched to main from origin. Current: main, 97 tracked files/18 directories. Fresh baseline 173 API tests became 250 after engine/CLI additions; the existing Starlette/httpx deprecation remains.
-- External limitations: current-fork GitHub PR/CI API previously returned Forbidden; native Git read/push works. TeraBox access unverified; generic engine work does not depend on partner credentials. Known historical ZIP sessions require owner revocation; no values are exposed here.
-- E04 validation: 50 extension/parser/popup/package tests passed, popup syntax/default package passed. Manifest remains MV3 activeTab-only. Website build/typecheck and all 20 desktop/mobile browser checks passed after typed metadata changes. Installed Chrome/Edge, production hosting and store submission remain unrun.
+- The extension checkpoint `25b1b01a3a0180d75f250bbe5c4b07fddd3fcdbf` adds homepage access from unsupported tabs and preserves the fragment handoff from supported shares. The engine checkpoint `4fbbec0fa6728e008096590110742cd731558277` adds cumulative retry-byte accounting and an optional hard body budget.
+- This record's latest commit adds the managed API and browser catalog, a single-worker container deployment, and separate controlled and live-source acceptance commands. Find the checkpoint with `git log -1 --format=%H -- docs/CODEX_CONTINUITY.md` and verify the recovery ref with `git ls-remote`.
+- Final local results were 289 API tests, 52 extension tests, 20 default browser tests, four local fixture tests, eight managed UI tests with simulated API responses, and two managed browser-to-engine tests with the real local services and a controlled upstream transport. Build/typecheck, dependency consistency, and Word archive validation passed. The independently verified body counts in the 4 MiB benchmark were 4,194,304 on resume and 4,718,715 on restart after a 524,411-byte interruption.
+- Both container targets built. Local Compose verified the homepage, API health and share validation through the ingress. The managed HTTPS smoke proved sign-in, access controls, catalog listing and private storage with a locally trusted TLS certificate. Public hosting and real provider credentials were outside the smoke.
+- The commit-pinned project README was retrieved through the managed HTTPS proxy and matched the Git bytes. The production pinning path failed because public direct DNS is unavailable in the task runtime, including from the API container. Run the [live-source acceptance mode](MANAGED_DOWNLOADS.md#acceptance-checks) where direct egress is available. Keep normal destination, TLS, and DNS validation in place.
+- The TeraBox operator preflight remains unconfigured. The owner still needs permitted provider access and a small authorized fixture for a live check. Chromium's managed installation policy blocks the installed-extension check here. Use the [deployment guide](MANAGED_DOWNLOADS.md), [operator runbook](OPERATOR_VALIDATION.md), and [extension packaging procedure](EXTENSION_DEVELOPMENT.md) for those release steps.
 
-## Completed checkpoints
+## Recovery checkpoints
 
-1. E01 `a03a4c3`: complete initial classification, newest owner priorities, engine architecture and continuity.
-2. E04 `f36a72b`: extension destination/popup/package and current source link.
-3. E02/E03 `0a8117a`: independent streaming/retry/integrity/recovery/CLI and 77 new tests.
-4. Benchmark `bf1eea2`: controlled measured byte/time/allocation samples and script.
-5. Website `5b9ac57`: runtime types/metadata/stale states and 20 passing browser checks.
-6. Final documentation checkpoint: resolve the commit containing this record with the command above; verify main on the remote. All earlier pushes succeeded; no failed push or local-only completed application work remains.
+- GitHub `main` was `c0163c24ffdcf4391c0e2874cb508f52172958f1`. The named recovery branch contains `1cd4c80410a40ddc427a6f8005564c4235672dd3`, the incident review and all 21 former `AnalyseFuture/` dispositions, and `bb37749a8a73a365c27465032c041f867f07ed4f`, the first recovery continuity update.
+- `5c0c8384879d9b827585de2ec5fdc217f5416c73` adds the controlled browser-to-engine transfer fixture and its CI checks. The inventory supplement records all eight new paths. Find the latest recovery checkpoint with `git log -1 --format=%H -- docs/CODEX_CONTINUITY.md` and compare it to `git ls-remote origin refs/heads/recovery/incident-review-2026-11-18`.
+- Current evidence includes the [incident review and owner actions](security/incident-review.md), [97-file inventory](history/repository-reviews/baseline-inventory-2026-11-18.md), [21-path move ledger](history/repository-reviews/move-ledger-2026-11-18.md), and [baseline checks](history/repository-reviews/baseline-validation-2026-11-18.md). The local bundle contains sensitive historical archives. Keep it private.
+- The baseline passed 250 API, 50 extension, and 20 Playwright tests, web build/typecheck, dependency consistency and advisory checks, Word/archive verification and nine bounded engine benchmark samples. The relocated archives passed extraction and repeat verification in a disposable directory. Relative Markdown links and the Word validator passed after migration.
+- The opt-in [fixture procedure](LOCAL_DEVELOPMENT.md#local-browser-to-engine-transfer-fixture) exercises progress, cancellation, completion, and file delivery with a fixed source and expiring job capabilities. The updated [engine guide](DOWNLOAD_ENGINE.md) describes the transfer boundary. The [API fixture](../services/api/app/fixture_transfers.py), [website component](../apps/web/app/fixture-transfer.tsx), and [browser checks](../apps/web/tests/fixture-transfer.spec.ts) are the milestone files.
+- Post-migration verification passed 262 API tests, including 12 fixture checks, plus 50 extension tests, 20 default browser tests, four fixture browser tests, both web builds and TypeScript checks. The independent 4 MiB engine benchmark also completed nine verified transfers. There were no failures or skips in these suites. The Python Starlette/httpx deprecation and Node color warnings remain.
+- TeraBox OAuth, actual TeraBox file delivery, production ingress testing, public deployment, and remote CI results remain unverified. Installed browser extension activation was blocked by the cloud Chromium policy.
 
-## Next five recommended tasks
+## Resume
 
-1. **Trusted source-to-job adapter:** design an operator-controlled source registry and scoped opaque file/job ownership before a visitor engine endpoint. Files: `provider.py`, `main.py`, `models.py`, `download_engine.py`, focused API tests. Never accept visitor arbitrary URLs/output paths or share an operator credential.
-2. **Observable browser transfer state:** connect only that trusted job flow to `apps/web/app/api-contract.ts` and `page.tsx`, using actual engine progress/cancellation and verified completion. Add browser/API tests; keep metadata-only actions truthful until delivery exists.
-3. **Bounded source recovery policy:** decide aggregate retry-byte/bandwidth budgets and adapter-controlled expiry refresh, with adversarial fixture tests in `test_download_engine.py`. Cross-process resume needs a separately reviewed identity/sidecar design; do not append untrusted partial files.
-4. **Measured scheduling investigation:** extend `scripts/benchmark_download_engine.py` with controlled latency/rate/error conditions before considering bounded parallel ranges/adaptive concurrency. Require unchanged validators, complete range coverage, cancellation and final size/hash; retain simple sequential fallback.
-5. **Installed client and real source evidence:** follow `docs/EXTENSION_DEVELOPMENT.md` in actual Chrome/Edge with owned HTTPS configuration; investigate a legitimate user-initiated TeraBox/direct-source workflow without bypasses. Record live source limits separately; no partnership application is needed to continue generic engine work.
-
-## Resume commands
+Use the existing checkout. Recheck GitHub and branch state before edits. Preserve unrelated changes and stage only the completed milestone.
 
 ```bash
 git status --short
-git fetch origin
-git log -5 --oneline
-git ls-remote origin refs/heads/main
+git ls-remote origin refs/heads/main refs/heads/recovery/incident-review-2026-11-18
+git fetch origin refs/heads/recovery/incident-review-2026-11-18
+# In a fresh checkout, create the local recovery branch from the fetched checkpoint:
+git switch -c recovery/incident-review-2026-11-18 FETCH_HEAD
+
 PYTHONPATH=services/api services/api/.venv/bin/python -m pytest -q services/api/tests
-services/api/.venv/bin/python -m pip check
 node --test apps/extension/tests/*.test.mjs
-services/api/.venv/bin/python scripts/benchmark_download_engine.py --size-mib 4 --repeats 3
-cd apps/web
-NEXT_TELEMETRY_DISABLED=1 npm run build
-npm run typecheck
-PATH=/workspace/create-terabox-downloader/services/api/.venv/bin:$PATH \
-PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium \
-NEXT_TELEMETRY_DISABLED=1 npm run test:e2e
 ```
 
-Use the existing checkout, no worktree. Preserve unrelated changes. Stage named files only. Keep incomplete code off main. Source-independent tests prove transfer behavior for those fixtures, not live TeraBox downloads. Next session should inspect the current record and engine design before repeating work.
+Run [ordinary web checks](LOCAL_DEVELOPMENT.md#repeatable-browser-checks) and the [opt-in browser suite](LOCAL_DEVELOPMENT.md#local-browser-to-engine-transfer-fixture) on fresh local services. The default site and API leave the fixture disabled. The fixture has separate CI coverage with the existing workflow permissions.
 
-Validation commands already completed in this session: API pytest (250), pip check,
-extension syntax/Node tests (50), web build/typecheck and Playwright (20), controlled
-benchmark and packaging command. No fresh vulnerability audit, current-fork Actions
-success, full-production load test or live TeraBox transfer is claimed. Development
-servers started for browser validation were stopped by the runner; future sessions
-must start required services again. Old onboarding server reuse caused stale assets
-in an initial attempt; final browser results came from a fresh current build.
+## Release acceptance still pending
+
+1. Run managed live-source acceptance from a host with approved direct egress. Compare the browser-delivered file with the pinned source hash.
+2. Deploy to an owned domain with the production access key and registry provisioned privately. Verify public TLS, ingress quotas, and restricted logs. Review GitHub access and the earlier session exposure before updating main.
+3. Run the packaged extension in owner-approved Chrome and Edge against that domain. Confirm both homepage launch and supported-share fragment handoff.
+4. Complete the authorized TeraBox operator preflight before exposing provider results to visitors. Real video, folder, batch, and preview behavior depends on the capabilities verified there.
